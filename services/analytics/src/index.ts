@@ -1,21 +1,24 @@
 import { Logger } from "@api/utils";
 import cors from "@fastify/cors";
 import { fastify } from "fastify";
+import { testRoutes } from "./routes";
 
 const API_VERSION = "v1";
 const PORT = 3000;
 
 export const start = async () => {
-    const server = fastify();
+    const server = fastify({
+        bodyLimit: 1_000_000,
+        trustProxy: true,
+    });
 
     server.register(cors, {
         maxAge: 600,
         origin: true,
         credentials: true,
     });
-
-    server.get("/", async () => {
-        return { success: true };
+    server.register(testRoutes, {
+        prefix: `/${API_VERSION}/test`,
     });
 
     try {

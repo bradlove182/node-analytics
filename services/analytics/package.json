@@ -1,0 +1,13 @@
+{
+    "name": "analytics",
+    "version": "1.0.0",
+    "private": true,
+    "scripts": {
+        "dev": "node ./dist/index.js"
+    },
+    "dependencies": {},
+    "devDependencies": {
+        "@repo/eslint-config": "workspace:*",
+        "@repo/typescript-config": "workspace:*"
+    }
+}

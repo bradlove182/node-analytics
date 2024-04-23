@@ -1,13 +1,12 @@
+import { initializeDatabase } from "@api/database";
+import { env } from "@api/env";
+import { middleware } from "@api/modules/middleware";
+import { testRoutes } from "@api/routes";
 import { Logger } from "@api/utils";
 import cors from "@fastify/cors";
 import { fastify } from "fastify";
-import { testRoutes } from "./routes";
-import dbConnector from "@api/plugins/database";
-import redisConnector from "@api/plugins/redis";
-import { loadEnviroments } from "@api/utils/fastify-env";
 
 const API_VERSION = "v1";
-const PORT = 3000;
 
 export const start = async () => {
     const server = fastify({
@@ -16,6 +15,9 @@ export const start = async () => {
         logger: true,
     });
 
+    await initializeDatabase();
+
+    server.register(middleware);
     server.register(cors, {
         maxAge: 600,
         origin: true,
@@ -26,20 +28,9 @@ export const start = async () => {
         prefix: `/${API_VERSION}/test`,
     });
 
-    // simple way to load env variables ( can change )
-    await loadEnviroments();
-
-    server.register(dbConnector);
-
-    server.register(redisConnector);
-
-    server.get("/", async () => {
-        return { success: true };
-    });
-
     try {
-        await server.listen({ port: PORT });
-        Logger.info("Start", `Server listening at ${PORT}`);
+        await server.listen({ host: env.API_HOST, port: env.API_PORT });
+        Logger.info("Start", `Server listening at ${env.API_PORT}`);
     } catch (error) {
         if (error instanceof Error) {
             Logger.error("Start", error.message);

@@ -1,11 +1,12 @@
 {
     "$schema": "https://turbo.build/schema.json",
-    "globalDependencies": ["**/.env.*local", ".env", ".env.local", "tsconfig.json"],
-    "globalEnv": ["DATABASE_URL"],
+    "globalDotEnv": [".env"],
+    "globalEnv": ["DATABASE_URL", "REDIS_URL", "API_HOST", "API_PORT"],
     "pipeline": {
         "build": {
             "dependsOn": ["^build"],
-            "outputs": [".next/**", "!.next/cache/**"]
+            "outputs": ["dist/**"],
+            "dotEnv": [".env.production.local", ".env.production", ".env.local", ".env"]
         },
         "lint": {
             "dependsOn": ["^lint"]
@@ -13,7 +14,7 @@
         "dev": {
             "cache": false,
             "persistent": true,
-            "env": ["POSTGRES_URL"]
+            "dotEnv": [".env.development.local", ".env.development", ".env.local", ".env"]
         }
     }
 }

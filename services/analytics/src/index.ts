@@ -1,9 +1,9 @@
 import { initializeDatabase } from "@api/database";
-import { env } from "@api/env";
 import { middleware } from "@api/modules/middleware";
 import { testRoutes } from "@api/routes";
 import { Logger } from "@api/utils";
 import cors from "@fastify/cors";
+import { env } from "@repo/environment";
 import { fastify } from "fastify";
 
 const API_VERSION = "v1";

@@ -1,6 +1,6 @@
 import * as schema from "@api/database/schemas";
-import { env } from "@api/env";
 import { Logger } from "@api/utils";
+import { env } from "@repo/environment";
 import { drizzle } from "drizzle-orm/node-postgres";
 import { migrate } from "drizzle-orm/node-postgres/migrator";
 import { Pool } from "pg";
@@ -25,14 +25,14 @@ export const initializeDatabase = async () => {
     }
 
     try {
-      await migrate(db, {
-        migrationsFolder: "./src/database/migrations"
-      });
-      Logger.info("Start", "Migrated database");
-    }catch(error){
-      if(error instanceof Error){
-        Logger.error("Start", `Failed to migrate database ${error.message}`)
-      }
-      throw new Error(`Failed to migrate database ${error}`);
+        await migrate(db, {
+            migrationsFolder: "./src/database/migrations",
+        });
+        Logger.info("Start", "Migrated database");
+    } catch (error) {
+        if (error instanceof Error) {
+            Logger.error("Start", `Failed to migrate database ${error.message}`);
+        }
+        throw new Error(`Failed to migrate database ${error}`);
     }
 };

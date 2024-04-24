@@ -29,8 +29,8 @@ export const start = async () => {
     });
 
     try {
-        await server.listen({ host: env.API_HOST, port: env.API_PORT });
-        Logger.info("Start", `Server listening at ${env.API_PORT}`);
+        await server.listen({ host: env.ANALYTICS_HOST, port: env.ANALYTICS_PORT });
+        Logger.info("Start", `Server listening at ${env.ANALYTICS_PORT}`);
     } catch (error) {
         if (error instanceof Error) {
             Logger.error("Start", error.message);

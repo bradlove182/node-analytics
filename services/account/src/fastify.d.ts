@@ -1,8 +1,8 @@
-import type { db } from "@api/database";
+import type { client } from "@api/client";
 
 declare module "fastify" {
     /* eslint-disable-next-line no-unused-vars */
     interface FastifyRequest {
-        db: typeof db;
+        client: typeof client;
     }
 }

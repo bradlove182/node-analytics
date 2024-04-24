@@ -1,4 +1,3 @@
-import { initializeDatabase } from "@api/database";
 import { middleware } from "@api/modules/middleware";
 import { testRoutes } from "@api/routes";
 import { Logger } from "@api/utils";
@@ -14,8 +13,6 @@ export const start = async () => {
         trustProxy: true,
         logger: true,
     });
-
-    await initializeDatabase();
 
     server.register(middleware);
     server.register(cors, {

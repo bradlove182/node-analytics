@@ -18,5 +18,3 @@ const accountEnvSchema = z.object({
 const envSchema = analyticsEnvSchema.merge(accountEnvSchema);
 
 export const env = envSchema.parse(process.env);
-
-console.log(env);

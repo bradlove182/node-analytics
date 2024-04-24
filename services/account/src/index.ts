@@ -1,9 +1,10 @@
 import { middleware } from "@api/modules/middleware";
-import { testRoutes } from "@api/routes";
+import { authRoutes, testRoutes } from "@api/routes";
 import { Logger } from "@api/utils";
 import cors from "@fastify/cors";
 import { env } from "@repo/environment";
 import { fastify } from "fastify";
+import { serializerCompiler, validatorCompiler } from "fastify-type-provider-zod";
 
 const API_VERSION = "v1";
 
@@ -11,8 +12,10 @@ export const start = async () => {
     const server = fastify({
         bodyLimit: 1_000_000,
         trustProxy: true,
-        logger: true,
     });
+
+    server.setValidatorCompiler(validatorCompiler);
+    server.setSerializerCompiler(serializerCompiler);
 
     server.register(middleware);
     server.register(cors, {
@@ -23,6 +26,9 @@ export const start = async () => {
 
     server.register(testRoutes, {
         prefix: `/${API_VERSION}/test`,
+    });
+    server.register(authRoutes, {
+        prefix: `/${API_VERSION}/auth`,
     });
 
     try {

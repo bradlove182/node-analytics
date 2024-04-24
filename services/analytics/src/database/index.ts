@@ -1,38 +1,30 @@
-import * as schema from "@api/database/schemas";
-import { Logger } from "@api/utils";
 import { env } from "@repo/environment";
-import { drizzle } from "drizzle-orm/node-postgres";
-import { migrate } from "drizzle-orm/node-postgres/migrator";
-import { Pool } from "pg";
+import { Logger } from "@api/utils";
+import { ClickHouseClient, createClient } from "@clickhouse/client";
 
-export let db: ReturnType<typeof drizzle<typeof schema>>;
+export let db: ClickHouseClient;
 
 export const initializeDatabase = async () => {
     try {
-        const pool = await new Pool({
-            connectionString: env.DATABASE_URL,
-        }).connect();
-        Logger.info("Start", "Connected to database");
-
-        db = drizzle(pool, {
-            schema,
+        db = createClient({
+            url: env.CLICKHOUSE_DATABASE_URL,
+            username: env.CLICKHOUSE_DATABASE_USERNAME,
+            password: env.CLICKHOUSE_DATABASE_PASSWORD,
+            clickhouse_settings: {
+                connect_timeout: 1000,
+            },
         });
+
+        if (!(await db.ping())) {
+            throw new Error("failed to ping clickhouse!");
+        }
+
+        Logger.info("Start", "Connected to Clickhouse database");
     } catch (error) {
         if (error instanceof Error) {
             Logger.error("Start", `Failed to connect to database ${error.message}`);
         }
-        throw new Error(`Failed to connect to database ${error}`);
-    }
 
-    try {
-        await migrate(db, {
-            migrationsFolder: "./src/database/migrations",
-        });
-        Logger.info("Start", "Migrated database");
-    } catch (error) {
-        if (error instanceof Error) {
-            Logger.error("Start", `Failed to migrate database ${error.message}`);
-        }
-        throw new Error(`Failed to migrate database ${error}`);
+        throw new Error(`Failed to connect to database ${error}`);
     }
 };

@@ -2,6 +2,13 @@ import { z } from "zod";
 
 const envSchema = z.object({
     DATABASE_URL: z.string().default("postgres://user:password@127.0.0.1:5432/postgres"),
+    CLICKHOUSE_DATABASE_URL: z
+        .string()
+        .default(
+            "http[s]://[username:password@]hostname:port[/database][?param1=value1&param2=value2]"
+        ),
+    CLICKHOUSE_DATABASE_USERNAME: z.string().default("default"),
+    CLICKHOUSE_DATABASE_PASSWORD: z.string().default("password"),
     REDIS_URL: z.string().default("redis://127.0.0.1:6379/"),
     API_PORT: z.coerce.number().default(8080),
     API_HOST: z.string().default("127.0.0.1"),

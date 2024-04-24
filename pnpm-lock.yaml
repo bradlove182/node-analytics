@@ -65,6 +65,67 @@ importers:
 
   packages/typescript-config: {}
 
+  services/account:
+    dependencies:
+      '@fastify/cors':
+        specifier: ^9.0.1
+        version: 9.0.1
+      '@fastify/env':
+        specifier: ^4.3.0
+        version: 4.3.0
+      '@fastify/postgres':
+        specifier: ^5.2.2
+        version: 5.2.2(pg@8.11.5)
+      '@fastify/redis':
+        specifier: ^6.1.1
+        version: 6.1.1
+      drizzle-orm:
+        specifier: ^0.30.9
+        version: 0.30.9(@types/pg@8.11.5)(pg@8.11.5)
+      fastify:
+        specifier: ^4.26.2
+        version: 4.26.2
+      fastify-plugin:
+        specifier: ^4.5.1
+        version: 4.5.1
+      pg:
+        specifier: ^8.11.5
+        version: 8.11.5
+    devDependencies:
+      '@repo/environment':
+        specifier: workspace:*
+        version: link:../../packages/environment
+      '@repo/eslint-config':
+        specifier: workspace:*
+        version: link:../../packages/eslint-config
+      '@repo/typescript-config':
+        specifier: workspace:*
+        version: link:../../packages/typescript-config
+      '@types/cli-color':
+        specifier: ^2.0.6
+        version: 2.0.6
+      '@types/node':
+        specifier: ^20.11.24
+        version: 20.11.24
+      '@types/pg':
+        specifier: ^8.11.5
+        version: 8.11.5
+      cli-color:
+        specifier: ^2.0.4
+        version: 2.0.4
+      drizzle-kit:
+        specifier: ^0.20.17
+        version: 0.20.17
+      tsup:
+        specifier: ^8.0.2
+        version: 8.0.2(typescript@5.3.3)
+      tsx:
+        specifier: ^4.7.2
+        version: 4.7.2
+      typescript:
+        specifier: ^5.3.3
+        version: 5.3.3
+
   services/analytics:
     dependencies:
       '@fastify/cors':
@@ -2630,7 +2691,7 @@ snapshots:
   env-schema@5.2.1:
     dependencies:
       ajv: 8.12.0
-      dotenv: 16.0.3
+      dotenv: 16.4.5
       dotenv-expand: 10.0.0
 
   es5-ext@0.10.64:

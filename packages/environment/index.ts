@@ -15,10 +15,7 @@ const accountEnvSchema = z.object({
   SUPABASE_KEY: z.string().default("url"),
 });
 
-const envSchema = z.union([
-  analyticsEnvSchema,
-  accountEnvSchema
-]);
+const envSchema = analyticsEnvSchema.merge(accountEnvSchema);
 
 export const env = envSchema.parse(process.env);
 

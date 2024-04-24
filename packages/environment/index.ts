@@ -1,19 +1,25 @@
 import { z } from "zod";
 
-const envSchema = z.object({
-    DATABASE_URL: z.string().default("postgres://user:password@127.0.0.1:5432/postgres"),
-    CLICKHOUSE_DATABASE_URL: z
-        .string()
-        .default(
-            "http[s]://[username:password@]hostname:port[/database][?param1=value1&param2=value2]"
-        ),
-    CLICKHOUSE_DATABASE_USERNAME: z.string().default("default"),
-    CLICKHOUSE_DATABASE_PASSWORD: z.string().default("password"),
-    REDIS_URL: z.string().default("redis://127.0.0.1:6379/"),
-    API_PORT: z.coerce.number().default(8080),
-    API_HOST: z.string().default("127.0.0.1"),
-    ACCOUNT_PORT: z.coerce.number().default(8081),
-    ACCOUNT_HOST: z.string().default("127.0.0.1"),
+const analyticsEnvSchema = z.object({
+  CLICKHOUSE_DATABASE_URL: z.string().default("url"),
+  CLICKHOUSE_DATABASE_USERNAME: z.string().default("default"),
+  CLICKHOUSE_DATABASE_PASSWORD: z.string().default("password"),
+  ANALYTICS_PORT: z.coerce.number().default(8080),
+  ANALYTICS_HOST: z.string().default("127.0.0.1"),
 });
 
+const accountEnvSchema = z.object({
+  ACCOUNT_PORT: z.coerce.number().default(8081),
+  ACCOUNT_HOST: z.string().default("127.0.0.1"),
+  SUPBASE_URL: z.string().default("url"),
+  SUPBASE_KEY: z.string().default("url"),
+});
+
+const envSchema = z.union([
+  analyticsEnvSchema,
+  accountEnvSchema
+]);
+
 export const env = envSchema.parse(process.env);
+
+console.log(env);

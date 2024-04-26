@@ -2,7 +2,10 @@
     "name": "@repo/eslint-config",
     "version": "0.0.0",
     "private": true,
-    "files": ["library.js", "svelte.js"],
+    "files": [
+        "library.js",
+        "svelte.js"
+    ],
     "devDependencies": {
         "eslint-config-turbo": "^1.12.4",
         "eslint-config-prettier": "^9.1.0",

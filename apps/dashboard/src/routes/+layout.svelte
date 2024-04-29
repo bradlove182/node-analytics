@@ -3,19 +3,10 @@
     import { goto, invalidate } from "$app/navigation";
     import { onMount } from "svelte";
     import { ModeWatcher as ThemeWatcher } from "mode-watcher";
-    import { Button } from "$lib/components/ui/button";
     import type { LayoutData } from "./$types";
-    import { ThemeToggle } from "@src/lib/components/ui/theme-toggle";
 
     export let data: LayoutData;
     $: ({ session, supabase, user } = data);
-
-    $: logout = async () => {
-        const { error } = await supabase.auth.signOut();
-        if (error) {
-            console.error(error);
-        }
-    };
 
     onMount(() => {
         const { data } = supabase.auth.onAuthStateChange((_, newSession) => {

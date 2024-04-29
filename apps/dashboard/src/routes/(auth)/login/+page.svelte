@@ -4,8 +4,8 @@
     import * as Card from "$lib/components/ui/card";
     import { Input } from "$lib/components/ui/input";
     import { Label } from "$lib/components/ui/label";
-    import type { ActionData } from "./$types";
     import * as Pin from "@src/lib/components/ui/pin";
+    import type { ActionData } from "./$types";
 
     export let form: ActionData;
     let email: string = "";
@@ -34,14 +34,21 @@
             <input type="hidden" name="email" value={form?.email} />
             <Card.Content class="grid gap-4">
                 <fieldset class="grid gap-2">
-                    <Pin.Root disabled={loading} name="pin" placeholder="0">
+                    <Pin.Root disabled={loading} name="pin" placeholder="">
+                        <Pin.Input on:paste={() => setTimeout(() => otpForm.requestSubmit())} />
                         <Pin.Input />
                         <Pin.Input />
                         <Pin.Input />
                         <Pin.Input />
-                        <Pin.Input />
-                        <Pin.Input on:change={() => otpForm.requestSubmit()} />
+                        <Pin.Input on:keydown={() => setTimeout(() => otpForm.requestSubmit())} />
+                        {#if loading}
+                            Loading
+                        {/if}
                     </Pin.Root>
+                    <form method="POST" action="?/login" use:enhance>
+                        <input type="hidden" name="email" value={form?.email} />
+                        <Button type="submit" variant="ghost" class="w-min">Resend OTP</Button>
+                    </form>
                 </fieldset>
             </Card.Content>
         </form>

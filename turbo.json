@@ -1,11 +1,11 @@
 {
     "$schema": "https://turbo.build/schema.json",
     "globalDotEnv": [".env"],
-    "globalEnv": ["DATABASE_URL", "REDIS_URL", "API_HOST", "API_PORT"],
+    "globalEnv": ["*"],
     "pipeline": {
         "build": {
             "dependsOn": ["^build"],
-            "outputs": ["dist/**"],
+            "outputs": ["dist/**", ".svelte-kit/**"],
             "dotEnv": [".env.production.local", ".env.production", ".env.local", ".env"]
         },
         "lint": {

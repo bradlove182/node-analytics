@@ -26,9 +26,12 @@ importers:
 
   apps/dashboard:
     dependencies:
-      '@repo/supabase':
-        specifier: workspace:*
-        version: link:../../packages/supabase
+      '@supabase/ssr':
+        specifier: ^0.3.0
+        version: 0.3.0(@supabase/supabase-js@2.42.5)
+      '@supabase/supabase-js':
+        specifier: ^2.42.5
+        version: 2.42.5
       bits-ui:
         specifier: ^0.21.4
         version: 0.21.4(svelte@4.2.15)
@@ -45,6 +48,9 @@ importers:
         specifier: ^0.2.1
         version: 0.2.1(tailwindcss@3.4.3)
     devDependencies:
+      '@repo/environment':
+        specifier: workspace:*
+        version: link:../../packages/environment
       '@repo/eslint-config':
         specifier: workspace:*
         version: link:../../packages/eslint-config
@@ -147,25 +153,6 @@ importers:
       typescript:
         specifier: ^5.3.3
         version: 5.3.3
-
-  packages/supabase:
-    dependencies:
-      '@supabase/supabase-js':
-        specifier: ^2.42.5
-        version: 2.42.5
-    devDependencies:
-      '@repo/environment':
-        specifier: workspace:*
-        version: link:../environment
-      '@repo/eslint-config':
-        specifier: workspace:*
-        version: link:../eslint-config
-      '@repo/typescript-config':
-        specifier: workspace:*
-        version: link:../typescript-config
-      typescript:
-        specifier: ^5.3.3
-        version: 5.4.5
 
   packages/typescript-config: {}
 
@@ -946,6 +933,11 @@ packages:
   '@supabase/realtime-js@2.9.4':
     resolution: {integrity: sha512-wdq+2hZpgw0r2ldRs87d3U08Y8BrsO1bZxPNqbImpYshAEkusDz4vufR8KaqujKxqewmXS6YnUhuRVdvSEIKCA==}
 
+  '@supabase/ssr@0.3.0':
+    resolution: {integrity: sha512-lcVyQ7H6eumb2FB1Wa2N+jYWMfq6CFza3KapikT0fgttMQ+QvDgpNogx9jI8bZgKds+XFSMCojxFvFb+gwdbfA==}
+    peerDependencies:
+      '@supabase/supabase-js': ^2.33.1
+
   '@supabase/storage-js@2.5.5':
     resolution: {integrity: sha512-OpLoDRjFwClwc2cjTJZG8XviTiQH4Ik8sCiMK5v7et0MDu2QlXjCAW3ljxJB5+z/KazdMOTnySi+hysxWUPu3w==}
 
@@ -1289,6 +1281,10 @@ packages:
 
   concat-map@0.0.1:
     resolution: {integrity: sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==}
+
+  cookie@0.5.0:
+    resolution: {integrity: sha512-YZ3GUyn/o8gfKJlnlX7g7xq4gyO6OSuhGPKaaGssGB2qgDUS0gPgtTvoyZLTt9Ab6dC4hfc9dV5arkvc/OCmrw==}
+    engines: {node: '>= 0.6'}
 
   cookie@0.6.0:
     resolution: {integrity: sha512-U71cyTamuh1CRNCfpGY6to28lxvNwPG4Guz/EVjgf3Jmzv0vlDp1atT9eS5dDjMYHucpHbWns6Lwf3BKz6svdw==}
@@ -2340,6 +2336,9 @@ packages:
   quick-format-unescaped@4.0.4:
     resolution: {integrity: sha512-tYC1Q1hgyRuHgloV/YXs2w15unPVh8qfu/qCTfhTYamaw7fyhumKa2yGpdSo87vY32rIclj+4fWYQXUMs9EHvg==}
 
+  ramda@0.29.1:
+    resolution: {integrity: sha512-OfxIeWzd4xdUNxlWhgFazxsA/nl3mS4/jGZI5n00uWOoSSFRhC1b6gl6xvmzUamgmqELraWp0J/qqVlXYPDPyA==}
+
   read-cache@1.0.0:
     resolution: {integrity: sha512-Owdv/Ft7IjOgm/i0xvNDZ1LrRANRfew4b2prF3OWMQLxLfu3bS8FVhCsrSCMK4lR56Y9ya+AThoTpDCTxCmpRA==}
 
@@ -3343,6 +3342,12 @@ snapshots:
       - bufferutil
       - utf-8-validate
 
+  '@supabase/ssr@0.3.0(@supabase/supabase-js@2.42.5)':
+    dependencies:
+      '@supabase/supabase-js': 2.42.5
+      cookie: 0.5.0
+      ramda: 0.29.1
+
   '@supabase/storage-js@2.5.5':
     dependencies:
       '@supabase/node-fetch': 2.6.15
@@ -3805,6 +3810,8 @@ snapshots:
   commander@9.5.0: {}
 
   concat-map@0.0.1: {}
+
+  cookie@0.5.0: {}
 
   cookie@0.6.0: {}
 
@@ -4853,6 +4860,8 @@ snapshots:
   queue-microtask@1.2.3: {}
 
   quick-format-unescaped@4.0.4: {}
+
+  ramda@0.29.1: {}
 
   read-cache@1.0.0:
     dependencies:

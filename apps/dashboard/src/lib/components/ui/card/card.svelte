@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { cn } from "$lib/utils.js";
+    import { cn, flyAndScale } from "$lib/utils.js";
     import type { HTMLAttributes } from "svelte/elements";
 
     type $$Props = HTMLAttributes<HTMLDivElement>;
@@ -17,6 +17,7 @@
     on:focusout
     on:mouseenter
     on:mouseleave
+    in:flyAndScale
 >
     <slot />
 </div>

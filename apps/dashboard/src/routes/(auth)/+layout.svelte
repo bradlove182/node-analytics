@@ -1,3 +1,3 @@
-<div class="flex max-h-screen w-full h-screen flex-col items-center justify-center">
+<main class="flex max-h-screen bg-muted/40 w-full h-screen flex-col items-center justify-center">
     <slot />
-</div>
+</main>

@@ -5,31 +5,44 @@
     import { Input } from "$lib/components/ui/input";
     import { Label } from "$lib/components/ui/label";
     import type { ActionData } from "./$types";
+    import * as Pin from "@src/lib/components/ui/pin";
 
     export let form: ActionData;
     let email: string = "";
-    let otp: string = "";
     let loading: boolean = false;
+    let otpForm: HTMLFormElement;
+
+    $: form?.error, (loading = false);
 </script>
 
-{#if form?.success}
+{#if form?.error}
+    {form.error.message}
+{/if}
+{#if form?.email}
     <Card.Root class="w-full max-w-sm">
         <Card.Header>
-            <Card.Title class="text-2xl">One time password sent.</Card.Title>
+            <Card.Title class="text-2xl">One time password.</Card.Title>
             <Card.Description>Check your email for your OTP.</Card.Description>
         </Card.Header>
-        <form method="POST" action="?/verifyOTP" use:enhance on:submit={() => (loading = true)}>
+        <form
+            method="POST"
+            action="?/verifyOTP"
+            bind:this={otpForm}
+            use:enhance
+            on:submit={() => (loading = true)}
+        >
+            <input type="hidden" name="email" value={form?.email} />
             <Card.Content class="grid gap-4">
-                <div class="grid gap-2">
-                    <Label for="email">One time password</Label>
-                    <Input
-                        bind:value={otp}
-                        name="email"
-                        id="email"
-                        type="number"
-                        placeholder="xxxxxx"
-                    />
-                </div>
+                <fieldset class="grid gap-2">
+                    <Pin.Root disabled={loading} name="pin" placeholder="0">
+                        <Pin.Input />
+                        <Pin.Input />
+                        <Pin.Input />
+                        <Pin.Input />
+                        <Pin.Input />
+                        <Pin.Input on:change={() => otpForm.requestSubmit()} />
+                    </Pin.Root>
+                </fieldset>
             </Card.Content>
         </form>
     </Card.Root>
@@ -41,7 +54,7 @@
         </Card.Header>
         <form method="POST" action="?/login" use:enhance on:submit={() => (loading = true)}>
             <Card.Content class="grid gap-4">
-                <div class="grid gap-2">
+                <fieldset class="grid gap-2" disabled={loading}>
                     <Label for="email">Email</Label>
                     <Input
                         bind:value={email}
@@ -50,7 +63,7 @@
                         type="email"
                         placeholder="m@example.com"
                     />
-                </div>
+                </fieldset>
             </Card.Content>
             <Card.Footer>
                 <Button disabled={email?.length === 0 || loading} type="submit" class="w-full">

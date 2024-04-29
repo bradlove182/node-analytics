@@ -9,8 +9,8 @@
 
     export let form: ActionData;
     let email: string = "";
+    let pin: string[] = [];
     let loading: boolean = false;
-    let otpForm: HTMLFormElement;
 
     $: form?.error, (loading = false);
 </script>
@@ -21,36 +21,40 @@
 {#if form?.email}
     <Card.Root class="w-full max-w-sm">
         <Card.Header>
-            <Card.Title class="text-2xl">One time password.</Card.Title>
-            <Card.Description>Check your email for your OTP.</Card.Description>
+            <Card.Title class="text-2xl">Enter your OTP.</Card.Title>
+            <Card.Description>OTP sent to {form.email}.</Card.Description>
         </Card.Header>
-        <form
-            method="POST"
-            action="?/verifyOTP"
-            bind:this={otpForm}
-            use:enhance
-            on:submit={() => (loading = true)}
-        >
+        <form method="POST" action="?/verifyOTP" use:enhance on:submit={() => (loading = true)}>
             <input type="hidden" name="email" value={form?.email} />
             <Card.Content class="grid gap-4">
                 <fieldset class="grid gap-2">
-                    <Pin.Root disabled={loading} name="pin" placeholder="">
-                        <Pin.Input on:paste={() => setTimeout(() => otpForm.requestSubmit())} />
+                    <Pin.Root bind:value={pin} disabled={loading} name="pin" placeholder="">
                         <Pin.Input />
                         <Pin.Input />
                         <Pin.Input />
                         <Pin.Input />
-                        <Pin.Input on:keydown={() => setTimeout(() => otpForm.requestSubmit())} />
-                        {#if loading}
-                            Loading
-                        {/if}
+                        <Pin.Input />
+                        <Pin.Input />
                     </Pin.Root>
-                    <form method="POST" action="?/login" use:enhance>
-                        <input type="hidden" name="email" value={form?.email} />
-                        <Button type="submit" variant="ghost" class="w-min">Resend OTP</Button>
-                    </form>
                 </fieldset>
             </Card.Content>
+            <Card.Footer class="flex gap-2 ">
+                <form method="POST" action="?/login" use:enhance>
+                    <input type="hidden" name="email" value={form?.email} />
+                    <Button type="submit" variant="ghost" class="w-min">Resend OTP</Button>
+                </form>
+                <Button
+                    disabled={!pin.every((item) => item.length > 0) || loading}
+                    type="submit"
+                    class="w-full"
+                >
+                    {#if loading}
+                        Loading...
+                    {:else}
+                        Continue
+                    {/if}
+                </Button>
+            </Card.Footer>
         </form>
     </Card.Root>
 {:else}

@@ -4,7 +4,7 @@
     import * as Card from "$lib/components/ui/card";
     import { Input } from "$lib/components/ui/input";
     import { Label } from "$lib/components/ui/label";
-    import * as Pin from "@src/lib/components/ui/pin";
+    import * as Pin from "$lib/components/ui/pin";
     import type { ActionData } from "./$types";
 
     export let form: ActionData;

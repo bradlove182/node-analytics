@@ -5,6 +5,7 @@
     import { Input } from "$lib/components/ui/input";
     import { Label } from "$lib/components/ui/label";
     import * as Pin from "$lib/components/ui/pin";
+    import { IconLoading } from "$lib/icons";
     import type { ActionData } from "./$types";
 
     export let form: ActionData;
@@ -49,7 +50,7 @@
                     class="w-full"
                 >
                     {#if loading}
-                        Loading...
+                        <IconLoading />
                     {:else}
                         Continue
                     {/if}
@@ -79,7 +80,7 @@
             <Card.Footer>
                 <Button disabled={email?.length === 0 || loading} type="submit" class="w-full">
                     {#if loading}
-                        Loading...
+                        <IconLoading />
                     {:else}
                         Sign in
                     {/if}

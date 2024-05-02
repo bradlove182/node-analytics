@@ -3,9 +3,9 @@
     "version": "0.0.0",
     "private": true,
     "devDependencies": {
-        "zod": "^3.23.0",
-        "typescript": "^5.3.3",
-        "@types/node": "^20.11.24",
+        "zod": "^3.23.5",
+        "typescript": "^5.4.5",
+        "@types/node": "^20.12.8",
         "@repo/eslint-config": "workspace:*",
         "@repo/typescript-config": "workspace:*"
     }

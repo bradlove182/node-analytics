@@ -6,8 +6,10 @@
     import { Label } from "$lib/components/ui/label";
     import * as Pin from "$lib/components/ui/pin";
     import { IconLoading } from "$lib/icons";
-    import type { ActionData } from "./$types";
+    import type { ActionData, PageData } from "./$types";
+    import LoginForm from "./login-form.svelte";
 
+    export let data: PageData;
     export let form: ActionData;
     let email: string = "";
     let pin: string[] = [];
@@ -15,6 +17,8 @@
 
     $: form?.error, (loading = false);
 </script>
+
+<LoginForm data={data.form} />
 
 {#if form?.error}
     {form.error.message}
@@ -82,7 +86,7 @@
                     {#if loading}
                         <IconLoading />
                     {:else}
-                        Sign in
+                        Continue
                     {/if}
                 </Button>
             </Card.Footer>

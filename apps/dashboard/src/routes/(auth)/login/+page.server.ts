@@ -1,18 +1,21 @@
 import { isAuthError } from "@supabase/supabase-js";
 import { fail } from "@sveltejs/kit";
-import type { Actions } from "./$types";
+import { superValidate } from "sveltekit-superforms";
+import { zod } from "sveltekit-superforms/adapters";
+import type { Actions, PageServerLoad } from "./$types";
+import { loginSchema } from "./schema";
 
 export const actions = {
     login: async ({ request, locals }) => {
         const formData = await request.formData();
-        const email = formData.get("email");
+        const email = formData.get("email")?.toString();
 
         if (!email) {
             return fail(400, { email });
         }
 
         const { error } = await locals.supabase.auth.signInWithOtp({
-            email: String(email),
+            email,
         });
 
         if (error && isAuthError(error)) {
@@ -28,16 +31,16 @@ export const actions = {
     },
     verifyOTP: async ({ request, locals }) => {
         const formData = await request.formData();
-        const email = formData.get("email");
-        const pin = formData.get("pin");
+        const email = formData.get("email")?.toString();
+        const pin = formData.get("pin")?.toString();
 
-        if (!email) {
-            return fail(400, { email });
+        if (!email || !pin) {
+            return fail(400, { email, pin });
         }
 
         const { error } = await locals.supabase.auth.verifyOtp({
-            email: String(email),
-            token: String(pin),
+            email,
+            token: pin,
             type: "magiclink",
         });
 
@@ -53,3 +56,9 @@ export const actions = {
         return { email, pin };
     },
 } satisfies Actions;
+
+export const load: PageServerLoad = async () => {
+    return {
+        form: await superValidate(zod(loginSchema)),
+    };
+};

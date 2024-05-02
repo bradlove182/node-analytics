@@ -1,21 +1,30 @@
 import { isAuthError } from "@supabase/supabase-js";
 import { fail } from "@sveltejs/kit";
-import { superValidate } from "sveltekit-superforms";
+import { message, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import type { Actions, PageServerLoad } from "./$types";
-import { loginSchema } from "./schema";
+import { loginSchema, pinSchema } from "./schema";
+
+export const load: PageServerLoad = async () => {
+    const loginForm = await superValidate(zod(loginSchema));
+    const pinForm = await superValidate(zod(pinSchema));
+
+    return {
+        loginForm,
+        pinForm,
+    };
+};
 
 export const actions = {
     login: async ({ request, locals }) => {
-        const formData = await request.formData();
-        const email = formData.get("email")?.toString();
+        const loginForm = await superValidate(request, zod(loginSchema));
 
-        if (!email) {
-            return fail(400, { email });
+        if (!loginForm.valid) {
+            return fail(400, { loginForm });
         }
 
         const { error } = await locals.supabase.auth.signInWithOtp({
-            email,
+            email: loginForm.data.email,
         });
 
         if (error && isAuthError(error)) {
@@ -27,20 +36,18 @@ export const actions = {
             });
         }
 
-        return { email };
+        return message(loginForm, "Login form submitted");
     },
     verifyOTP: async ({ request, locals }) => {
-        const formData = await request.formData();
-        const email = formData.get("email")?.toString();
-        const pin = formData.get("pin")?.toString();
+        const pinForm = await superValidate(request, zod(pinSchema));
 
-        if (!email || !pin) {
-            return fail(400, { email, pin });
+        if (!pinForm.valid) {
+            return fail(400, { pinForm });
         }
 
         const { error } = await locals.supabase.auth.verifyOtp({
-            email,
-            token: pin,
+            email: pinForm.data.email,
+            token: pinForm.data.pin.join(""),
             type: "magiclink",
         });
 
@@ -53,12 +60,9 @@ export const actions = {
             });
         }
 
-        return { email, pin };
+        return message(pinForm, "Pin form submitted");
+    },
+    resendOTP: async () => {
+        console.log("resend");
     },
 } satisfies Actions;
-
-export const load: PageServerLoad = async () => {
-    return {
-        form: await superValidate(zod(loginSchema)),
-    };
-};

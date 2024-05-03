@@ -5,6 +5,9 @@ import { sequence } from "@sveltejs/kit/hooks";
 
 const supabase: Handle = async ({ event, resolve }) => {
     event.locals.supabase = createServerClient(env.PUBLIC_SUPABASE_URL, env.PUBLIC_SUPABASE_KEY, {
+        auth: {
+            flowType: "pkce",
+        },
         cookies: {
             get: (key) => event.cookies.get(key),
             set: (key, value, options) => {

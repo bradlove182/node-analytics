@@ -1,34 +1,36 @@
 import { isAuthError } from "@supabase/supabase-js";
 import { fail } from "@sveltejs/kit";
-import { message, superValidate } from "sveltekit-superforms";
+import { superValidate, type Infer } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import type { Actions, PageServerLoad } from "./$types";
-import { loginSchema, pinSchema } from "./schema";
+import { loginSchema } from "./schema";
 
 export const load: PageServerLoad = async () => {
-    const loginForm = await superValidate(zod(loginSchema));
-    const pinForm = await superValidate(zod(pinSchema));
+    const form = await superValidate(zod(loginSchema));
 
-    return {
-        loginForm,
-        pinForm,
-    };
+    return { form };
 };
 
 export const actions = {
     login: async ({ request, locals }) => {
-        const loginForm = await superValidate(request, zod(loginSchema));
+        const form = await superValidate(request, zod(loginSchema));
 
-        if (!loginForm.valid) {
-            return fail(400, { loginForm });
+        if (!form.valid) {
+            return fail(400, { form });
         }
 
         const { error } = await locals.supabase.auth.signInWithOtp({
-            email: loginForm.data.email,
+            email: form.data.email,
+            options: {
+                // set this to false if you do not want the user to be automatically signed up
+                shouldCreateUser: true,
+            },
         });
 
         if (error && isAuthError(error)) {
+            console.error(error);
             return fail(400, {
+                form,
                 error: {
                     status: error.status,
                     message: error.message,
@@ -36,33 +38,6 @@ export const actions = {
             });
         }
 
-        return message(loginForm, "Login form submitted");
-    },
-    verifyOTP: async ({ request, locals }) => {
-        const pinForm = await superValidate(request, zod(pinSchema));
-
-        if (!pinForm.valid) {
-            return fail(400, { pinForm });
-        }
-
-        const { error } = await locals.supabase.auth.verifyOtp({
-            email: pinForm.data.email,
-            token: pinForm.data.pin.join(""),
-            type: "magiclink",
-        });
-
-        if (error && isAuthError(error)) {
-            return fail(400, {
-                error: {
-                    status: error.status,
-                    message: error.message,
-                },
-            });
-        }
-
-        return message(pinForm, "Pin form submitted");
-    },
-    resendOTP: async () => {
-        console.log("resend");
+        return { form };
     },
 } satisfies Actions;

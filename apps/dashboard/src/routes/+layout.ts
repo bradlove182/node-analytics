@@ -12,6 +12,9 @@ export const load: LayoutLoad = async ({ data, depends, fetch }) => {
 
     const supabase = isBrowser()
         ? createBrowserClient(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_KEY, {
+              auth: {
+                  flowType: "pkce",
+              },
               global: {
                   fetch,
               },
@@ -23,6 +26,9 @@ export const load: LayoutLoad = async ({ data, depends, fetch }) => {
               },
           })
         : createServerClient(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_KEY, {
+              auth: {
+                  flowType: "pkce",
+              },
               global: {
                   fetch,
               },
@@ -45,8 +51,6 @@ export const load: LayoutLoad = async ({ data, depends, fetch }) => {
     const {
         data: { user },
     } = await supabase.auth.getUser();
-
-    console.log(user);
 
     return { session, supabase, user };
 };

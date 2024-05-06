@@ -1,6 +1,6 @@
 import { env } from "@repo/environment";
 import { createServerClient } from "@supabase/ssr";
-import { redirect, type Handle } from "@sveltejs/kit";
+import { redirect, type Handle, type HandleServerError } from "@sveltejs/kit";
 import { sequence } from "@sveltejs/kit/hooks";
 
 const supabase: Handle = async ({ event, resolve }) => {
@@ -67,3 +67,16 @@ const authGuard: Handle = async ({ event, resolve }) => {
 };
 
 export const handle: Handle = sequence(supabase, authGuard);
+
+export const handleError: HandleServerError = async ({ error, status, message }) => {
+    const errorId = crypto.randomUUID();
+
+    console.error(status, message);
+    console.error(error);
+
+    return {
+        code: status,
+        message: "An unexpected error occurred. We are working on it.",
+        errorId,
+    };
+};

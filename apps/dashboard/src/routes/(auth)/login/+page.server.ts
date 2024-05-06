@@ -1,5 +1,5 @@
 import { isAuthError } from "@supabase/supabase-js";
-import { fail } from "@sveltejs/kit";
+import { fail, redirect } from "@sveltejs/kit";
 import { superValidate, type Infer } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import type { Actions, PageServerLoad } from "./$types";
@@ -16,7 +16,7 @@ export const actions = {
         const form = await superValidate(request, zod(loginSchema));
 
         if (!form.valid) {
-            return fail(400, { form });
+            return fail(400, { form, error: undefined });
         }
 
         const { error } = await locals.supabase.auth.signInWithOtp({
@@ -29,6 +29,9 @@ export const actions = {
 
         if (error && isAuthError(error)) {
             console.error(error);
+            if (error.status === 422) {
+                return redirect(303, "/onboarding");
+            }
             return fail(400, {
                 form,
                 error: {
@@ -38,6 +41,6 @@ export const actions = {
             });
         }
 
-        return { form };
+        return { form, error: undefined };
     },
 } satisfies Actions;

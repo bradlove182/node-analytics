@@ -13,7 +13,11 @@ declare global {
                 { session: null; user: null } | { session: Session; user: User | null }
             >;
         }
-        // interface Error {}
+        interface Error {
+            code?: string | number;
+            errorId?: string;
+            message?: string;
+        }
         // interface PageData {}
         // interface PageState {}
         // interface Platform {}

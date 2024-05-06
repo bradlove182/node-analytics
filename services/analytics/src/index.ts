@@ -1,6 +1,7 @@
 import { initializeDatabase } from "@api/database";
 import { middleware } from "@api/modules/middleware";
-import { testRoutes } from "@api/routes";
+import { getTest } from "@api/routes";
+import { eventDataRoute, sessionEventDataRoute, websiteEventRoute } from "@api/routes/create";
 import { Logger } from "@api/utils";
 import cors from "@fastify/cors";
 import { env } from "@repo/environment";
@@ -24,8 +25,20 @@ export const start = async () => {
         credentials: true,
     });
 
-    server.register(testRoutes, {
-        prefix: `/${API_VERSION}/test`,
+    server.register(eventDataRoute, {
+        prefix: `/${API_VERSION}/create/event-data`,
+    });
+
+    server.register(websiteEventRoute, {
+        prefix: `/${API_VERSION}/create/website-events`,
+    });
+
+    server.register(sessionEventDataRoute, {
+        prefix: `/${API_VERSION}/create/session-events`,
+    });
+
+    server.register(getTest, {
+        prefix: `/${API_VERSION}/`,
     });
 
     try {

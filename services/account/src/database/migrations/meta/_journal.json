@@ -1,0 +1,20 @@
+{
+  "version": "5",
+  "dialect": "pg",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1715006386186,
+      "tag": "0000_aromatic_the_hunter",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1715071475069,
+      "tag": "0001_fine_odin",
+      "breakpoints": true
+    }
+  ]
+}

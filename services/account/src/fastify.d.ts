@@ -12,5 +12,7 @@ declare module "fastify" {
 declare module "lucia" {
     interface Register {
         Lucia: typeof lucia;
+        DatabaseSessionAttributes: DatabaseSessionAttributes;
     }
+    interface DatabaseSessionAttributes {}
 }

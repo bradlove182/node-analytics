@@ -1,3 +1,4 @@
+import { initializeDatabase } from "@api/database";
 import { middleware } from "@api/modules/middleware";
 import { authRoutes, testRoutes } from "@api/routes";
 import { Logger } from "@api/utils";
@@ -13,6 +14,8 @@ export const start = async () => {
         bodyLimit: 1_000_000,
         trustProxy: true,
     });
+
+    await initializeDatabase();
 
     server.setValidatorCompiler(validatorCompiler);
     server.setSerializerCompiler(serializerCompiler);

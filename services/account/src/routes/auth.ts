@@ -1,5 +1,4 @@
 import { usersTable } from "@api/database/schemas";
-import { isAuthApiError } from "@supabase/supabase-js";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { FastifyPluginCallback } from "fastify";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
@@ -21,21 +20,8 @@ export const authRoutes: FastifyPluginCallback = (fastify, _, done) => {
                 }),
             },
         },
-        async (request, response) => {
-            const { email, redirect } = request.body;
-
-            const { data, error } = await request.client.auth.signInWithOtp({
-                email,
-                options: {
-                    emailRedirectTo: redirect,
-                },
-            });
-
-            if (error && isAuthApiError(error)) {
-                return response.code(error.status).send(error);
-            }
-
-            return data;
+        async () => {
+            return { route: "/" };
         }
     );
 

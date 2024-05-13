@@ -1,16 +1,5 @@
 import crypto from "crypto";
-
-export const generateRandomString = (length: number): string => {
-    let token = "";
-    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    const randomArray = new Uint8Array(length);
-    crypto.getRandomValues(randomArray);
-    randomArray.forEach((number) => {
-        token += chars[number % chars.length];
-    });
-
-    return token;
-};
+import { generateIdFromEntropySize } from "lucia";
 
 export const generateRandomIntegerArray = (length: number) => {
     const max = 10;
@@ -19,6 +8,6 @@ export const generateRandomIntegerArray = (length: number) => {
     return randomArray.map((number) => number % max);
 };
 
-export const generateSessionToken = () => generateRandomString(256);
+export const generateSessionToken = () => generateIdFromEntropySize(128);
 
 export const generateOTP = () => generateRandomIntegerArray(4).join("");

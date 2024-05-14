@@ -1,5 +1,6 @@
 import { initializeDatabase } from "@api/database";
 import { middleware } from "@api/modules/middleware";
+import { Redis } from "@api/redis";
 import { authRoutes, testRoutes } from "@api/routes";
 import { Logger } from "@api/utils";
 import cors from "@fastify/cors";
@@ -16,6 +17,7 @@ export const start = async () => {
     });
 
     await initializeDatabase();
+    await Redis.initialize();
 
     server.setValidatorCompiler(validatorCompiler);
     server.setSerializerCompiler(serializerCompiler);

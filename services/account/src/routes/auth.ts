@@ -51,34 +51,6 @@ export const authRoutes: FastifyPluginCallback = (fastify, _, done) => {
             };
         }
     );
-    fastify.withTypeProvider<ZodTypeProvider>().post(
-        "/login",
-        {
-            schema: {
-                body: z.object({
-                    email: z.coerce.string().email(),
-                    redirect: z.coerce.string().url().optional(),
-                }),
-            },
-        },
-        async () => {
-            return { route: "/" };
-        }
-    );
-
-    fastify.withTypeProvider<ZodTypeProvider>().get(
-        "/callback",
-        {
-            schema: {
-                querystring: z.object({}),
-            },
-        },
-        async (request) => {
-            return {
-                url: request.url,
-            };
-        }
-    );
 
     done();
 };

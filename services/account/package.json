@@ -3,7 +3,7 @@
     "version": "1.0.0",
     "private": true,
     "scripts": {
-        "dev": "docker compose up -d && tsx watch --clear-screen=false src/index.ts",
+        "dev": "tsx watch --clear-screen=false src/index.ts",
         "migrate": "drizzle-kit generate:pg",
         "build": "tsc -p tsconfig.json",
         "start": "node dist/index.js"

@@ -16,12 +16,14 @@
         "drizzle-orm": "^0.30.9",
         "fastify": "^4.26.2",
         "fastify-plugin": "^4.5.1",
-        "pg": "^8.11.5"
+        "fastify-type-provider-zod": "^1.1.9",
+        "pg": "^8.11.5",
+        "zod": "^3.23.8"
     },
     "devDependencies": {
+        "@repo/environment": "workspace:*",
         "@repo/eslint-config": "workspace:*",
         "@repo/typescript-config": "workspace:*",
-        "@repo/environment": "workspace:*",
         "@types/cli-color": "^2.0.6",
         "@types/node": "^20.11.24",
         "@types/pg": "^8.11.5",

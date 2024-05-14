@@ -3,7 +3,7 @@ import { z } from "zod";
 const analyticsEnvSchema = z.object({
     CLICKHOUSE_DATABASE_URL: z.string().default("url"),
     CLICKHOUSE_DATABASE_USERNAME: z.string().default("default"),
-    CLICKHOUSE_DATABASE_PASSWORD: z.string().default("password"),
+    CLICKHOUSE_DATABASE_PASSWORD: z.string().default(""),
     ANALYTICS_PORT: z.coerce.number().default(8080),
     ANALYTICS_HOST: z.string().default("127.0.0.1"),
 });

@@ -1,0 +1,71 @@
+# docker-compose.yml
+
+version: "2"
+
+services:
+    clickhouse:
+        container_name: clickhouse
+        image: clickhouse/clickhouse-server:latest
+        depends_on:
+            - kafka
+        environment:
+            CLICKHOUSE_USER: "username"
+            CLICKHOUSE_PASS: "password"
+            CLICKHOUSE_DB: "honeycomb"
+            CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT: 1
+        ports:
+            - 8123:8123
+        deploy:
+            resources:
+                limits:
+                    cpus: "8"
+                    memory: 12000M
+        volumes:
+            - ./dev/db/.clickhouse/:/bitnami/clickhouse
+
+    kafka:
+        image: bitnami/kafka:latest
+        container_name: kafka
+        ports:
+            - 9092:9092
+            - 9093:9093
+            - 9094:9094
+        deploy:
+            resources:
+                limits:
+                    cpus: "1"
+                    memory: 2000M
+        environment:
+            - KAFKA_CFG_NODE_ID=0
+            - KAFKA_CFG_PROCESS_ROLES=controller,broker
+            - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093,EXTERNAL://:9094
+            - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092,EXTERNAL://localhost:9094
+            - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT
+            - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=0@kafka:9093
+            - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+        volumes:
+            - ./dev/db/.kafka/:/bitnami/kafka
+
+    kafka-ui:
+        depends_on:
+            - kafka
+        container_name: kafka-ui
+        image: provectuslabs/kafka-ui
+        ports:
+            - 8000:8000
+        environment:
+            DYNAMIC_CONFIG_ENABLED: true
+
+    postgres:
+        image: postgres
+        environment:
+            POSTGRES_USER: user
+            POSTGRES_PASSWORD: password
+            POSTGRES_DB: postgres
+        ports:
+            - "5432:5432"
+
+    redis:
+        image: redis
+        ports:
+            - "6379:6379"

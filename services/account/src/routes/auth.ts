@@ -1,16 +1,11 @@
-import { usersTable } from "@api/database/schemas";
 import { OTPService } from "@api/modules/otp";
-import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { FastifyPluginCallback } from "fastify";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
-import { sha256 } from "oslo/crypto";
+import { HMAC } from "oslo/crypto";
 import { encodeHex } from "oslo/encoding";
 import z from "zod";
 
-// Schema for inserting a user - can be used to validate API requests
-export const insertUserSchema = createInsertSchema(usersTable);
-// Schema for selecting a user - can be used to validate API responses
-export const selectUserSchema = createSelectSchema(usersTable);
+const hasher = new HMAC("SHA-256");
 
 export const authRoutes: FastifyPluginCallback = (fastify, _, done) => {
     fastify.withTypeProvider<ZodTypeProvider>().post(
@@ -26,10 +21,10 @@ export const authRoutes: FastifyPluginCallback = (fastify, _, done) => {
             const { body, redis } = request;
 
             const email = new TextEncoder().encode(body.email);
-            const hashedEmail = await sha256(email);
-            const hex = encodeHex(hashedEmail);
+            const hashedEmail = await hasher.sign(OTPService.secret, email);
+            const encodedEmail = encodeHex(hashedEmail);
 
-            const existingOTP = await redis.get(`otp:${hex}`);
+            const existingOTP = await redis.get(`otp:${encodedEmail}`);
 
             if (existingOTP) {
                 return {
@@ -39,7 +34,7 @@ export const authRoutes: FastifyPluginCallback = (fastify, _, done) => {
 
             const otp = await OTPService.generate();
 
-            await redis.set(`otp:${hex}`, otp, {
+            await redis.set(`otp:${encodedEmail}`, otp, {
                 EX: OTPService.expiration.seconds(),
             });
 

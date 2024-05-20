@@ -1,5 +1,6 @@
 import { initializeDatabase } from "@api/database";
 import { middleware } from "@api/modules/middleware";
+import { OTPService } from "@api/modules/otp";
 import { Redis } from "@api/redis";
 import { authRoutes, testRoutes } from "@api/routes";
 import { Logger } from "@api/utils";
@@ -18,6 +19,8 @@ export const start = async () => {
 
     await initializeDatabase();
     await Redis.initialize();
+
+    await OTPService.initialize();
 
     server.setValidatorCompiler(validatorCompiler);
     server.setSerializerCompiler(serializerCompiler);

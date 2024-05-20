@@ -1,18 +1,16 @@
-import { otpTable, usersTable } from "@api/database/schemas";
-import { generateOTP } from "@api/utils";
-import { eq } from "drizzle-orm";
+import { usersTable } from "@api/database/schemas";
+import { OTPService } from "@api/modules/otp";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { FastifyPluginCallback } from "fastify";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
-import { generateIdFromEntropySize } from "lucia";
+import { sha256 } from "oslo/crypto";
+import { encodeHex } from "oslo/encoding";
 import z from "zod";
 
 // Schema for inserting a user - can be used to validate API requests
 export const insertUserSchema = createInsertSchema(usersTable);
 // Schema for selecting a user - can be used to validate API responses
 export const selectUserSchema = createSelectSchema(usersTable);
-
-export const insertOTPSchema = createInsertSchema(otpTable);
 
 export const authRoutes: FastifyPluginCallback = (fastify, _, done) => {
     fastify.withTypeProvider<ZodTypeProvider>().post(
@@ -24,30 +22,29 @@ export const authRoutes: FastifyPluginCallback = (fastify, _, done) => {
                 }),
             },
         },
-        async (request, response) => {
-            const { db, body } = request;
+        async (request) => {
+            const { body, redis } = request;
 
-            const existingUser = await db.query.usersTable.findFirst({
-                where: eq(usersTable.email, body.email),
-            });
+            const email = new TextEncoder().encode(body.email);
+            const hashedEmail = await sha256(email);
+            const hex = encodeHex(hashedEmail);
 
-            if (existingUser) {
-                // Send OTP to users email
+            const existingOTP = await redis.get(`otp:${hex}`);
+
+            if (existingOTP) {
                 return {
-                    existingUser,
+                    existingOTP,
                 };
             }
 
-            const newUser = insertUserSchema.parse({
-                id: crypto.randomUUID(),
-                email: body.email,
+            const otp = await OTPService.generate();
+
+            await redis.set(`otp:${hex}`, otp, {
+                EX: OTPService.expiration.seconds(),
             });
 
-            //Create new user
-            await db.insert(usersTable).values(newUser);
-
             return {
-                user: newUser,
+                otp,
             };
         }
     );

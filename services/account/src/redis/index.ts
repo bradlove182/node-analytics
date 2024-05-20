@@ -2,8 +2,8 @@ import { Logger } from "@api/utils";
 import { env } from "@repo/environment";
 import * as redis from "redis";
 
-type RedisPrefixes = "session" | "visits";
-type RedisKey = `${RedisPrefixes}:${string | number}` | RedisPrefixes;
+type RedisPrefixes = "session" | "otp";
+type RedisKey = `${RedisPrefixes}:${string | number}`;
 
 class Redis {
     public static redis: ReturnType<typeof redis.createClient>;
@@ -33,7 +33,7 @@ class Redis {
      *
      * @example
      * await Redis.set("session:user_xxx", new Date().toISOString());
-     * await Redis.set("visits", "1");
+     * await Redis.set("otp:user_xxx", new Date().toISOString());
      */
     public static async set(key: RedisKey, value: string, options?: redis.SetOptions) {
         await this.redis.set(key, value, options);

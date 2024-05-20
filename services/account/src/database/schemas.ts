@@ -16,15 +16,3 @@ export const sessionTable = pgTable("session", {
         mode: "date",
     }).notNull(),
 });
-
-export const otpTable = pgTable("otp", {
-    id: text("id").primaryKey(),
-    pin: text("pin").notNull(),
-    userId: text("user_id")
-        .notNull()
-        .references(() => usersTable.id),
-    expiresAt: timestamp("expires_at", {
-        withTimezone: true,
-        mode: "date",
-    }).notNull(),
-});

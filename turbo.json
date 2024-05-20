@@ -12,9 +12,17 @@
             "dependsOn": ["^lint"]
         },
         "dev": {
+            "dependsOn": ["setup:dev", "db:migrate"],
             "cache": false,
             "persistent": true,
             "dotEnv": [".env.development.local", ".env.development", ".env.local", ".env"]
+        },
+        "db:migrate": {
+            "outputs": ["src/database/migrations/**"],
+            "cache": false
+        },
+        "setup:dev": {
+            "cache": false
         }
     }
 }

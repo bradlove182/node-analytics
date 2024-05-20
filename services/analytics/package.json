@@ -4,6 +4,7 @@
     "private": true,
     "scripts": {
         "dev": "tsx watch --clear-screen=false src/index.ts",
+        "setup:dev": "docker compose up -d",
         "migrate": "drizzle-kit generate:pg",
         "start": "node dist/index.js"
     },

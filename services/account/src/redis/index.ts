@@ -1,28 +1,29 @@
 import { Logger } from "@api/utils";
 import { env } from "@repo/environment";
-import * as redis from "redis";
+import IORedis, { Callback } from "ioredis";
 
 type RedisPrefixes = "session" | "otp";
-type RedisKey = `${RedisPrefixes}:${string | number}`;
+type RedisKey = `${RedisPrefixes}:${string}`;
 
 class Redis {
-    public static redis: ReturnType<typeof redis.createClient>;
+    public static redis: IORedis;
 
     public static async initialize() {
-        this.redis = redis.createClient({
-            url: env.ACCOUNT_REDIS_URL,
+        this.redis = new IORedis({
+            host: env.ACCOUNT_REDIS_HOST,
+            port: env.ACCOUNT_REDIS_PORT,
+            connectTimeout: 500,
+            maxRetriesPerRequest: 1,
         });
 
         this.redis.on("error", (error) => {
-            Logger.error("Start", "Failed to connect to redis " + String(error));
+            Logger.error("Redis", "Failed to connect to redis " + String(error));
             throw new Error("Failed to connect to redis");
         });
 
         this.redis.on("connect", () => {
-            Logger.info("Start", "Connected to redis");
+            Logger.info("Redis", "Connected to redis");
         });
-
-        await this.redis.connect();
     }
 
     /**
@@ -35,8 +36,8 @@ class Redis {
      * await Redis.set("session:user_xxx", new Date().toISOString());
      * await Redis.set("otp:user_xxx", new Date().toISOString());
      */
-    public static async set(key: RedisKey, value: string, options?: redis.SetOptions) {
-        await this.redis.set(key, value, options);
+    public static async set(key: RedisKey, value: string) {
+        await this.redis.set(key, value);
     }
 
     public static async incr(key: RedisKey) {
@@ -45,6 +46,10 @@ class Redis {
 
     public static async decr(key: RedisKey) {
         await this.redis.decr(key);
+    }
+
+    public static async expire(key: RedisKey, seconds: string | number) {
+        await this.redis.expire(key, seconds);
     }
 
     /**

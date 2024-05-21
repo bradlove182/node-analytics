@@ -1,18 +1,18 @@
 import { FastifyPluginCallback } from "fastify";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
 import { TimeSpan } from "oslo";
-import { sha256 } from "oslo/crypto";
+import { alphabet, generateRandomString, sha256 } from "oslo/crypto";
 import { encodeHex } from "oslo/encoding";
-import { TOTPController } from "oslo/otp";
 import z from "zod";
 
 const OTP_LENGTH = 6;
-const OTP_DURATION = new TimeSpan(15, "m");
+const OTP_DURATION = new TimeSpan(5, "m");
 
-const controller = new TOTPController({
-    digits: OTP_LENGTH,
-    period: OTP_DURATION,
-});
+const encodeEmail = async (email: string) => {
+    const encoded = new TextEncoder().encode(email);
+    const hashedEmail = await sha256(encoded);
+    return encodeHex(hashedEmail);
+};
 
 export const otpRoutes: FastifyPluginCallback = (server, _, done) => {
     server.withTypeProvider<ZodTypeProvider>().post(
@@ -30,21 +30,22 @@ export const otpRoutes: FastifyPluginCallback = (server, _, done) => {
                 }),
             },
         },
-        async (request) => {
+        async (request, response) => {
             const { body, redis } = request;
 
-            const email = new TextEncoder().encode(body.email);
-            const hashedEmail = await sha256(email);
-            const encodedEmail = encodeHex(hashedEmail);
+            const email = encodeEmail(body.email);
 
-            const otp = await controller.generate(hashedEmail);
+            const otp = generateRandomString(OTP_LENGTH, alphabet("0-9"));
 
-            await redis.set(`otp:${encodedEmail}`, otp);
-            await redis.expire(`otp:${encodedEmail}`, OTP_DURATION.seconds());
+            await redis.set(`otp:${email}`, otp);
+            await redis.expire(`otp:${email}`, OTP_DURATION.seconds());
 
-            return {
+            return response.status(200).send({
+                status: 200,
+                success: true,
+                message: "OTP sent successfully",
                 otp,
-            };
+            });
         }
     );
 
@@ -64,21 +65,27 @@ export const otpRoutes: FastifyPluginCallback = (server, _, done) => {
                 }),
             },
         },
-        async (request) => {
+        async (request, response) => {
             const { body, redis } = request;
 
             const otp = body.otp;
-            const email = new TextEncoder().encode(body.email);
-            const hashedEmail = await sha256(email);
-            const encodedEmail = encodeHex(hashedEmail);
+            const email = encodeEmail(body.email);
 
-            const storedOTP = await redis.get(`otp:${encodedEmail}`);
+            const storedOTP = await redis.get(`otp:${email}`);
 
-            const valid = Boolean((await controller.verify(otp, hashedEmail)) && storedOTP === otp);
+            if (storedOTP === otp) {
+                return response.status(200).send({
+                    status: 200,
+                    success: true,
+                    message: "OTP verified successfully",
+                });
+            }
 
-            return {
-                valid,
-            };
+            return response.status(500).send({
+                status: 500,
+                success: false,
+                message: "OTP invalid",
+            });
         }
     );
 

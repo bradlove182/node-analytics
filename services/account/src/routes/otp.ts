@@ -26,14 +26,22 @@ export const otpRoutes: FastifyPluginCallback = (server, _, done) => {
             },
             schema: {
                 body: z.object({
-                    email: z.coerce.string().email(),
+                    email: z.coerce.string().email("Invalid email"),
                 }),
+                response: {
+                    200: z.object({
+                        status: z.literal(200),
+                        message: z.string(),
+                        success: z.boolean(),
+                        otp: z.string().length(OTP_LENGTH),
+                    }),
+                },
             },
         },
         async (request, response) => {
             const { body, redis } = request;
 
-            const email = encodeEmail(body.email);
+            const email = await encodeEmail(body.email);
 
             const otp = generateRandomString(OTP_LENGTH, alphabet("0-9"));
 
@@ -63,13 +71,25 @@ export const otpRoutes: FastifyPluginCallback = (server, _, done) => {
                     email: z.coerce.string().email(),
                     otp: z.coerce.string().length(OTP_LENGTH),
                 }),
+                response: {
+                    200: z.object({
+                        status: z.literal(200),
+                        success: z.boolean(),
+                        message: z.string(),
+                    }),
+                    500: z.object({
+                        status: z.literal(500),
+                        success: z.boolean(),
+                        message: z.string(),
+                    }),
+                },
             },
         },
         async (request, response) => {
             const { body, redis } = request;
 
             const otp = body.otp;
-            const email = encodeEmail(body.email);
+            const email = await encodeEmail(body.email);
 
             const storedOTP = await redis.get(`otp:${email}`);
 

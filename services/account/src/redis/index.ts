@@ -1,6 +1,6 @@
 import { Logger } from "@api/utils";
 import { env } from "@repo/environment";
-import IORedis, { Callback } from "ioredis";
+import IORedis from "ioredis";
 
 type RedisPrefixes = "session" | "otp";
 type RedisKey = `${RedisPrefixes}:${string}`;

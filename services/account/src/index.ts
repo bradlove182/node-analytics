@@ -1,7 +1,7 @@
 import { initializeDatabase } from "@api/database";
 import { middleware } from "@api/modules/middleware";
 import { Redis } from "@api/redis";
-import { otpRoutes, testRoutes } from "@api/routes";
+import { otpRoutes, testRoutes, userRoutes } from "@api/routes";
 import { Logger } from "@api/utils";
 import cors from "@fastify/cors";
 import fastifyRateLimit from "@fastify/rate-limit";
@@ -41,6 +41,9 @@ export const start = async () => {
     });
     server.register(otpRoutes, {
         prefix: `/${API_VERSION}/auth/otp`,
+    });
+    server.register(userRoutes, {
+        prefix: `/${API_VERSION}/auth/user`,
     });
 
     try {

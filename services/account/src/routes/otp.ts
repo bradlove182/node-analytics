@@ -1,18 +1,12 @@
+import { encodeString } from "@api/utils";
 import { FastifyPluginCallback } from "fastify";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
 import { TimeSpan } from "oslo";
-import { alphabet, generateRandomString, sha256 } from "oslo/crypto";
-import { encodeHex } from "oslo/encoding";
+import { alphabet, generateRandomString } from "oslo/crypto";
 import z from "zod";
 
 const OTP_LENGTH = 6;
 const OTP_DURATION = new TimeSpan(5, "m");
-
-const encodeEmail = async (email: string) => {
-    const encoded = new TextEncoder().encode(email);
-    const hashedEmail = await sha256(encoded);
-    return encodeHex(hashedEmail);
-};
 
 export const otpRoutes: FastifyPluginCallback = (server, _, done) => {
     server.withTypeProvider<ZodTypeProvider>().post(
@@ -41,7 +35,7 @@ export const otpRoutes: FastifyPluginCallback = (server, _, done) => {
         async (request, response) => {
             const { body, redis } = request;
 
-            const email = await encodeEmail(body.email);
+            const email = await encodeString(body.email);
 
             const otp = generateRandomString(OTP_LENGTH, alphabet("0-9"));
 
@@ -89,7 +83,7 @@ export const otpRoutes: FastifyPluginCallback = (server, _, done) => {
             const { body, redis } = request;
 
             const otp = body.otp;
-            const email = await encodeEmail(body.email);
+            const email = await encodeString(body.email);
 
             const storedOTP = await redis.get(`otp:${email}`);
 

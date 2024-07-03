@@ -3,13 +3,13 @@ import { Logger } from "@api/utils";
 import { env } from "@repo/environment";
 import { drizzle } from "drizzle-orm/node-postgres";
 import { migrate } from "drizzle-orm/node-postgres/migrator";
-import { Pool } from "pg";
+import pg from "pg";
 
 export let db: ReturnType<typeof drizzle<typeof schema>>;
 
 export const initializeDatabase = async () => {
     try {
-        const pool = await new Pool({
+        const pool = await new pg.Pool({
             connectionString: env.ACCOUNT_DATABASE_URL,
         }).connect();
 

@@ -1,10 +1,8 @@
 {
-  "id": "63ec7f84-2e26-47b0-b4f1-172a5c673967",
-  "prevId": "b49b78ee-d692-47cf-9062-97916b31558f",
-  "version": "5",
-  "dialect": "pg",
+  "version": "7",
+  "dialect": "postgresql",
   "tables": {
-    "otp": {
+    "public.otp": {
       "name": "otp",
       "schema": "",
       "columns": {
@@ -38,21 +36,21 @@
         "otp_user_id_users_id_fk": {
           "name": "otp_user_id_users_id_fk",
           "tableFrom": "otp",
-          "tableTo": "users",
           "columnsFrom": [
             "user_id"
           ],
+          "tableTo": "users",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "session": {
+    "public.session": {
       "name": "session",
       "schema": "",
       "columns": {
@@ -80,21 +78,21 @@
         "session_user_id_users_id_fk": {
           "name": "session_user_id_users_id_fk",
           "tableFrom": "session",
-          "tableTo": "users",
           "columnsFrom": [
             "user_id"
           ],
+          "tableTo": "users",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "users": {
+    "public.users": {
       "name": "users",
       "schema": "",
       "columns": {
@@ -127,8 +125,10 @@
   "enums": {},
   "schemas": {},
   "_meta": {
-    "columns": {},
     "schemas": {},
-    "tables": {}
-  }
+    "tables": {},
+    "columns": {}
+  },
+  "id": "63ec7f84-2e26-47b0-b4f1-172a5c673967",
+  "prevId": "b49b78ee-d692-47cf-9062-97916b31558f"
 }

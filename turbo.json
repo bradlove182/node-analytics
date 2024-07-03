@@ -1,21 +1,19 @@
 {
     "$schema": "https://turbo.build/schema.json",
-    "globalDotEnv": [".env"],
     "globalEnv": ["*"],
+    "globalDependencies": [".env"],
     "tasks": {
         "build": {
             "dependsOn": ["^build"],
-            "outputs": ["dist/**", ".svelte-kit/**"],
-            "dotEnv": [".env.production.local", ".env.production", ".env.local", ".env"]
+            "outputs": ["dist/**", ".svelte-kit/**"]
         },
         "lint": {
             "dependsOn": ["^lint"]
         },
         "dev": {
-            "dependsOn": ["setup:dev", "db:migrate", "db:view"],
+            "dependsOn": ["setup:dev", "db:migrate"],
             "cache": false,
-            "persistent": true,
-            "dotEnv": [".env.development.local", ".env.development", ".env.local", ".env"]
+            "persistent": true
         },
         "setup:dev": {
             "cache": false
@@ -25,7 +23,9 @@
             "cache": false
         },
         "db:view": {
-            "cache": false
+            "dependsOn": ["setup:dev", "db:migrate"],
+            "cache": false,
+            "persistent": true
         }
     }
 }

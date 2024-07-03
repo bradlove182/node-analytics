@@ -5,7 +5,7 @@
     "scripts": {
         "dev": "tsx watch --clear-screen=false src/index.ts",
         "setup:dev": "docker compose up -d",
-        "db:migrate": "drizzle-kit generate:pg",
+        "db:migrate": "drizzle-kit generate",
         "db:view": "drizzle-kit studio",
         "build": "tsc -p tsconfig.json",
         "start": "node dist/index.js"

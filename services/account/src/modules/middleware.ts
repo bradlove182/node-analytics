@@ -1,3 +1,4 @@
+import { lucia } from "@api/auth";
 import { db } from "@api/database";
 import { Redis } from "@api/redis";
 import type { FastifyInstance } from "fastify";
@@ -7,6 +8,7 @@ const middleware = fp(async (fastify: FastifyInstance) => {
     fastify.addHook("onRequest", async (request) => {
         request.db = db;
         request.redis = Redis;
+        request.auth = lucia;
     });
 });
 

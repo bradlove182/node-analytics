@@ -1,9 +1,13 @@
 import { pgTable, text, timestamp } from "drizzle-orm/pg-core";
+import { createInsertSchema, createSelectSchema } from "drizzle-zod";
+import { z } from "zod";
 
 export const usersTable = pgTable("users", {
     id: text("id").primaryKey(),
-    email: text("email").notNull(),
-    createdAt: timestamp("created_at").notNull().defaultNow(),
+    createdAt: timestamp("created_at", {
+        withTimezone: true,
+        mode: "date",
+    }).notNull().defaultNow(),
 });
 
 export const sessionTable = pgTable("session", {
@@ -16,3 +20,12 @@ export const sessionTable = pgTable("session", {
         mode: "date",
     }).notNull(),
 });
+
+export const userSelectSchema = createSelectSchema(usersTable);
+export const userInsertSchema = createInsertSchema(usersTable);
+
+export const sessionSelectSchema = createSelectSchema(sessionTable);
+export const sessionInsertSchema = createInsertSchema(sessionTable);
+
+export type User = z.infer<typeof userSelectSchema>;
+export type Session = z.infer<typeof sessionSelectSchema>;

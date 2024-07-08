@@ -3,9 +3,9 @@ import cors from "@fastify/cors";
 import formBody from "@fastify/formbody";
 import { fastifyHelmet } from "@fastify/helmet";
 import fastifyRateLimit from "@fastify/rate-limit";
-import { FastifyPluginCallback } from "fastify";
+import fp from "fastify-plugin";
 
-export const plugins: FastifyPluginCallback = (server, _, done) => {
+export const plugins = fp(async (server) => {
     server.register(cors, {
         maxAge: 600,
         origin: true,
@@ -18,6 +18,7 @@ export const plugins: FastifyPluginCallback = (server, _, done) => {
         redis: Redis.redis,
     });
     server.register(formBody);
-    server.register(fastifyHelmet);
-    done();
-};
+    server.register(fastifyHelmet, {
+        global: true,
+    });
+});

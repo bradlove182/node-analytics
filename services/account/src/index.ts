@@ -1,4 +1,5 @@
 import { initializeDatabase } from "@api/database";
+import { handlers } from "@api/modules/handlers";
 import { middleware } from "@api/modules/middleware";
 import { plugins } from "@api/modules/plugins";
 import { Redis } from "@api/redis";
@@ -7,7 +8,6 @@ import { Logger } from "@api/utils";
 import { env } from "@repo/environment";
 import { fastify } from "fastify";
 import { serializerCompiler, validatorCompiler } from "fastify-type-provider-zod";
-import { ZodError } from "zod";
 
 const API_VERSION = "v1";
 
@@ -25,28 +25,9 @@ export const start = async () => {
 
     server.register(middleware);
     server.register(plugins);
+    server.register(handlers);
     server.register(routes, {
         prefix: `/${API_VERSION}`,
-    });
-
-    server.setErrorHandler((error, request, response) => {
-        const statusCode = error.statusCode || 500;
-
-        response.status(statusCode);
-
-        if (error instanceof ZodError) {
-            response.send({
-                status: statusCode,
-                success: false,
-                message: error.issues[0]?.message,
-            });
-        }
-
-        response.send({
-            status: statusCode,
-            success: false,
-            message: error.message,
-        });
     });
 
     try {

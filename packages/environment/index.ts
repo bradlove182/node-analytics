@@ -1,5 +1,9 @@
 import { z } from "zod";
 
+const baseEnvSchema = z.object({
+    NODE_ENV: z.enum(["development", "production", "test"]).default("development"),
+});
+
 const analyticsEnvSchema = z.object({
     CLICKHOUSE_DATABASE_URL: z.string().default("url"),
     CLICKHOUSE_DATABASE_USERNAME: z.string().default("default"),
@@ -21,6 +25,9 @@ const supabaseEnvSchema = z.object({
     PUBLIC_SUPABASE_KEY: z.string().default("key"),
 });
 
-const envSchema = analyticsEnvSchema.merge(accountEnvSchema).merge(supabaseEnvSchema);
+const envSchema = baseEnvSchema
+    .merge(analyticsEnvSchema)
+    .merge(accountEnvSchema)
+    .merge(supabaseEnvSchema);
 
 export const env = envSchema.parse(process.env);

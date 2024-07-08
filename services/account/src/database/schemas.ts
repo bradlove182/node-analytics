@@ -4,10 +4,14 @@ import { z } from "zod";
 
 export const usersTable = pgTable("users", {
     id: text("id").primaryKey(),
+    email: text("email").unique().notNull(),
+    password_hash: text("password_hash").notNull(),
     createdAt: timestamp("created_at", {
         withTimezone: true,
         mode: "date",
-    }).notNull().defaultNow(),
+    })
+        .notNull()
+        .defaultNow(),
 });
 
 export const sessionTable = pgTable("session", {

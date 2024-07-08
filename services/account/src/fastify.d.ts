@@ -4,7 +4,6 @@ import type { User } from "@api/database/schemas";
 import type { Redis } from "@api/redis";
 
 declare module "fastify" {
-    /* eslint-disable-next-line no-unused-vars */
     interface FastifyRequest {
         db: Database;
         redis: typeof Redis;
@@ -15,6 +14,6 @@ declare module "fastify" {
 declare module "lucia" {
     interface Register {
         Lucia: Auth;
-        DatabaseUserAttributes: Omit<User, "id">;
+        DatabaseUserAttributes: Omit<User, "id" | "password_hash">;
     }
 }

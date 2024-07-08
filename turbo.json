@@ -22,7 +22,7 @@
             "outputs": ["src/database/migrations/**"],
             "cache": false
         },
-        "db:view": {
+        "db:studio": {
             "dependsOn": ["setup:dev", "db:migrate"],
             "cache": false,
             "persistent": true

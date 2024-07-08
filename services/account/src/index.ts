@@ -1,13 +1,13 @@
 import { initializeDatabase } from "@api/database";
 import { middleware } from "@api/modules/middleware";
+import { plugins } from "@api/modules/plugins";
 import { Redis } from "@api/redis";
-import { otpRoutes, testRoutes, userRoutes } from "@api/routes";
+import { routes } from "@api/routes";
 import { Logger } from "@api/utils";
-import cors from "@fastify/cors";
-import fastifyRateLimit from "@fastify/rate-limit";
 import { env } from "@repo/environment";
 import { fastify } from "fastify";
 import { serializerCompiler, validatorCompiler } from "fastify-type-provider-zod";
+import { ZodError } from "zod";
 
 const API_VERSION = "v1";
 
@@ -24,26 +24,29 @@ export const start = async () => {
     server.setSerializerCompiler(serializerCompiler);
 
     server.register(middleware);
-    server.register(cors, {
-        maxAge: 600,
-        origin: true,
-        credentials: true,
-    });
-    server.register(fastifyRateLimit, {
-        global: true,
-        max: 3000,
-        allowList: ["127.0.0.1"],
-        redis: Redis.redis,
+    server.register(plugins);
+    server.register(routes, {
+        prefix: `/${API_VERSION}`,
     });
 
-    server.register(testRoutes, {
-        prefix: `/${API_VERSION}/test`,
-    });
-    server.register(otpRoutes, {
-        prefix: `/${API_VERSION}/auth/otp`,
-    });
-    server.register(userRoutes, {
-        prefix: `/${API_VERSION}/auth/user`,
+    server.setErrorHandler((error, request, response) => {
+        const statusCode = error.statusCode || 500;
+
+        response.status(statusCode);
+
+        if (error instanceof ZodError) {
+            response.send({
+                status: statusCode,
+                success: false,
+                message: error.issues[0]?.message,
+            });
+        }
+
+        response.send({
+            status: statusCode,
+            success: false,
+            message: error.message,
+        });
     });
 
     try {

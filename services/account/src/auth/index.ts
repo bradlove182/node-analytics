@@ -7,15 +7,16 @@ const adapter = new DrizzlePostgreSQLAdapter(db, sessionTable, usersTable);
 
 export const lucia = new Lucia(adapter, {
     sessionCookie: {
-		attributes: {
-			secure: process.env.NODE_ENV === "production"
-		}
-	},
-	getUserAttributes: (attributes) => {
-		return {
-			createdAt: attributes.createdAt
-		};
-	}
+        attributes: {
+            secure: process.env.NODE_ENV === "production",
+        },
+    },
+    getUserAttributes: (attributes) => {
+        return {
+            email: attributes.email,
+            createdAt: attributes.createdAt,
+        };
+    },
 });
 
 export type Auth = typeof lucia;

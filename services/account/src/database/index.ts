@@ -7,6 +7,8 @@ import pg from "pg";
 
 export let db: ReturnType<typeof drizzle<typeof schema>>;
 
+export type Database = typeof db;
+
 export const initializeDatabase = async () => {
     try {
         const pool = await new pg.Pool({

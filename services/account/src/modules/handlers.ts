@@ -1,3 +1,4 @@
+import { Logger } from "@api/utils";
 import fp from "fastify-plugin";
 import pg from "pg";
 import { ZodError } from "zod";
@@ -8,25 +9,26 @@ export const handlers = fp(async (server) => {
 
         response.status(statusCode);
 
+        Logger.error(request.url, error.message);
+
         if (error instanceof ZodError) {
             response.send({
-                status: statusCode,
+                statusCode,
                 success: false,
                 message: error.issues[0]?.message,
             });
         }
 
         if (error instanceof pg.DatabaseError) {
-            console.log(error.statusCode);
             response.send({
-                status: statusCode,
+                statusCode,
                 success: false,
                 message: error.message,
             });
         }
 
         response.send({
-            status: statusCode,
+            statusCode,
             success: false,
             message: error.message,
         });

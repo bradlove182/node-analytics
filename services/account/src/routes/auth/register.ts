@@ -12,12 +12,12 @@ const schema = {
     }),
     response: {
         200: z.object({
-            status: z.literal(200),
+            statusCode: z.literal(200),
             success: z.boolean(),
             message: z.string(),
         }),
         400: z.object({
-            status: z.literal(400),
+            statusCode: z.literal(400),
             success: z.boolean(),
             message: z.string(),
         }),
@@ -65,7 +65,7 @@ export const registerRoute: FastifyPluginCallback = (server, _, done) => {
                 });
 
                 return response.status(200).send({
-                    status: 200,
+                    statusCode: 200,
                     success: true,
                     message: "Registration successful",
                 });

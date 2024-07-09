@@ -17,7 +17,7 @@ const schema = {
     }),
     response: {
         200: z.object({
-            status: z.literal(200),
+            statusCode: z.literal(200),
             success: z.boolean(),
             message: z.string(),
         }),
@@ -38,7 +38,7 @@ export const loginRoute: FastifyPluginCallback = (server, _, done) => {
         },
         async (request, response) => {
             response.status(200).send({
-                status: 200,
+                statusCode: 200,
                 success: true,
                 message: "Login successful",
             });

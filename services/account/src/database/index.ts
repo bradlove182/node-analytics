@@ -1,25 +1,29 @@
-import * as schema from "@api/database/schemas";
+import { sessionTable, userTable } from "@api/database/schemas";
 import { Logger } from "@api/utils";
 import { env } from "@repo/environment";
 import { drizzle } from "drizzle-orm/node-postgres";
 import { migrate } from "drizzle-orm/node-postgres/migrator";
 import pg from "pg";
 
-export let db: ReturnType<typeof drizzle<typeof schema>>;
+const schema = {
+    user: userTable,
+    session: sessionTable,
+};
+
+const pool = new pg.Pool({
+    connectionString: env.ACCOUNT_DATABASE_URL,
+});
+
+export let db = drizzle(pool, {
+    schema,
+});
 
 export type Database = typeof db;
 
 export const initializeDatabase = async () => {
     try {
-        const pool = await new pg.Pool({
-            connectionString: env.ACCOUNT_DATABASE_URL,
-        }).connect();
-
+        await pool.connect();
         Logger.info("Start", "Connected to database");
-
-        db = drizzle(pool, {
-            schema,
-        });
     } catch (error) {
         if (error instanceof Error) {
             Logger.error("Start", `Failed to connect to database ${error.message}`);

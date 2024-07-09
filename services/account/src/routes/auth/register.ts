@@ -1,5 +1,4 @@
-import { usersTable } from "@api/database/schemas";
-import { Logger } from "@api/utils";
+import { userTable } from "@api/database/schemas";
 import { hash } from "@node-rs/argon2";
 import { FastifyPluginCallback, FastifySchema } from "fastify";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
@@ -51,7 +50,7 @@ export const registerRoute: FastifyPluginCallback = (server, _, done) => {
             const userId = generateIdFromEntropySize(10);
 
             try {
-                await db.insert(usersTable).values({
+                await db.insert(userTable).values({
                     id: userId,
                     email,
                     password_hash: passwordHash,
@@ -71,17 +70,7 @@ export const registerRoute: FastifyPluginCallback = (server, _, done) => {
                     message: "Registration successful",
                 });
             } catch (error) {
-                if (error instanceof Error) {
-                    Logger.error("auth/register", error.message);
-                    if (error.stack) {
-                        Logger.error("auth/register", error.stack);
-                    }
-                }
-                return response.status(400).send({
-                    status: 400,
-                    success: false,
-                    message: "Registration failed, please try again.",
-                });
+                throw error;
             }
         }
     );

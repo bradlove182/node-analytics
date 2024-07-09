@@ -11,14 +11,11 @@ import { serializerCompiler, validatorCompiler } from "fastify-type-provider-zod
 
 const API_VERSION = "v1";
 
-export const start = async () => {
+export const buildServer = () => {
     const server = fastify({
         bodyLimit: 1_000_000,
         trustProxy: true,
     });
-
-    await initializeDatabase();
-    await Redis.initialize();
 
     server.setValidatorCompiler(validatorCompiler);
     server.setSerializerCompiler(serializerCompiler);
@@ -29,6 +26,15 @@ export const start = async () => {
     server.register(routes, {
         prefix: `/${API_VERSION}`,
     });
+
+    return server;
+};
+
+export const startServer = async () => {
+    const server = buildServer();
+
+    await initializeDatabase();
+    await Redis.initialize();
 
     try {
         await server.listen({ host: env.ACCOUNT_HOST, port: env.ACCOUNT_PORT });
@@ -45,4 +51,4 @@ export const start = async () => {
     }
 };
 
-start();
+startServer();

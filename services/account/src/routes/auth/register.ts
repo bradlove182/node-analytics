@@ -80,7 +80,7 @@ export const registerRoute: FastifyPluginCallback = (server, _, done) => {
                 return response.status(400).send({
                     status: 400,
                     success: false,
-                    message: "Registration failed",
+                    message: "Registration failed, please try again.",
                 });
             }
         }

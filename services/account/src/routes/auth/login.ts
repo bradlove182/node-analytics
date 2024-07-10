@@ -1,3 +1,5 @@
+import { verify } from "@node-rs/argon2";
+import { eq } from "drizzle-orm";
 import { FastifyPluginCallback, FastifySchema } from "fastify";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
 import { z } from "zod";
@@ -9,15 +11,18 @@ const schema = {
                 message: "Email is required",
             })
             .email("Invalid email"),
-        password: z
-            .string({
-                message: "Password is required",
-            })
-            .min(8, "Password must be at least 8 characters"),
+        password: z.string({
+            message: "Password is required",
+        }),
     }),
     response: {
         200: z.object({
             statusCode: z.literal(200),
+            success: z.boolean(),
+            message: z.string(),
+        }),
+        400: z.object({
+            statusCode: z.literal(400),
             success: z.boolean(),
             message: z.string(),
         }),
@@ -36,12 +41,53 @@ export const loginRoute: FastifyPluginCallback = (server, _, done) => {
             },
             schema,
         },
-        async (request, response) => {
-            response.status(200).send({
-                statusCode: 200,
-                success: true,
-                message: "Login successful",
-            });
+        async (request, reply) => {
+            const { body, db, auth } = request;
+            const { email, password } = body;
+
+            try {
+                const user = await db.query.user.findFirst({
+                    where: (userTable) => eq(userTable.email, email),
+                });
+
+                if (!user) {
+                    return reply.code(400).send({
+                        statusCode: 400,
+                        success: false,
+                        message: "Invalid email or password",
+                    });
+                }
+
+                const validPassword = await verify(user.password_hash, password, {
+                    memoryCost: 19456,
+                    timeCost: 2,
+                    outputLen: 32,
+                    parallelism: 1,
+                });
+
+                if (!validPassword) {
+                    return reply.code(400).send({
+                        statusCode: 400,
+                        success: false,
+                        message: "Invalid email or password",
+                    });
+                }
+
+                const session = await auth.createSession(user.id, {});
+                const sessionCookie = auth.createSessionCookie(session.id);
+
+                reply.headers({
+                    "Set-Cookie": sessionCookie.serialize(),
+                });
+
+                reply.code(200).send({
+                    statusCode: 200,
+                    success: true,
+                    message: "Login successful",
+                });
+            } catch (error) {
+                throw error;
+            }
         }
     );
 

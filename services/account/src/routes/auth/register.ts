@@ -3,12 +3,23 @@ import { hash } from "@node-rs/argon2";
 import { FastifyPluginCallback, FastifySchema } from "fastify";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
 import { generateIdFromEntropySize } from "lucia";
+import pg from "pg";
 import { z } from "zod";
 
 const schema = {
     body: z.object({
-        email: z.string().email("Invalid email").describe("Email address"),
-        password: z.string().min(8, "Password must be at least 8 characters").describe("Password"),
+        email: z
+            .string({
+                message: "Email is required",
+            })
+            .email("Invalid email")
+            .describe("User's Email address"),
+        password: z
+            .string({
+                message: "Password is required",
+            })
+            .min(8, "Password must be at least 8 characters")
+            .describe("User's Password"),
     }),
     response: {
         200: z.object({
@@ -36,7 +47,7 @@ export const registerRoute: FastifyPluginCallback = (server, _, done) => {
             },
             schema,
         },
-        async (request, response) => {
+        async (request, reply) => {
             const { db, body, auth } = request;
             const { email, password } = body;
 
@@ -60,16 +71,26 @@ export const registerRoute: FastifyPluginCallback = (server, _, done) => {
                 const session = await auth.createSession(userId, {});
                 const sessionCookie = auth.createSessionCookie(session.id);
 
-                response.headers({
+                reply.headers({
                     "Set-Cookie": sessionCookie.serialize(),
                 });
 
-                return response.status(200).send({
+                return reply.code(200).send({
                     statusCode: 200,
                     success: true,
                     message: "Registration successful",
                 });
             } catch (error) {
+                if (error instanceof pg.DatabaseError) {
+                    if ((error.constraint = "user_email_unique")) {
+                        return reply.code(400).send({
+                            statusCode: 400,
+                            success: false,
+                            message: "Email already exists",
+                        });
+                    }
+                }
+
                 throw error;
             }
         }

@@ -1,4 +1,4 @@
-import { userTable } from "@api/database/schemas";
+import { passwordTable, userTable } from "@api/database/schemas";
 import { hash } from "@node-rs/argon2";
 import { FastifyPluginCallback, FastifySchema } from "fastify";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
@@ -59,14 +59,22 @@ export const registerRoute: FastifyPluginCallback = (server, _, done) => {
             });
 
             const userId = generateIdFromEntropySize(10);
+            const passwordId = generateIdFromEntropySize(10);
 
             try {
-                await db.insert(userTable).values({
-                    id: userId,
-                    email,
-                    password_hash: passwordHash,
-                    createdAt: new Date(),
-                });
+                await Promise.all([
+                    db.insert(userTable).values({
+                        id: userId,
+                        email,
+                        createdAt: new Date(),
+                    }),
+                    db.insert(passwordTable).values({
+                        id: passwordId,
+                        userId: userId,
+                        password_hash: passwordHash,
+                        createdAt: new Date(),
+                    }),
+                ]);
 
                 const session = await auth.createSession(userId, {});
                 const sessionCookie = auth.createSessionCookie(session.id);

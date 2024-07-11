@@ -20,9 +20,9 @@ export const buildServer = () => {
     server.setValidatorCompiler(validatorCompiler);
     server.setSerializerCompiler(serializerCompiler);
 
-    server.register(middleware);
     server.register(plugins);
     server.register(handlers);
+    server.register(middleware);
     server.register(routes, {
         prefix: `/${API_VERSION}`,
     });

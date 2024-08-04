@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { pgTable, text, timestamp } from "drizzle-orm/pg-core";
+import { pgTable, primaryKey, text, timestamp } from "drizzle-orm/pg-core";
 
 export const userTable = pgTable("user", {
     id: text("id").primaryKey(),
@@ -12,11 +12,12 @@ export const userTable = pgTable("user", {
         .defaultNow(),
 });
 
-export const userTableRelations = relations(userTable, ({ one }) => ({
+export const userTableRelations = relations(userTable, ({ one, many }) => ({
     password: one(passwordTable, {
         fields: [userTable.id],
         references: [passwordTable.userId],
     }),
+    usersToOrganizations: many(usersToOrganizations),
 }));
 
 export const sessionTable = pgTable("session", {
@@ -44,9 +45,77 @@ export const passwordTable = pgTable("password", {
         .defaultNow(),
 });
 
+export const organizationTable = pgTable("organization", {
+    id: text("id").primaryKey(),
+    name: text("name").notNull(),
+    createdAt: timestamp("created_at", {
+        withTimezone: true,
+        mode: "date",
+    })
+        .notNull()
+        .defaultNow(),
+});
+
+export const organizationTableRelations = relations(organizationTable, ({ many }) => ({
+    usersToOrganizations: many(usersToOrganizations),
+}));
+
+export const projectTable = pgTable("project", {
+    id: text("id").primaryKey(),
+    name: text("name").notNull(),
+    organizationId: text("organization_id")
+        .notNull()
+        .references(() => organizationTable.id),
+    createdAt: timestamp("created_at", {
+        withTimezone: true,
+        mode: "date",
+    })
+        .notNull()
+        .defaultNow(),
+});
+
+export const projectTableRelations = relations(projectTable, ({ one, many }) => ({
+    organization: one(organizationTable, {
+        fields: [projectTable.organizationId],
+        references: [organizationTable.id],
+    }),
+}));
+
+export const usersToOrganizations = pgTable(
+    "users_to_organizations",
+    {
+        userId: text("user_id")
+            .notNull()
+            .references(() => userTable.id),
+        organizationId: text("organization_id")
+            .notNull()
+            .references(() => organizationTable.id),
+    },
+    (t) => ({
+        pk: primaryKey({ columns: [t.userId, t.organizationId] }),
+    })
+);
+
+export const usersToOrganizationsRelations = relations(usersToOrganizations, ({ one }) => ({
+    organization: one(organizationTable, {
+        fields: [usersToOrganizations.organizationId],
+        references: [organizationTable.id],
+    }),
+    user: one(userTable, {
+        fields: [usersToOrganizations.userId],
+        references: [userTable.id],
+    }),
+}));
+
 export const schema = {
     user: userTable,
     session: sessionTable,
     password: passwordTable,
+    organization: organizationTable,
+    project: projectTable,
+    usersToOrganizations,
+    usersToOrganizationsRelations,
     userTableRelations,
+    organizationTableRelations,
+    projectTableRelations,
 };

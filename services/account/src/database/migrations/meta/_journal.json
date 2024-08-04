@@ -71,6 +71,20 @@
       "when": 1720687682948,
       "tag": "0009_green_warpath",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1721078379791,
+      "tag": "0010_cute_black_tom",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1722753544626,
+      "tag": "0011_majestic_professor_monster",
+      "breakpoints": true
     }
   ]
 }

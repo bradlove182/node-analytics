@@ -1,6 +1,7 @@
 import { FastifyPluginCallback } from "fastify";
 
 import { authRoutes } from "./auth";
+import { organizationRoutes } from "./organization";
 import { testRoutes } from "./test";
 import { usersRoutes } from "./users";
 
@@ -13,6 +14,9 @@ export const routes: FastifyPluginCallback = (server, _, done) => {
     });
     server.register(usersRoutes, {
         prefix: `/users`,
+    });
+    server.register(organizationRoutes, {
+        prefix: `/organization`,
     });
     done();
 };

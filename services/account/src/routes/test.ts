@@ -1,5 +1,5 @@
+import { eq } from "drizzle-orm";
 import type { FastifyPluginCallback } from "fastify";
-import { generateRandomInteger } from "oslo/crypto";
 
 export const testRoutes: FastifyPluginCallback = (fastify, _, done) => {
     fastify.get(
@@ -11,8 +11,17 @@ export const testRoutes: FastifyPluginCallback = (fastify, _, done) => {
                 },
             },
         },
-        async () => {
-            return { test: generateRandomInteger(10) };
+        async (request) => {
+            const { db } = request;
+
+            const testUser = await db.query.user.findFirst({
+                where: (userTable) => eq(userTable.id, "test"),
+                with: {
+                    usersToOrganizations: true,
+                },
+            });
+
+            return { testUser };
         }
     );
 

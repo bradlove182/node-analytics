@@ -1,5 +1,6 @@
-import { env } from "@repo/environment";
-import { defineConfig } from "drizzle-kit";
+import { env } from "@repo/environment"
+import { defineConfig } from "drizzle-kit"
+
 export default defineConfig({
     schema: "./src/database/schemas.ts",
     out: "./src/database/migrations",
@@ -7,4 +8,4 @@ export default defineConfig({
     dbCredentials: {
         url: env.ACCOUNT_DATABASE_URL,
     },
-});
+})

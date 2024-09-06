@@ -1,8 +1,8 @@
-import { verify } from "@node-rs/argon2";
-import { eq } from "drizzle-orm";
-import { FastifyPluginCallback, FastifySchema } from "fastify";
-import { ZodTypeProvider } from "fastify-type-provider-zod";
-import { z } from "zod";
+import { verify } from "@node-rs/argon2"
+import { eq } from "drizzle-orm"
+import { z } from "zod"
+import type { FastifyPluginCallback, FastifySchema } from "fastify"
+import type { ZodTypeProvider } from "fastify-type-provider-zod"
 
 const schema = {
     body: z.object({
@@ -27,7 +27,7 @@ const schema = {
             message: z.string(),
         }),
     },
-} satisfies FastifySchema;
+} satisfies FastifySchema
 
 export const loginRoute: FastifyPluginCallback = (server, _, done) => {
     server.withTypeProvider<ZodTypeProvider>().post(
@@ -42,55 +42,51 @@ export const loginRoute: FastifyPluginCallback = (server, _, done) => {
             schema,
         },
         async (request, reply) => {
-            const { body, db, auth } = request;
-            const { email, password } = body;
+            const { body, db, auth } = request
+            const { email, password } = body
 
-            try {
-                const user = await db.query.user.findFirst({
-                    where: (userTable) => eq(userTable.email, email),
-                    with: { password: true },
-                });
+            const user = await db.query.user.findFirst({
+                where: userTable => eq(userTable.email, email),
+                with: { password: true },
+            })
 
-                if (!user) {
-                    return reply.code(400).send({
-                        statusCode: 400,
-                        success: false,
-                        message: "Invalid email or password",
-                    });
-                }
-
-                const validPassword = await verify(user.password.password_hash, password, {
-                    memoryCost: 19456,
-                    timeCost: 2,
-                    outputLen: 32,
-                    parallelism: 1,
-                });
-
-                if (!validPassword) {
-                    return reply.code(400).send({
-                        statusCode: 400,
-                        success: false,
-                        message: "Invalid email or password",
-                    });
-                }
-
-                const session = await auth.createSession(user.id, {});
-                const sessionCookie = auth.createSessionCookie(session.id);
-
-                reply.headers({
-                    "Set-Cookie": sessionCookie.serialize(),
-                });
-
-                reply.code(200).send({
-                    statusCode: 200,
-                    success: true,
-                    message: "Login successful",
-                });
-            } catch (error) {
-                throw error;
+            if (!user) {
+                return reply.code(400).send({
+                    statusCode: 400,
+                    success: false,
+                    message: "Invalid email or password",
+                })
             }
-        }
-    );
 
-    done();
-};
+            const validPassword = await verify(user.password.password_hash, password, {
+                memoryCost: 19456,
+                timeCost: 2,
+                outputLen: 32,
+                parallelism: 1,
+            })
+
+            if (!validPassword) {
+                return reply.code(400).send({
+                    statusCode: 400,
+                    success: false,
+                    message: "Invalid email or password",
+                })
+            }
+
+            const session = await auth.createSession(user.id, {})
+            const sessionCookie = auth.createSessionCookie(session.id)
+
+            reply.headers({
+                "Set-Cookie": sessionCookie.serialize(),
+            })
+
+            reply.code(200).send({
+                statusCode: 200,
+                success: true,
+                message: "Login successful",
+            })
+        },
+    )
+
+    done()
+}

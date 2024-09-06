@@ -1,7 +1,7 @@
-import { type User } from "@api/database/types";
-import { FastifyPluginCallback, FastifySchema } from "fastify";
-import { ZodTypeProvider } from "fastify-type-provider-zod";
-import { z } from "zod";
+import { z } from "zod"
+import type { User } from "@api/database/types"
+import type { FastifyPluginCallback, FastifySchema } from "fastify"
+import type { ZodTypeProvider } from "fastify-type-provider-zod"
 
 const schema = {
     response: {
@@ -18,7 +18,7 @@ const schema = {
             error: z.string(),
         }),
     },
-} satisfies FastifySchema;
+} satisfies FastifySchema
 
 export const usersRoute: FastifyPluginCallback = (server, _, done) => {
     server.withTypeProvider<ZodTypeProvider>().get(
@@ -33,22 +33,18 @@ export const usersRoute: FastifyPluginCallback = (server, _, done) => {
             schema,
         },
         async (request, reply) => {
-            const { db } = request;
+            const { db } = request
 
-            try {
-                const user = await db.query.user.findMany();
+            const user = await db.query.user.findMany()
 
-                return reply.code(200).send({
-                    statusCode: 200,
-                    success: true,
-                    data: user,
-                    error: undefined,
-                });
-            } catch (error) {
-                throw error;
-            }
-        }
-    );
+            return reply.code(200).send({
+                statusCode: 200,
+                success: true,
+                data: user,
+                error: undefined,
+            })
+        },
+    )
 
-    done();
-};
+    done()
+}

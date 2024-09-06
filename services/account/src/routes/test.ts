@@ -1,5 +1,5 @@
-import { eq } from "drizzle-orm";
-import type { FastifyPluginCallback } from "fastify";
+import { eq } from "drizzle-orm"
+import type { FastifyPluginCallback } from "fastify"
 
 export const testRoutes: FastifyPluginCallback = (fastify, _, done) => {
     fastify.get(
@@ -12,18 +12,18 @@ export const testRoutes: FastifyPluginCallback = (fastify, _, done) => {
             },
         },
         async (request) => {
-            const { db } = request;
+            const { db } = request
 
             const testUser = await db.query.user.findFirst({
-                where: (userTable) => eq(userTable.id, "test"),
+                where: userTable => eq(userTable.id, "test"),
                 with: {
                     usersToOrganizations: true,
                 },
-            });
+            })
 
-            return { testUser };
-        }
-    );
+            return { testUser }
+        },
+    )
 
-    done();
-};
+    done()
+}

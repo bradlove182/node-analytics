@@ -1,13 +1,13 @@
 // import { events } from "@api/database/schemas";
-import type { FastifyPluginCallback } from "fastify";
+import type { FastifyPluginCallback } from "fastify"
 
 export const websiteEventRoute: FastifyPluginCallback = (fastify, _, done) => {
-    const tableName = "honeycomb.website_event";
+    const tableName = "honeycomb.website_event"
 
     fastify.get("/", async (request) => {
         await request.db.command({
             query: `DROP TABLE IF EXISTS ${tableName}`,
-        });
+        })
 
         await request.db.command({
             query: `CREATE TABLE ${tableName}
@@ -43,12 +43,12 @@ export const websiteEventRoute: FastifyPluginCallback = (fastify, _, done) => {
                 engine = MergeTree
                     ORDER BY (website_id, session_id, created_at)
                     SETTINGS index_granularity = 8192;`,
-        });
+        })
 
-        request.db.close();
+        request.db.close()
 
-        return { success: 200 };
-    });
+        return { success: 200 }
+    })
 
-    done();
-};
+    done()
+}

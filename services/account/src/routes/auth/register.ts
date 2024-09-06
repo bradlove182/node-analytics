@@ -1,10 +1,10 @@
-import { passwordTable, userTable } from "@api/database/schemas";
-import { hash } from "@node-rs/argon2";
-import { FastifyPluginCallback, FastifySchema } from "fastify";
-import { ZodTypeProvider } from "fastify-type-provider-zod";
-import { generateIdFromEntropySize } from "lucia";
-import pg from "pg";
-import { z } from "zod";
+import { passwordTable, userTable } from "@api/database/schemas"
+import { hash } from "@node-rs/argon2"
+import { generateIdFromEntropySize } from "lucia"
+import pg from "pg"
+import { z } from "zod"
+import type { FastifyPluginCallback, FastifySchema } from "fastify"
+import type { ZodTypeProvider } from "fastify-type-provider-zod"
 
 const schema = {
     body: z.object({
@@ -33,7 +33,7 @@ const schema = {
             message: z.string(),
         }),
     },
-} satisfies FastifySchema;
+} satisfies FastifySchema
 
 export const registerRoute: FastifyPluginCallback = (server, _, done) => {
     server.withTypeProvider<ZodTypeProvider>().post(
@@ -48,18 +48,18 @@ export const registerRoute: FastifyPluginCallback = (server, _, done) => {
             schema,
         },
         async (request, reply) => {
-            const { db, body, auth } = request;
-            const { email, password } = body;
+            const { db, body, auth } = request
+            const { email, password } = body
 
             const passwordHash = await hash(password, {
                 memoryCost: 19456,
                 timeCost: 2,
                 outputLen: 32,
                 parallelism: 1,
-            });
+            })
 
-            const userId = generateIdFromEntropySize(10);
-            const passwordId = generateIdFromEntropySize(10);
+            const userId = generateIdFromEntropySize(10)
+            const passwordId = generateIdFromEntropySize(10)
 
             try {
                 await Promise.all([
@@ -70,39 +70,40 @@ export const registerRoute: FastifyPluginCallback = (server, _, done) => {
                     }),
                     db.insert(passwordTable).values({
                         id: passwordId,
-                        userId: userId,
+                        userId,
                         password_hash: passwordHash,
                         createdAt: new Date(),
                     }),
-                ]);
+                ])
 
-                const session = await auth.createSession(userId, {});
-                const sessionCookie = auth.createSessionCookie(session.id);
+                const session = await auth.createSession(userId, {})
+                const sessionCookie = auth.createSessionCookie(session.id)
 
                 reply.headers({
                     "Set-Cookie": sessionCookie.serialize(),
-                });
+                })
 
                 return reply.code(200).send({
                     statusCode: 200,
                     success: true,
                     message: "Registration successful",
-                });
-            } catch (error) {
+                })
+            }
+            catch (error) {
                 if (error instanceof pg.DatabaseError) {
-                    if ((error.constraint = "user_email_unique")) {
+                    if ((error.constraint === "user_email_unique")) {
                         return reply.code(400).send({
                             statusCode: 400,
                             success: false,
                             message: "Email already exists",
-                        });
+                        })
                     }
                 }
 
-                throw error;
+                throw error
             }
-        }
-    );
+        },
+    )
 
-    done();
-};
+    done()
+}

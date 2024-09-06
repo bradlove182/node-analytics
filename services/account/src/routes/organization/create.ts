@@ -1,9 +1,9 @@
-import { organizationTable } from "@api/database/schemas";
-import { Organization } from "@api/database/types";
-import { FastifyPluginCallback, FastifySchema } from "fastify";
-import { ZodTypeProvider } from "fastify-type-provider-zod";
-import { generateIdFromEntropySize } from "lucia";
-import { z } from "zod";
+import { organizationTable } from "@api/database/schemas"
+import { generateIdFromEntropySize } from "lucia"
+import { z } from "zod"
+import type { Organization } from "@api/database/types"
+import type { FastifyPluginCallback, FastifySchema } from "fastify"
+import type { ZodTypeProvider } from "fastify-type-provider-zod"
 
 const schema = {
     body: z.object({
@@ -23,7 +23,7 @@ const schema = {
             message: z.string(),
         }),
     },
-} satisfies FastifySchema;
+} satisfies FastifySchema
 
 export const organizationCreateRoute: FastifyPluginCallback = (server, _, done) => {
     server.withTypeProvider<ZodTypeProvider>().post(
@@ -38,29 +38,25 @@ export const organizationCreateRoute: FastifyPluginCallback = (server, _, done) 
             schema,
         },
         async (request, reply) => {
-            const { body, db } = request;
-            const { name } = body;
+            const { body, db } = request
+            const { name } = body
 
-            try {
-                const id = generateIdFromEntropySize(10);
+            const id = generateIdFromEntropySize(10)
 
-                const organizations = await db
-                    .insert(organizationTable)
-                    .values({ name, id })
-                    .returning();
+            const organizations = await db
+                .insert(organizationTable)
+                .values({ name, id })
+                .returning()
 
-                const organization = organizations.find((organization) => organization.id === id)!;
+            const organization = organizations.find(organization => organization.id === id)!
 
-                reply.code(200).send({
-                    statusCode: 200,
-                    success: true,
-                    data: organization,
-                });
-            } catch (error) {
-                throw error;
-            }
-        }
-    );
+            reply.code(200).send({
+                statusCode: 200,
+                success: true,
+                data: organization,
+            })
+        },
+    )
 
-    done();
-};
+    done()
+}

@@ -1,8 +1,8 @@
 // import { events } from "@api/database/schemas";
-import type { FastifyPluginCallback } from "fastify";
+import type { FastifyPluginCallback } from "fastify"
 
 export const getTest: FastifyPluginCallback = (fastify, _, done) => {
-    const tableName = "my_table";
+    const tableName = "my_table"
 
     fastify.get("/tracker", async (request) => {
         const response = await request.db.query({
@@ -12,14 +12,14 @@ export const getTest: FastifyPluginCallback = (fastify, _, done) => {
             FROM ${tableName}
             GROUP BY name
             LIMIT 10`,
-        });
+        })
 
-        const { data } = await response.json();
+        const { data } = await response.json()
 
-        request.db.close();
+        request.db.close()
 
-        return { success: data };
-    });
+        return { success: data }
+    })
 
-    done();
-};
+    done()
+}

@@ -1,8 +1,8 @@
-import { type User } from "@api/database/types";
-import { eq } from "drizzle-orm";
-import { FastifyPluginCallback, FastifySchema } from "fastify";
-import { ZodTypeProvider } from "fastify-type-provider-zod";
-import { z } from "zod";
+import { eq } from "drizzle-orm"
+import { z } from "zod"
+import type { User } from "@api/database/types"
+import type { FastifyPluginCallback, FastifySchema } from "fastify"
+import type { ZodTypeProvider } from "fastify-type-provider-zod"
 
 const schema = {
     params: z.object({
@@ -24,7 +24,7 @@ const schema = {
             error: z.string(),
         }),
     },
-} satisfies FastifySchema;
+} satisfies FastifySchema
 
 export const userRoute: FastifyPluginCallback = (server, _, done) => {
     server.withTypeProvider<ZodTypeProvider>().get(
@@ -39,34 +39,30 @@ export const userRoute: FastifyPluginCallback = (server, _, done) => {
             schema,
         },
         async (request, reply) => {
-            const { params, db } = request;
-            const { userId } = params;
+            const { params, db } = request
+            const { userId } = params
 
-            try {
-                const user = await db.query.user.findFirst({
-                    where: (userTable) => eq(userTable.id, userId),
-                });
+            const user = await db.query.user.findFirst({
+                where: userTable => eq(userTable.id, userId),
+            })
 
-                if (!user) {
-                    return reply.code(400).send({
-                        statusCode: 400,
-                        success: false,
-                        data: undefined,
-                        error: "User not found",
-                    });
-                }
-
-                return reply.code(200).send({
-                    statusCode: 200,
-                    success: true,
-                    data: user,
-                    error: undefined,
-                });
-            } catch (error) {
-                throw error;
+            if (!user) {
+                return reply.code(400).send({
+                    statusCode: 400,
+                    success: false,
+                    data: undefined,
+                    error: "User not found",
+                })
             }
-        }
-    );
 
-    done();
-};
+            return reply.code(200).send({
+                statusCode: 200,
+                success: true,
+                data: user,
+                error: undefined,
+            })
+        },
+    )
+
+    done()
+}

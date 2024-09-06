@@ -1,12 +1,12 @@
-import { encodeString } from "@api/utils";
-import { FastifyPluginCallback } from "fastify";
-import { ZodTypeProvider } from "fastify-type-provider-zod";
-import { TimeSpan } from "oslo";
-import { alphabet, generateRandomString } from "oslo/crypto";
-import z from "zod";
+import { encodeString } from "@api/utils"
+import { TimeSpan } from "oslo"
+import { alphabet, generateRandomString } from "oslo/crypto"
+import z from "zod"
+import type { FastifyPluginCallback } from "fastify"
+import type { ZodTypeProvider } from "fastify-type-provider-zod"
 
-const OTP_LENGTH = 6;
-const OTP_DURATION = new TimeSpan(5, "m");
+const OTP_LENGTH = 6
+const OTP_DURATION = new TimeSpan(5, "m")
 
 export const otpRoutes: FastifyPluginCallback = (server, _, done) => {
     server.withTypeProvider<ZodTypeProvider>().post(
@@ -33,23 +33,23 @@ export const otpRoutes: FastifyPluginCallback = (server, _, done) => {
             },
         },
         async (request, response) => {
-            const { body, redis } = request;
+            const { body, redis } = request
 
-            const email = await encodeString(body.email);
+            const email = await encodeString(body.email)
 
-            const otp = generateRandomString(OTP_LENGTH, alphabet("0-9"));
+            const otp = generateRandomString(OTP_LENGTH, alphabet("0-9"))
 
-            await redis.set(`otp:${email}`, otp);
-            await redis.expire(`otp:${email}`, OTP_DURATION.seconds());
+            await redis.set(`otp:${email}`, otp)
+            await redis.expire(`otp:${email}`, OTP_DURATION.seconds())
 
             return response.status(200).send({
                 status: 200,
                 success: true,
                 message: "OTP sent successfully",
                 otp,
-            });
-        }
-    );
+            })
+        },
+    )
 
     server.withTypeProvider<ZodTypeProvider>().post(
         "/verify",
@@ -80,28 +80,28 @@ export const otpRoutes: FastifyPluginCallback = (server, _, done) => {
             },
         },
         async (request, response) => {
-            const { body, redis } = request;
+            const { body, redis } = request
 
-            const otp = body.otp;
-            const email = await encodeString(body.email);
+            const otp = body.otp
+            const email = await encodeString(body.email)
 
-            const storedOTP = await redis.get(`otp:${email}`);
+            const storedOTP = await redis.get(`otp:${email}`)
 
             if (storedOTP === otp) {
                 return response.status(200).send({
                     status: 200,
                     success: true,
                     message: "OTP verified successfully",
-                });
+                })
             }
 
             return response.status(500).send({
                 status: 500,
                 success: false,
                 message: "OTP invalid",
-            });
-        }
-    );
+            })
+        },
+    )
 
-    done();
-};
+    done()
+}

@@ -1,10 +1,12 @@
-import { env } from "@repo/environment";
-import { Logger } from "@api/utils";
-import { ClickHouseClient, createClient } from "@clickhouse/client";
+import { Logger } from "@api/utils"
+import { createClient } from "@clickhouse/client"
+import { env } from "@repo/environment"
+import type { ClickHouseClient } from "@clickhouse/client"
 
-export let db: ClickHouseClient;
+// eslint-disable-next-line import/no-mutable-exports
+export let db: ClickHouseClient
 
-export const initializeDatabase = async () => {
+export async function initializeDatabase() {
     try {
         db = createClient({
             url: env.CLICKHOUSE_DATABASE_URL,
@@ -13,18 +15,19 @@ export const initializeDatabase = async () => {
             clickhouse_settings: {
                 connect_timeout: 1000,
             },
-        });
+        })
 
         if (!(await db.ping())) {
-            throw new Error("failed to ping clickhouse!");
+            throw new Error("failed to ping clickhouse!")
         }
 
-        Logger.info("Start", "Connected to Clickhouse database");
-    } catch (error) {
-        if (error instanceof Error) {
-            Logger.error("Start", `Failed to connect to database ${error.message}`);
-        }
-
-        throw new Error(`Failed to connect to database ${error}`);
+        Logger.info("Start", "Connected to Clickhouse database")
     }
-};
+    catch (error) {
+        if (error instanceof Error) {
+            Logger.error("Start", `Failed to connect to database ${error.message}`)
+        }
+
+        throw new Error(`Failed to connect to database ${error}`)
+    }
+}

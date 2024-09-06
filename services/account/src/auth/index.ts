@@ -1,19 +1,12 @@
-import { db } from "@api/database";
-import { sessionTable, userTable } from "@api/database/schemas";
-import { type User } from "@api/database/types";
-import { DrizzlePostgreSQLAdapter } from "@lucia-auth/adapter-drizzle";
-import { env } from "@repo/environment";
-import { Lucia } from "lucia";
-import { TimeSpan } from "oslo";
+import { db } from "@api/database"
+import { sessionTable, userTable } from "@api/database/schemas"
+import { DrizzlePostgreSQLAdapter } from "@lucia-auth/adapter-drizzle"
+import { env } from "@repo/environment"
+import { Lucia } from "lucia"
+import { TimeSpan } from "oslo"
+import type { User } from "@api/database/types"
 
-declare module "lucia" {
-    interface Register {
-        Lucia: Auth;
-        DatabaseUserAttributes: User;
-    }
-}
-
-const adapter = new DrizzlePostgreSQLAdapter(db, sessionTable, userTable);
+const adapter = new DrizzlePostgreSQLAdapter(db, sessionTable, userTable)
 
 export const lucia = new Lucia(adapter, {
     sessionCookie: {
@@ -30,8 +23,15 @@ export const lucia = new Lucia(adapter, {
             id: attributes.id,
             email: attributes.email,
             createdAt: attributes.createdAt,
-        };
+        }
     },
-});
+})
 
-export type Auth = typeof lucia;
+export type Auth = typeof lucia
+
+declare module "lucia" {
+    interface Register {
+        Lucia: Auth
+        DatabaseUserAttributes: User
+    }
+}

@@ -9,9 +9,9 @@ services:
         depends_on:
             - kafka
         environment:
-            CLICKHOUSE_USER: "username"
-            CLICKHOUSE_PASS: "password"
-            CLICKHOUSE_DB: "honeycomb"
+            CLICKHOUSE_USER: username
+            CLICKHOUSE_PASS: password
+            CLICKHOUSE_DB: honeycomb
             CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT: 1
         ports:
             - 8123:8123

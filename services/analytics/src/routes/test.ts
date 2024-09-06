@@ -1,13 +1,13 @@
 // import { events } from "@api/database/schemas";
-import type { FastifyPluginCallback } from "fastify";
+import type { FastifyPluginCallback } from "fastify"
 
 export const testRoutes: FastifyPluginCallback = (fastify, _, done) => {
-    const tableName = "my_table";
+    const tableName = "my_table"
 
     fastify.get("/", async (request) => {
         await request.db.command({
             query: `DROP TABLE IF EXISTS ${tableName}`,
-        });
+        })
 
         await request.db.command({
             query: `CREATE TABLE ${tableName}
@@ -15,7 +15,7 @@ export const testRoutes: FastifyPluginCallback = (fastify, _, done) => {
             ENGINE MergeTree()
             ORDER BY (id)
             `,
-        });
+        })
 
         const response = await request.db.insert({
             table: tableName,
@@ -24,12 +24,12 @@ export const testRoutes: FastifyPluginCallback = (fastify, _, done) => {
                 { id: 42, name: "bar" },
             ],
             format: "JSONEachRow",
-        });
+        })
 
-        request.db.close();
+        request.db.close()
 
-        return { success: response };
-    });
+        return { success: response }
+    })
 
-    done();
-};
+    done()
+}

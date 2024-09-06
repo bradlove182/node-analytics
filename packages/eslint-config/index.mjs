@@ -6,5 +6,8 @@ export default antfu({
         semi: false,
         quotes: "double",
     },
+    rules: {
+        "yaml/indent": ["error", 4, { indicatorValueIndent: 2 }],
+    },
     ignores: ["node_modules", ".svelte-kit", ".turbo", "dist", "build", "dev"],
 })

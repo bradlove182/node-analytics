@@ -20,6 +20,8 @@
         "@fastify/rate-limit": "^9.1.0",
         "@lucia-auth/adapter-drizzle": "^1.0.7",
         "@node-rs/argon2": "^1.8.3",
+        "@oslojs/crypto": "^1.0.1",
+        "@oslojs/encoding": "^1.1.0",
         "drizzle-orm": "^0.31.2",
         "drizzle-zod": "^0.5.1",
         "fastify": "^4.28.1",

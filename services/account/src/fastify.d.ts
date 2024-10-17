@@ -1,4 +1,4 @@
-import type { Auth } from "@api/auth"
+import type { Auth } from "@api/lib/auth"
 import type { Database } from "@api/database"
 import type { Redis } from "@api/redis"
 

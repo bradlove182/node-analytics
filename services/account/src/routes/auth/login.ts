@@ -3,6 +3,7 @@ import { eq } from "drizzle-orm"
 import { z } from "zod"
 import type { FastifyPluginCallback, FastifySchema } from "fastify"
 import type { ZodTypeProvider } from "fastify-type-provider-zod"
+import { passwordTable, userTable } from "@api/database/schemas"
 
 const schema = {
     body: z.object({
@@ -45,10 +46,13 @@ export const loginRoute: FastifyPluginCallback = (server, _, done) => {
             const { body, db, auth } = request
             const { email, password } = body
 
-            const user = await db.query.user.findFirst({
-                where: userTable => eq(userTable.email, email),
-                with: { password: true },
-            })
+            const result = await db
+            .select({ user: userTable, password: passwordTable })
+            .from(userTable)
+            .innerJoin(passwordTable, eq(userTable.id, passwordTable.userId))
+            .where(eq(userTable.email, email))
+
+            const { user, password: storedPassword } = result[0]!
 
             if (!user) {
                 return reply.code(400).send({
@@ -58,7 +62,7 @@ export const loginRoute: FastifyPluginCallback = (server, _, done) => {
                 })
             }
 
-            const validPassword = await verify(user.password.password_hash, password, {
+            const validPassword = await verify(storedPassword.password_hash, password, {
                 memoryCost: 19456,
                 timeCost: 2,
                 outputLen: 32,
@@ -73,12 +77,10 @@ export const loginRoute: FastifyPluginCallback = (server, _, done) => {
                 })
             }
 
-            const session = await auth.createSession(user.id, {})
-            const sessionCookie = auth.createSessionCookie(session.id)
+            const token = auth.generateSessionToken()
 
-            reply.headers({
-                "Set-Cookie": sessionCookie.serialize(),
-            })
+            await auth.createSession(token, user.id)
+            auth.setSessionTokenCookie(reply, token)
 
             reply.code(200).send({
                 statusCode: 200,

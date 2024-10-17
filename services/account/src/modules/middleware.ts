@@ -1,4 +1,4 @@
-import { lucia } from "@api/auth"
+import { auth } from "@api/lib/auth"
 import { db } from "@api/database"
 import { Redis } from "@api/redis"
 import fp from "fastify-plugin"
@@ -10,7 +10,7 @@ const middleware = fp(async (fastify: FastifyInstance) => {
     fastify.addHook("onRequest", async (request) => {
         request.db = db
         request.redis = Redis
-        request.auth = lucia
+        request.auth = auth
     })
 
     // Verify request origin

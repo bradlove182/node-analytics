@@ -76,12 +76,10 @@ export const registerRoute: FastifyPluginCallback = (server, _, done) => {
                     })
                 })
 
-                const session = await auth.createSession(userId, {})
-                const sessionCookie = auth.createSessionCookie(session.id)
+                const token = auth.generateSessionToken();
 
-                reply.headers({
-                    "Set-Cookie": sessionCookie.serialize(),
-                })
+                await auth.createSession(token, userId)
+                auth.setSessionTokenCookie(reply, token)
 
                 return reply.code(200).send({
                     statusCode: 200,

@@ -1,17 +1,14 @@
+import type { Session, User } from "@api/database"
+import type { FastifyReply } from "fastify"
 import { db } from "@api/database"
-import { sessionTable, userTable } from "@api/database/schemas"
+import { schema } from "@api/database/schemas"
 import { createTimeSpan } from "@api/utils"
-import { DrizzlePostgreSQLAdapter } from "@lucia-auth/adapter-drizzle"
 import { sha256 } from "@oslojs/crypto/sha2"
 import { encodeBase32LowerCaseNoPadding, encodeHexLowerCase } from "@oslojs/encoding"
 import { env } from "@repo/environment"
 import { eq } from "drizzle-orm"
-import { Lucia } from "lucia"
-import { TimeSpan } from "oslo"
-import type { Session, User } from "@api/database/types"
-import type { FastifyReply } from "fastify"
 
-const adapter = new DrizzlePostgreSQLAdapter(db, sessionTable, userTable)
+const { session: sessionTable } = schema
 
 export type SessionValidationResult =
     | { session: Session, user: User }
@@ -39,17 +36,19 @@ export async function createSession(token: string, userId: User["id"]): Promise<
 
 export async function validateSessionToken(token: string): Promise<SessionValidationResult> {
     const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)))
-    const result = await db
-        .select({ user: userTable, session: sessionTable })
-        .from(sessionTable)
-        .innerJoin(userTable, eq(sessionTable.userId, userTable.id))
-        .where(eq(sessionTable.id, sessionId))
 
-    if (result.length < 1) {
+    const result = await db.query.session.findFirst({
+        where: eq(sessionTable.id, sessionId),
+        with: {
+            user: true,
+        },
+    })
+
+    if (!result || !result.user) {
         return { session: undefined, user: undefined }
     }
 
-    const { user, session } = result[0]!
+    const { user, ...session } = result
 
     // Check if session is expired
     if (Date.now() >= session.expiresAt.getTime()) {
@@ -105,30 +104,4 @@ export const auth = {
     deleteSessionTokenCookie,
 }
 
-export const lucia = new Lucia(adapter, {
-    sessionCookie: {
-        name: "session",
-        expires: false,
-        attributes: {
-            secure: env.NODE_ENV === "production",
-            sameSite: "strict",
-        },
-    },
-    sessionExpiresIn: new TimeSpan(30, "d"),
-    getUserAttributes: (attributes) => {
-        return {
-            id: attributes.id,
-            email: attributes.email,
-            createdAt: attributes.createdAt,
-        }
-    },
-})
-
-export type Auth = typeof lucia
-
-declare module "lucia" {
-    interface Register {
-        Lucia: Auth
-        DatabaseUserAttributes: User
-    }
-}
+export type Auth = typeof auth

@@ -1,8 +1,8 @@
 import { relations } from "drizzle-orm"
-import { pgTable, primaryKey, text, timestamp } from "drizzle-orm/pg-core"
-import { organizationTable } from "./organization"
+import { pgTable, text, timestamp } from "drizzle-orm/pg-core"
 import { passwordTable } from "./password"
 import { sessionTable } from "./session"
+import { teamUsers } from "./team"
 
 export const userTable = pgTable("user", {
     id: text("id").primaryKey(),
@@ -15,6 +15,6 @@ export const userTable = pgTable("user", {
 
 export const userTableRelations = relations(userTable, ({ one, many }) => ({
     password: one(passwordTable),
-    organizations: many(organizationTable),
+    teams: many(teamUsers),
     sessions: many(sessionTable),
 }))

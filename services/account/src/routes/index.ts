@@ -1,7 +1,7 @@
 import type { FastifyPluginCallback } from "fastify"
 
 import { authRoutes } from "./auth"
-import { organizationRoutes } from "./organization"
+import { teamRoutes } from "./team"
 import { testRoutes } from "./test"
 import { usersRoutes } from "./users"
 
@@ -15,8 +15,8 @@ export const routes: FastifyPluginCallback = (server, _, done) => {
     server.register(usersRoutes, {
         prefix: `/users`,
     })
-    server.register(organizationRoutes, {
-        prefix: `/organization`,
+    server.register(teamRoutes, {
+        prefix: `/team`,
     })
     done()
 }

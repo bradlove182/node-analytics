@@ -1,14 +1,12 @@
 import type { Session, User } from "@api/database"
 import type { FastifyReply } from "fastify"
 import { db } from "@api/database"
-import { schema } from "@api/database/schemas"
+import { sessionTable } from "@api/database/schemas"
 import { createTimeSpan } from "@api/utils"
 import { sha256 } from "@oslojs/crypto/sha2"
 import { encodeBase32LowerCaseNoPadding, encodeHexLowerCase } from "@oslojs/encoding"
 import { env } from "@repo/environment"
 import { eq } from "drizzle-orm"
-
-const { session: sessionTable } = schema
 
 export type SessionValidationResult =
     | { session: Session, user: User }
@@ -37,7 +35,7 @@ export async function createSession(token: string, userId: User["id"]): Promise<
 export async function validateSessionToken(token: string): Promise<SessionValidationResult> {
     const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)))
 
-    const result = await db.query.session.findFirst({
+    const result = await db.query.sessionTable.findFirst({
         where: eq(sessionTable.id, sessionId),
         with: {
             user: true,

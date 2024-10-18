@@ -1,8 +1,8 @@
-import { eq } from "drizzle-orm"
-import { z } from "zod"
-import type { User } from "@api/database/types"
+import type { User } from "@api/database"
 import type { FastifyPluginCallback, FastifySchema } from "fastify"
 import type { ZodTypeProvider } from "fastify-type-provider-zod"
+import { eq } from "drizzle-orm"
+import { z } from "zod"
 
 const schema = {
     params: z.object({
@@ -42,7 +42,7 @@ export const userRoute: FastifyPluginCallback = (server, _, done) => {
             const { params, db } = request
             const { userId } = params
 
-            const user = await db.query.user.findFirst({
+            const user = await db.query.userTable.findFirst({
                 where: userTable => eq(userTable.id, userId),
             })
 

@@ -1,9 +1,9 @@
-import { organizationTable } from "@api/database/schemas"
-import { generateIdFromEntropySize } from "lucia"
-import { z } from "zod"
-import type { Organization } from "@api/database/types"
+import type { Team } from "@api/database"
 import type { FastifyPluginCallback, FastifySchema } from "fastify"
 import type { ZodTypeProvider } from "fastify-type-provider-zod"
+import { teamTable } from "@api/database/schemas"
+import { generateIdFromEntropySize } from "lucia"
+import { z } from "zod"
 
 const schema = {
     body: z.object({
@@ -15,7 +15,7 @@ const schema = {
         200: z.object({
             statusCode: z.literal(200),
             success: z.boolean(),
-            data: z.custom<Organization>(),
+            data: z.custom<Team>(),
         }),
         400: z.object({
             statusCode: z.literal(400),
@@ -25,7 +25,7 @@ const schema = {
     },
 } satisfies FastifySchema
 
-export const organizationCreateRoute: FastifyPluginCallback = (server, _, done) => {
+export const teamCreateRoute: FastifyPluginCallback = (server, _, done) => {
     server.withTypeProvider<ZodTypeProvider>().post(
         "/create",
         {
@@ -43,17 +43,17 @@ export const organizationCreateRoute: FastifyPluginCallback = (server, _, done) 
 
             const id = generateIdFromEntropySize(10)
 
-            const organizations = await db
-                .insert(organizationTable)
+            const teams = await db
+                .insert(teamTable)
                 .values({ name, id })
                 .returning()
 
-            const organization = organizations.find(organization => organization.id === id)!
+            const team = teams.find(team => team.id === id)!
 
             reply.code(200).send({
                 statusCode: 200,
                 success: true,
-                data: organization,
+                data: team,
             })
         },
     )

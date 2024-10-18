@@ -1,9 +1,9 @@
-import { verify } from "@node-rs/argon2"
-import { eq } from "drizzle-orm"
-import { z } from "zod"
 import type { FastifyPluginCallback, FastifySchema } from "fastify"
 import type { ZodTypeProvider } from "fastify-type-provider-zod"
 import { passwordTable, userTable } from "@api/database/schemas"
+import { verify } from "@node-rs/argon2"
+import { eq } from "drizzle-orm"
+import { z } from "zod"
 
 const schema = {
     body: z.object({
@@ -47,10 +47,10 @@ export const loginRoute: FastifyPluginCallback = (server, _, done) => {
             const { email, password } = body
 
             const result = await db
-            .select({ user: userTable, password: passwordTable })
-            .from(userTable)
-            .innerJoin(passwordTable, eq(userTable.id, passwordTable.userId))
-            .where(eq(userTable.email, email))
+                .select({ user: userTable, password: passwordTable })
+                .from(userTable)
+                .innerJoin(passwordTable, eq(userTable.id, passwordTable.userId))
+                .where(eq(userTable.email, email))
 
             const { user, password: storedPassword } = result[0]!
 

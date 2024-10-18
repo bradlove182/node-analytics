@@ -1,13 +1,17 @@
 import { relations } from "drizzle-orm"
 import { pgTable, primaryKey, text, timestamp } from "drizzle-orm/pg-core"
-import { organizationTable } from "./organization";
+import { teamTable } from "./team"
 
 export const projectTable = pgTable("project", {
     id: text("id").primaryKey(),
     name: text("name").notNull(),
-    organizationId: text("organization_id").notNull().references(() => organizationTable.id),
+    teamId: text("team_id").notNull().references(() => teamTable.id),
     createdAt: timestamp("created_at", {
         withTimezone: true,
         mode: "date",
     }).notNull().defaultNow(),
 })
+
+export const projectTableRelations = relations(projectTable, ({ one }) => ({
+    team: one(teamTable, { fields: [projectTable.teamId], references: [teamTable.id] }),
+}))

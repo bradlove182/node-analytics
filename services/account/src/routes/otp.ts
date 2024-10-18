@@ -1,9 +1,9 @@
+import type { FastifyPluginCallback } from "fastify"
+import type { ZodTypeProvider } from "fastify-type-provider-zod"
 import { encodeString } from "@api/utils"
 import { TimeSpan } from "oslo"
 import { alphabet, generateRandomString } from "oslo/crypto"
 import z from "zod"
-import type { FastifyPluginCallback } from "fastify"
-import type { ZodTypeProvider } from "fastify-type-provider-zod"
 
 const OTP_LENGTH = 6
 const OTP_DURATION = new TimeSpan(5, "m")

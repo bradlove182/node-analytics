@@ -1,5 +1,12 @@
+import type {
+    passwordTable,
+    projectTable,
+    sessionTable,
+    teamTable,
+    userTable,
+} from "@api/database/schemas"
 import type { InferSelectModel } from "drizzle-orm"
-import { schema } from "@api/database/schemas"
+import * as schema from "@api/database/schemas"
 import { Logger } from "@api/utils"
 import { env } from "@repo/environment"
 import { drizzle } from "drizzle-orm/node-postgres"
@@ -16,11 +23,11 @@ export const db = drizzle(pool, {
 
 export type Database = typeof db
 
-export type User = InferSelectModel<typeof schema.user>
-export type Password = InferSelectModel<typeof schema.password>
-export type Session = InferSelectModel<typeof schema.session>
-export type Organization = InferSelectModel<typeof schema.organization>
-export type Project = InferSelectModel<typeof schema.project>
+export type User = InferSelectModel<typeof userTable>
+export type Password = InferSelectModel<typeof passwordTable>
+export type Session = InferSelectModel<typeof sessionTable>
+export type Team = InferSelectModel<typeof teamTable>
+export type Project = InferSelectModel<typeof projectTable>
 
 export async function initializeDatabase() {
     try {

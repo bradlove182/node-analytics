@@ -1,10 +1,10 @@
+import type { FastifyPluginCallback, FastifySchema } from "fastify"
+import type { ZodTypeProvider } from "fastify-type-provider-zod"
 import { passwordTable, userTable } from "@api/database/schemas"
 import { hash } from "@node-rs/argon2"
 import { generateIdFromEntropySize } from "lucia"
 import pg from "pg"
 import { z } from "zod"
-import type { FastifyPluginCallback, FastifySchema } from "fastify"
-import type { ZodTypeProvider } from "fastify-type-provider-zod"
 
 const schema = {
     body: z.object({
@@ -76,7 +76,7 @@ export const registerRoute: FastifyPluginCallback = (server, _, done) => {
                     })
                 })
 
-                const token = auth.generateSessionToken();
+                const token = auth.generateSessionToken()
 
                 await auth.createSession(token, userId)
                 auth.setSessionTokenCookie(reply, token)

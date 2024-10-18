@@ -1,7 +1,7 @@
-import { z } from "zod"
-import type { User } from "@api/database/types"
+import type { User } from "@api/database"
 import type { FastifyPluginCallback, FastifySchema } from "fastify"
 import type { ZodTypeProvider } from "fastify-type-provider-zod"
+import { z } from "zod"
 
 const schema = {
     response: {
@@ -35,7 +35,7 @@ export const usersRoute: FastifyPluginCallback = (server, _, done) => {
         async (request, reply) => {
             const { db } = request
 
-            const user = await db.query.user.findMany()
+            const user = await db.query.userTable.findMany()
 
             return reply.code(200).send({
                 statusCode: 200,

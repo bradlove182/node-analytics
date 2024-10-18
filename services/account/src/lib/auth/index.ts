@@ -69,37 +69,14 @@ export async function invalidateSession(sessionId: Session["id"]): Promise<void>
     await db.delete(sessionTable).where(eq(sessionTable.id, sessionId))
 }
 
-export function setSessionTokenCookie(reply: FastifyReply, token: string): void {
-    let cookie = `session=${token}; HttpOnly; SameSite=Lax; Expires=${new Date(Date.now() + createTimeSpan(30, "d").milliseconds()).toUTCString()}; Path=/;`
-
-    if (env.NODE_ENV === "production") {
-        cookie = `${cookie} Secure;`
-    }
-
-    reply.headers({
-        "set-cookie": cookie,
-    })
-}
-
-export function deleteSessionTokenCookie(reply: FastifyReply): void {
-    let cookie = "session=; HttpOnly; SameSite=Lax; Max-Age=0; Path=/;"
-
-    if (env.NODE_ENV === "production") {
-        cookie = `${cookie} Secure;`
-    }
-
-    reply.headers({
-        "set-cookie": cookie,
-    })
-}
+export const getSessionCookieName = () => "session"
 
 export const auth = {
     generateSessionToken,
     createSession,
     validateSessionToken,
     invalidateSession,
-    setSessionTokenCookie,
-    deleteSessionTokenCookie,
+    getSessionCookieName,
 }
 
 export type Auth = typeof auth

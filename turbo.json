@@ -27,6 +27,7 @@
             "cache": false
         },
         "db:migrate": {
+            "dependsOn": ["setup:dev"],
             "outputs": ["src/database/migrations/**"],
             "cache": false
         },

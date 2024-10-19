@@ -4,7 +4,7 @@ import { createTeam, deleteTeam, getTeam, getTeams, updateTeam } from "."
 
 const testTeam: Team = {
     id: "2",
-    name: "the sick test team",
+    name: "test team",
     createdAt: new Date(Date.now()),
 }
 
@@ -13,46 +13,46 @@ afterEach(async () => {
 })
 
 describe("lib/team", () => {
-    it("create a new Team", async () => {
-        const Team = await createTeam(testTeam)
+    it("create a new team", async () => {
+        const team = await createTeam(testTeam)
 
-        expect(Team.id).toEqual(testTeam.id)
-        expect(Team.name).toEqual(testTeam.name)
-        expect(Team.createdAt).toBeInstanceOf(Date)
+        expect(team.id).toEqual(testTeam.id)
+        expect(team.name).toEqual(testTeam.name)
+        expect(team.createdAt).toBeInstanceOf(Date)
     })
 
     it("get a team", async () => {
         await createTeam(testTeam)
-        const Team = await getTeam(testTeam.id)
+        const team = await getTeam(testTeam.id)
 
-        expect(Team?.id).toEqual(testTeam.id)
-        expect(Team?.name).toEqual(testTeam.name)
-        expect(Team?.createdAt).toBeInstanceOf(Date)
+        expect(team?.id).toEqual(testTeam.id)
+        expect(team?.name).toEqual(testTeam.name)
+        expect(team?.createdAt).toBeInstanceOf(Date)
     })
 
     it("delete a team", async () => {
-        const Team = await createTeam(testTeam)
-        await deleteTeam(Team.id)
+        const team = await createTeam(testTeam)
+        await deleteTeam(team.id)
 
-        const deletedTeam = await getTeam(Team.id)
+        const deletedTeam = await getTeam(team.id)
 
         expect(deletedTeam).toBeUndefined()
     })
 
     it("update a team", async () => {
-        const Team = await createTeam(testTeam)
-        await updateTeam(Team.id, {
-            name: "the most sickest team ever",
+        const team = await createTeam(testTeam)
+        await updateTeam(team.id, {
+            name: "updated test team",
         })
-        const updatedTeam = await getTeam(Team.id)
+        const updatedTeam = await getTeam(team.id)
 
-        expect(updatedTeam?.name).toEqual("the most sickest team ever")
+        expect(updatedTeam?.name).toEqual("updated test team")
     })
 
     it("gets teams", async () => {
         await createTeam(testTeam)
-        const Teams = await getTeams()
+        const teams = await getTeams()
 
-        expect(Teams.length).toBeGreaterThan(0)
+        expect(teams.length).toBeGreaterThan(0)
     })
 })

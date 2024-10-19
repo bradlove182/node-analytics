@@ -80,23 +80,23 @@ importers:
   services/account:
     dependencies:
       '@fastify/cors':
-        specifier: ^9.0.1
-        version: 9.0.1
+        specifier: ^10.0.1
+        version: 10.0.1
       '@fastify/formbody':
-        specifier: ^7.4.0
-        version: 7.4.0
+        specifier: ^8.0.1
+        version: 8.0.1
       '@fastify/helmet':
-        specifier: ^11.1.1
-        version: 11.1.1
+        specifier: ^12.0.1
+        version: 12.0.1
       '@fastify/rate-limit':
-        specifier: ^9.1.0
-        version: 9.1.0
+        specifier: ^10.1.1
+        version: 10.1.1
       '@lucia-auth/adapter-drizzle':
-        specifier: ^1.0.7
-        version: 1.1.0(drizzle-orm@0.31.4)(lucia@3.2.1)
+        specifier: ^1.1.0
+        version: 1.1.0(drizzle-orm@0.35.2)(lucia@3.2.1)
       '@node-rs/argon2':
-        specifier: ^1.8.3
-        version: 1.8.3
+        specifier: ^2.0.0
+        version: 2.0.0
       '@oslojs/crypto':
         specifier: ^1.0.1
         version: 1.0.1
@@ -104,38 +104,38 @@ importers:
         specifier: ^1.1.0
         version: 1.1.0
       drizzle-orm:
-        specifier: ^0.31.2
-        version: 0.31.4(@types/pg@8.11.10)(pg@8.13.0)
+        specifier: ^0.35.2
+        version: 0.35.2(@types/pg@8.11.10)(pg@8.13.0)
       drizzle-zod:
         specifier: ^0.5.1
-        version: 0.5.1(drizzle-orm@0.31.4)(zod@3.23.8)
+        version: 0.5.1(drizzle-orm@0.35.2)(zod@3.23.8)
       fastify:
-        specifier: ^4.28.1
-        version: 4.28.1
+        specifier: ^5.0.0
+        version: 5.0.0
       fastify-plugin:
-        specifier: ^4.5.1
-        version: 4.5.1
+        specifier: ^5.0.1
+        version: 5.0.1
       fastify-type-provider-zod:
-        specifier: ^2.0.0
-        version: 2.1.0(fastify@4.28.1)(zod@3.23.8)
+        specifier: ^4.0.2
+        version: 4.0.2(fastify@5.0.0)(zod@3.23.8)
       ioredis:
         specifier: ^5.4.1
         version: 5.4.1
       lucia:
-        specifier: ^3.2.0
+        specifier: ^3.2.1
         version: 3.2.1
       oslo:
         specifier: ^1.2.1
         version: 1.2.1
       pg:
-        specifier: ^8.12.0
+        specifier: ^8.13.0
         version: 8.13.0
       zod:
         specifier: ^3.23.8
         version: 3.23.8
     devDependencies:
       '@antfu/eslint-config':
-        specifier: ^3.3.2
+        specifier: ^3.8.0
         version: 3.8.0(@typescript-eslint/utils@8.9.0)(@vue/compiler-sfc@3.5.12)(eslint@9.12.0)(typescript@5.6.3)(vitest@2.1.3)
       '@repo/environment':
         specifier: workspace:*
@@ -150,38 +150,38 @@ importers:
         specifier: ^2.0.6
         version: 2.0.6
       '@types/node':
-        specifier: ^20.14.9
-        version: 20.16.12
+        specifier: ^22.7.6
+        version: 22.7.6
       '@types/pg':
-        specifier: ^8.11.6
+        specifier: ^8.11.10
         version: 8.11.10
       cli-color:
         specifier: ^2.0.4
         version: 2.0.4
       drizzle-kit:
-        specifier: ^0.22.8
-        version: 0.22.8
+        specifier: ^0.26.2
+        version: 0.26.2
       eslint:
-        specifier: ^9.9.1
+        specifier: ^9.12.0
         version: 9.12.0
       tsconfig-paths:
         specifier: ^4.2.0
         version: 4.2.0
       tsup:
-        specifier: ^8.1.0
+        specifier: ^8.3.0
         version: 8.3.0(tsx@4.19.1)(typescript@5.6.3)
       tsx:
-        specifier: ^4.16.1
+        specifier: ^4.19.1
         version: 4.19.1
       typescript:
-        specifier: ^5.5.3
+        specifier: ^5.6.3
         version: 5.6.3
       vite-tsconfig-paths:
         specifier: ^5.0.1
         version: 5.0.1(typescript@5.6.3)
       vitest:
         specifier: ^2.1.3
-        version: 2.1.3(@types/node@20.16.12)
+        version: 2.1.3(@types/node@22.7.6)
 
   services/analytics:
     dependencies:
@@ -527,6 +527,10 @@ packages:
     dependencies:
       '@clickhouse/client-common': 1.6.0
     dev: false
+
+  /@drizzle-team/brocli@0.10.1:
+    resolution: {integrity: sha512-AHy0vjc+n/4w/8Mif+w86qpppHuF3AyXbcWW+R/W7GNA3F5/p2nuhlkCJaTXSLZheB4l1rtHzOfr9A7NwoR/Zg==}
+    dev: true
 
   /@emnapi/core@0.45.0:
     resolution: {integrity: sha512-DPWjcUDQkCeEM4VnljEOEcXdAD7pp8zSZsgOujk/LGIwCXWbXJngin+MO4zbH429lzeC3WbYLGjE2MaUOwzpyw==}
@@ -1539,6 +1543,21 @@ packages:
       fast-uri: 2.4.0
     dev: false
 
+  /@fastify/ajv-compiler@4.0.1:
+    resolution: {integrity: sha512-DxrBdgsjNLP0YM6W5Hd6/Fmj43S8zMKiFJYgi+Ri3htTGAowPVG/tG1wpnWLMjufEnehRivUCKZ1pLDIoZdTuw==}
+    dependencies:
+      ajv: 8.17.1
+      ajv-formats: 3.0.1(ajv@8.17.1)
+      fast-uri: 3.0.3
+    dev: false
+
+  /@fastify/cors@10.0.1:
+    resolution: {integrity: sha512-O8JIf6448uQbOgzSkCqhClw6gFTAqrdfeA6R3fc/3gwTJGUp7gl8/3tbNB+6INuu4RmgVOq99BmvdGbtu5pgOA==}
+    dependencies:
+      fastify-plugin: 5.0.1
+      mnemonist: 0.39.8
+    dev: false
+
   /@fastify/cors@9.0.1:
     resolution: {integrity: sha512-YY9Ho3ovI+QHIL2hW+9X4XqQjXLjJqsU+sMV/xFsxZkE8p3GNnYVFpoOxF7SsP5ZL76gwvbo3V9L+FIekBGU4Q==}
     dependencies:
@@ -1557,23 +1576,33 @@ packages:
     resolution: {integrity: sha512-wWSvph+29GR783IhmvdwWnN4bUxTD01Vm5Xad4i7i1VuAOItLvbPAb69sb0IQ2N57yprvhNIwAP5B6xfKTmjmQ==}
     dev: false
 
+  /@fastify/error@4.0.0:
+    resolution: {integrity: sha512-OO/SA8As24JtT1usTUTKgGH7uLvhfwZPwlptRi2Dp5P4KKmJI3gvsZ8MIHnNwDs4sLf/aai5LzTyl66xr7qMxA==}
+    dev: false
+
   /@fastify/fast-json-stringify-compiler@4.3.0:
     resolution: {integrity: sha512-aZAXGYo6m22Fk1zZzEUKBvut/CIIQe/BapEORnxiD5Qr0kPHqqI69NtEMCme74h+at72sPhbkb4ZrLd1W3KRLA==}
     dependencies:
       fast-json-stringify: 5.16.1
     dev: false
 
-  /@fastify/formbody@7.4.0:
-    resolution: {integrity: sha512-H3C6h1GN56/SMrZS8N2vCT2cZr7mIHzBHzOBa5OPpjfB/D6FzP9mMpE02ZzrFX0ANeh0BAJdoXKOF2e7IbV+Og==}
+  /@fastify/fast-json-stringify-compiler@5.0.1:
+    resolution: {integrity: sha512-f2d3JExJgFE3UbdFcpPwqNUEoHWmt8pAKf8f+9YuLESdefA0WgqxeT6DrGL4Yrf/9ihXNSKOqpjEmurV405meA==}
     dependencies:
-      fast-querystring: 1.1.2
-      fastify-plugin: 4.5.1
+      fast-json-stringify: 6.0.0
     dev: false
 
-  /@fastify/helmet@11.1.1:
-    resolution: {integrity: sha512-pjJxjk6SLEimITWadtYIXt6wBMfFC1I6OQyH/jYVCqSAn36sgAIFjeNiibHtifjCd+e25442pObis3Rjtame6A==}
+  /@fastify/formbody@8.0.1:
+    resolution: {integrity: sha512-LPrcadSIK8TrQk510Zdj56fnw7cyHq0/PW0YHGGM8ycGL4X7XAex+FKcwpzB4i5lF9eykc71a4EtcO9AEoByqw==}
     dependencies:
-      fastify-plugin: 4.5.1
+      fast-querystring: 1.1.2
+      fastify-plugin: 5.0.1
+    dev: false
+
+  /@fastify/helmet@12.0.1:
+    resolution: {integrity: sha512-kkjBcedWwdflRThovGuvN9jB2QQLytBqArCFPdMIb7o2Fp0l/H3xxYi/6x/SSRuH/FFt9qpTGIfJz2bfnMrLqA==}
+    dependencies:
+      fastify-plugin: 5.0.1
       helmet: 7.2.0
     dev: false
 
@@ -1592,11 +1621,11 @@ packages:
       pg: 8.13.0
     dev: false
 
-  /@fastify/rate-limit@9.1.0:
-    resolution: {integrity: sha512-h5dZWCkuZXN0PxwqaFQLxeln8/LNwQwH9popywmDCFdKfgpi4b/HoMH1lluy6P+30CG9yzzpSpwTCIPNB9T1JA==}
+  /@fastify/rate-limit@10.1.1:
+    resolution: {integrity: sha512-v6ZrDhWVjmDHWYdW2vbALyTCPz9W6Jqvf0QXbl9/atMXlZeFQw4XJkHUm5GGbJReCxaj5dHKbD+P32kkI3xzCA==}
     dependencies:
       '@lukeed/ms': 2.0.2
-      fastify-plugin: 4.5.1
+      fastify-plugin: 5.0.1
       toad-cache: 3.7.0
     dev: false
 
@@ -1697,13 +1726,13 @@ packages:
       '@jridgewell/sourcemap-codec': 1.5.0
     dev: true
 
-  /@lucia-auth/adapter-drizzle@1.1.0(drizzle-orm@0.31.4)(lucia@3.2.1):
+  /@lucia-auth/adapter-drizzle@1.1.0(drizzle-orm@0.35.2)(lucia@3.2.1):
     resolution: {integrity: sha512-iCTnZWvfI5lLZOdUHZYiXA1jaspIFEeo2extLxQ3DjP3uOVys7IPwBi7zezLIRu9dhro4H4Kji+7gSYyjcef2A==}
     peerDependencies:
       drizzle-orm: '>= 0.29 <1'
       lucia: 3.x
     dependencies:
-      drizzle-orm: 0.31.4(@types/pg@8.11.10)(pg@8.13.0)
+      drizzle-orm: 0.35.2(@types/pg@8.11.10)(pg@8.13.0)
       lucia: 3.2.1
     dev: false
 
@@ -1731,8 +1760,8 @@ packages:
     dev: false
     optional: true
 
-  /@node-rs/argon2-android-arm-eabi@1.8.3:
-    resolution: {integrity: sha512-JFZPlNM0A8Og+Tncb8UZsQrhEMlbHBXPsT3hRoKImzVmTmq28Os0ucFWow0AACp2coLHBSydXH3Dh0lZup3rWw==}
+  /@node-rs/argon2-android-arm-eabi@2.0.0:
+    resolution: {integrity: sha512-PbnBBiHg/boaj9EyQ1+Y53OQrvxJh1knrPZmzr6wRTR+DyCSHnwHpBANVhXV/T4Z9MJywy1SHFeCpuUMxN6HTw==}
     engines: {node: '>= 10'}
     cpu: [arm]
     os: [android]
@@ -1749,8 +1778,8 @@ packages:
     dev: false
     optional: true
 
-  /@node-rs/argon2-android-arm64@1.8.3:
-    resolution: {integrity: sha512-zaf8P3T92caeW2xnMA7P1QvRA4pIt/04oilYP44XlTCtMye//vwXDMeK53sl7dvYiJKnzAWDRx41k8vZvpZazg==}
+  /@node-rs/argon2-android-arm64@2.0.0:
+    resolution: {integrity: sha512-o3L+m7E2TnVRFRCAlJm3TF8ZR+WyMykakCSopOYaAcAtjwlhOOiaQsV+iw2WS3ju3AuvJ/0Qu7A4ecdHAWQ4aA==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [android]
@@ -1767,8 +1796,8 @@ packages:
     dev: false
     optional: true
 
-  /@node-rs/argon2-darwin-arm64@1.8.3:
-    resolution: {integrity: sha512-DV/IbmLGdNXBtXb5o2UI5ba6kvqXqPAJgmMOTUCuHeBSp992GlLHdfU4rzGu0dNrxudBnunNZv+crd0YdEQSUA==}
+  /@node-rs/argon2-darwin-arm64@2.0.0:
+    resolution: {integrity: sha512-ad5qpXGxDwIS4/kH18LNe0G4m/4tm0z7gI4DmlTU4r3/LnrbMBW7XTHHNjUGpmtgAEn+4g/WQj1fIGtJZNFerw==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [darwin]
@@ -1785,8 +1814,8 @@ packages:
     dev: false
     optional: true
 
-  /@node-rs/argon2-darwin-x64@1.8.3:
-    resolution: {integrity: sha512-YMjmBGFZhLfYjfQ2gll9A+BZu/zAMV7lWZIbKxb7ZgEofILQwuGmExjDtY3Jplido/6leCEdpmlk2oIsME00LA==}
+  /@node-rs/argon2-darwin-x64@2.0.0:
+    resolution: {integrity: sha512-DhWHTjO3XNf8g9CflXZHeHbPFsRxvgsqC52S15Adj0lKSrWFzxvE9+z27jAP5KE/GmfDa4Ln5Dc4qQIQEblZAA==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [darwin]
@@ -1803,8 +1832,8 @@ packages:
     dev: false
     optional: true
 
-  /@node-rs/argon2-freebsd-x64@1.8.3:
-    resolution: {integrity: sha512-Hq3Rj5Yb2RolTG/luRPnv+XiGCbi5nAK25Pc8ou/tVapwX+iktEm/NXbxc5zsMxraYVkCvfdwBjweC5O+KqCGw==}
+  /@node-rs/argon2-freebsd-x64@2.0.0:
+    resolution: {integrity: sha512-FdLOudD9D9aL/0XB4QJl5OY48+XfZZbrPrVhcpbHgskZmo/ISWTn2z/TEyjraE7Zy9D/4X8d3/WMJiXueoyZPw==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [freebsd]
@@ -1821,8 +1850,8 @@ packages:
     dev: false
     optional: true
 
-  /@node-rs/argon2-linux-arm-gnueabihf@1.8.3:
-    resolution: {integrity: sha512-x49l8RgzKoG0/V0IXa5rrEl1TcJEc936ctlYFvqcunSOyowZ6kiWtrp1qrbOR8gbaNILl11KTF52vF6+h8UlEQ==}
+  /@node-rs/argon2-linux-arm-gnueabihf@2.0.0:
+    resolution: {integrity: sha512-Qtp0bsVv+/dnZsLl1O7CWVqp1ijb3r2YMvQnkK3z06pH6fajMH9LWQCGdZslnidNfRudwxj51Xiym+nD8POuYw==}
     engines: {node: '>= 10'}
     cpu: [arm]
     os: [linux]
@@ -1839,8 +1868,8 @@ packages:
     dev: false
     optional: true
 
-  /@node-rs/argon2-linux-arm64-gnu@1.8.3:
-    resolution: {integrity: sha512-gJesam/qA63reGkb9qJ2TjFSLBtY41zQh2oei7nfnYsmVQPuHHWItJxEa1Bm21SPW53gZex4jFJbDIgj0+PxIw==}
+  /@node-rs/argon2-linux-arm64-gnu@2.0.0:
+    resolution: {integrity: sha512-1maxs5vFcn3q6jgWuG92oT7uZxcPEHTCu3IIOEVaQCJzVSAfyL7h6o0hWaHj7Ga3/5rhiaDgSwX1MTW7Crl2QQ==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [linux]
@@ -1857,8 +1886,8 @@ packages:
     dev: false
     optional: true
 
-  /@node-rs/argon2-linux-arm64-musl@1.8.3:
-    resolution: {integrity: sha512-7O6kQdSKzB4Tjx/EBa8zKIxnmLkQE8VdJgPm6Ksrpn+ueo0mx2xf76fIDnbbTCtm3UbB+y+FkTo2wLA7tOqIKg==}
+  /@node-rs/argon2-linux-arm64-musl@2.0.0:
+    resolution: {integrity: sha512-Wju44r1YDhQXDWxGNkfft0iHvoXcmxJ5NJSoqSMpNuHiGOkqW2heWtBlaXZk71F8rfFLZ8hES+t1uouXYV1mNw==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [linux]
@@ -1875,8 +1904,8 @@ packages:
     dev: false
     optional: true
 
-  /@node-rs/argon2-linux-x64-gnu@1.8.3:
-    resolution: {integrity: sha512-OBH+EFG7BGjFyldaao2H2gSCLmjtrrwf420B1L+lFn7JLW9UAjsIPFKAcWsYwPa/PwYzIge9Y7SGcpqlsSEX0w==}
+  /@node-rs/argon2-linux-x64-gnu@2.0.0:
+    resolution: {integrity: sha512-udCXRjNR9RU03n4NeUcrsgsVVDzWatI5RvRPererR8mCiljDzNB89hZokXtEVtVTHDey+0WVa5lL13wJdkQOAQ==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [linux]
@@ -1893,8 +1922,8 @@ packages:
     dev: false
     optional: true
 
-  /@node-rs/argon2-linux-x64-musl@1.8.3:
-    resolution: {integrity: sha512-bDbMuyekIxZaN7NaX+gHVkOyABB8bcMEJYeRPW1vCXKHj3brJns1wiUFSxqeUXreupifNVJlQfPt1Y5B/vFXgQ==}
+  /@node-rs/argon2-linux-x64-musl@2.0.0:
+    resolution: {integrity: sha512-RZGpd82OzYkGg4ZCLgCqwZ68m5qizPUBCDRwTquaUi4JV1Wly4iJnMlQuXsvgwvX8AKbCWKRB2HfXfOxnYRCOA==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [linux]
@@ -1915,8 +1944,8 @@ packages:
     dev: false
     optional: true
 
-  /@node-rs/argon2-wasm32-wasi@1.8.3:
-    resolution: {integrity: sha512-NBf2cMCDbNKMzp13Pog8ZPmI0M9U4Ak5b95EUjkp17kdKZFds12dwW67EMnj7Zy+pRqby2QLECaWebDYfNENTg==}
+  /@node-rs/argon2-wasm32-wasi@2.0.0:
+    resolution: {integrity: sha512-WUbkAsxV2ZbwfVKJ/YgSLngn1H2IJ6uO4FYw+KPkDDYbpUHPImg0ny6k2gV340qUXYP6QvHg7EorUbXrLCE8Rg==}
     engines: {node: '>=14.0.0'}
     cpu: [wasm32]
     requiresBuild: true
@@ -1934,8 +1963,8 @@ packages:
     dev: false
     optional: true
 
-  /@node-rs/argon2-win32-arm64-msvc@1.8.3:
-    resolution: {integrity: sha512-AHpPo7UbdW5WWjwreVpgFSY0o1RY4A7cUFaqDXZB2OqEuyrhMxBdZct9PX7PQKI18D85pLsODnR+gvVuTwJ6rQ==}
+  /@node-rs/argon2-win32-arm64-msvc@2.0.0:
+    resolution: {integrity: sha512-yEvArafekU2Roo3DweBReQrRIvD+VQDiLyKhY6uIi/J27iKdWUcpqK2KTyYRak2z32LwqGS+f/4OlOGIHrbFgA==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [win32]
@@ -1952,8 +1981,8 @@ packages:
     dev: false
     optional: true
 
-  /@node-rs/argon2-win32-ia32-msvc@1.8.3:
-    resolution: {integrity: sha512-bqzn2rcQkEwCINefhm69ttBVVkgHJb/V03DdBKsPFtiX6H47axXKz62d1imi26zFXhOEYxhKbu3js03GobJOLw==}
+  /@node-rs/argon2-win32-ia32-msvc@2.0.0:
+    resolution: {integrity: sha512-JUxcS00LmJ1xJgb1Wc5hg/neuqHmFJXdMEejdul45Mdi5GVuv4lsy3ywXkggjlDfETDkvlgnKgoaHG0mcIdtdg==}
     engines: {node: '>= 10'}
     cpu: [ia32]
     os: [win32]
@@ -1970,8 +1999,8 @@ packages:
     dev: false
     optional: true
 
-  /@node-rs/argon2-win32-x64-msvc@1.8.3:
-    resolution: {integrity: sha512-ILlrRThdbp5xNR5gwYM2ic1n/vG5rJ8dQZ+YMRqksl+lnTJ/6FDe5BOyIhiPtiDwlCiCtUA+1NxpDB9KlUCAIA==}
+  /@node-rs/argon2-win32-x64-msvc@2.0.0:
+    resolution: {integrity: sha512-Wp+CuqwX97y8v+TXRU7FDCeXpWDqqoEZzBTD5RTY/ncgoyhyYsToHGztoKrlK9Nc4Q5Pco9OaJsgL5piHzvzcQ==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [win32]
@@ -1999,24 +2028,24 @@ packages:
       '@node-rs/argon2-win32-x64-msvc': 1.7.0
     dev: false
 
-  /@node-rs/argon2@1.8.3:
-    resolution: {integrity: sha512-sf/QAEI59hsMEEE2J8vO4hKrXrv4Oplte3KI2N4MhMDYpytH0drkVfErmHBfWFZxxIEK03fX1WsBNswS2nIZKg==}
+  /@node-rs/argon2@2.0.0:
+    resolution: {integrity: sha512-19DVNk87JRT0f5R9CucMM06cQg6PAoRBEfvmKXdrD0uFAWUmaf58IXTyCLdVLJW0IXwfV7I0FCldTiOilh1rZA==}
     engines: {node: '>= 10'}
     optionalDependencies:
-      '@node-rs/argon2-android-arm-eabi': 1.8.3
-      '@node-rs/argon2-android-arm64': 1.8.3
-      '@node-rs/argon2-darwin-arm64': 1.8.3
-      '@node-rs/argon2-darwin-x64': 1.8.3
-      '@node-rs/argon2-freebsd-x64': 1.8.3
-      '@node-rs/argon2-linux-arm-gnueabihf': 1.8.3
-      '@node-rs/argon2-linux-arm64-gnu': 1.8.3
-      '@node-rs/argon2-linux-arm64-musl': 1.8.3
-      '@node-rs/argon2-linux-x64-gnu': 1.8.3
-      '@node-rs/argon2-linux-x64-musl': 1.8.3
-      '@node-rs/argon2-wasm32-wasi': 1.8.3
-      '@node-rs/argon2-win32-arm64-msvc': 1.8.3
-      '@node-rs/argon2-win32-ia32-msvc': 1.8.3
-      '@node-rs/argon2-win32-x64-msvc': 1.8.3
+      '@node-rs/argon2-android-arm-eabi': 2.0.0
+      '@node-rs/argon2-android-arm64': 2.0.0
+      '@node-rs/argon2-darwin-arm64': 2.0.0
+      '@node-rs/argon2-darwin-x64': 2.0.0
+      '@node-rs/argon2-freebsd-x64': 2.0.0
+      '@node-rs/argon2-linux-arm-gnueabihf': 2.0.0
+      '@node-rs/argon2-linux-arm64-gnu': 2.0.0
+      '@node-rs/argon2-linux-arm64-musl': 2.0.0
+      '@node-rs/argon2-linux-x64-gnu': 2.0.0
+      '@node-rs/argon2-linux-x64-musl': 2.0.0
+      '@node-rs/argon2-wasm32-wasi': 2.0.0
+      '@node-rs/argon2-win32-arm64-msvc': 2.0.0
+      '@node-rs/argon2-win32-ia32-msvc': 2.0.0
+      '@node-rs/argon2-win32-x64-msvc': 2.0.0
     dev: false
 
   /@node-rs/bcrypt-android-arm-eabi@1.9.0:
@@ -2417,6 +2446,12 @@ packages:
     dependencies:
       undici-types: 6.19.8
 
+  /@types/node@22.7.6:
+    resolution: {integrity: sha512-/d7Rnj0/ExXDMcioS78/kf1lMzYk4BZV8MZGTBKzTGZ6/406ukkbYlIsZmMPhcR5KlkunDHQLrtAVmSq7r+mSw==}
+    dependencies:
+      undici-types: 6.19.8
+    dev: true
+
   /@types/normalize-package-data@2.4.4:
     resolution: {integrity: sha512-37i+OaWTh9qeK4LSHPsyRC7NahnGotNuZvjLSgcPzblpHB3rrCJxAOgI5gCdKm7coonsaX1Of0ILiTcnZjbfxA==}
     dev: true
@@ -2574,7 +2609,7 @@ packages:
       '@typescript-eslint/utils': 8.9.0(eslint@9.12.0)(typescript@5.6.3)
       eslint: 9.12.0
       typescript: 5.6.3
-      vitest: 2.1.3(@types/node@20.16.12)
+      vitest: 2.1.3(@types/node@22.7.6)
     dev: true
 
   /@vitest/expect@2.1.3:
@@ -2601,7 +2636,7 @@ packages:
       '@vitest/spy': 2.1.3
       estree-walker: 3.0.3
       magic-string: 0.30.12
-      vite: 5.4.9(@types/node@20.16.12)
+      vite: 5.4.9(@types/node@22.7.6)
     dev: true
 
   /@vitest/pretty-format@2.1.3:
@@ -2803,6 +2838,13 @@ packages:
     resolution: {integrity: sha512-CDSwaxINFy59iNwhYnkvALBwZiTydGkOecZyPkqBpABYR1KqGEsET0VOOYDwtleZSUIdeY36DC2bSZ24CO1igA==}
     dependencies:
       '@fastify/error': 3.4.1
+      fastq: 1.17.1
+    dev: false
+
+  /avvio@9.1.0:
+    resolution: {integrity: sha512-fYASnYi600CsH/j9EQov7lECAniYiBFiiAtBNuZYLA2leLe9qOvZzqYHFjtIj6gD2VMoMLP14834LFWvr4IfDw==}
+    dependencies:
+      '@fastify/error': 4.0.0
       fastq: 1.17.1
     dev: false
 
@@ -3197,10 +3239,11 @@ packages:
       - supports-color
     dev: true
 
-  /drizzle-kit@0.22.8:
-    resolution: {integrity: sha512-VjI4wsJjk3hSqHSa3TwBf+uvH6M6pRHyxyoVbt935GUzP9tUR/BRZ+MhEJNgryqbzN2Za1KP0eJMTgKEPsalYQ==}
+  /drizzle-kit@0.26.2:
+    resolution: {integrity: sha512-cMq8omEKywjIy5KcqUo6LvEFxkl8/zYHsgYjFVXjmPWWtuW4blcz+YW9+oIhoaALgs2ebRjzXwsJgN9i6P49Dw==}
     hasBin: true
     dependencies:
+      '@drizzle-team/brocli': 0.10.1
       '@esbuild-kit/esm-loader': 2.6.5
       esbuild: 0.19.12
       esbuild-register: 3.6.0(esbuild@0.19.12)
@@ -3292,13 +3335,13 @@ packages:
       pg: 8.13.0
     dev: false
 
-  /drizzle-orm@0.31.4(@types/pg@8.11.10)(pg@8.13.0):
-    resolution: {integrity: sha512-VGD9SH9aStF2z4QOTnVlVX/WghV/EnuEzTmsH3fSVp2E4fFgc8jl3viQrS/XUJx1ekW4rVVLJMH42SfGQdjX3Q==}
+  /drizzle-orm@0.35.2(@types/pg@8.11.10)(pg@8.13.0):
+    resolution: {integrity: sha512-bLQtRchl8QvRo2MyG6kcZC90UDzR7Ubir4YwOHV3cZPdJbF+4jU/Yt0QOczsoXe25wLRt6CtCWLXtSDQKft3yg==}
     peerDependencies:
       '@aws-sdk/client-rds-data': '>=3'
       '@cloudflare/workers-types': '>=3'
       '@electric-sql/pglite': '>=0.1.1'
-      '@libsql/client': '*'
+      '@libsql/client': '>=0.10.0'
       '@neondatabase/serverless': '>=0.1'
       '@op-engineering/op-sqlite': '>=2'
       '@opentelemetry/api': ^1.4.1
@@ -3385,13 +3428,13 @@ packages:
       pg: 8.13.0
     dev: false
 
-  /drizzle-zod@0.5.1(drizzle-orm@0.31.4)(zod@3.23.8):
+  /drizzle-zod@0.5.1(drizzle-orm@0.35.2)(zod@3.23.8):
     resolution: {integrity: sha512-C/8bvzUH/zSnVfwdSibOgFjLhtDtbKYmkbPbUCq46QZyZCH6kODIMSOgZ8R7rVjoI+tCj3k06MRJMDqsIeoS4A==}
     peerDependencies:
       drizzle-orm: '>=0.23.13'
       zod: '*'
     dependencies:
-      drizzle-orm: 0.31.4(@types/pg@8.11.10)(pg@8.13.0)
+      drizzle-orm: 0.35.2(@types/pg@8.11.10)(pg@8.13.0)
       zod: 3.23.8
     dev: false
 
@@ -4185,6 +4228,18 @@ packages:
       rfdc: 1.4.1
     dev: false
 
+  /fast-json-stringify@6.0.0:
+    resolution: {integrity: sha512-FGMKZwniMTgZh7zQp9b6XnBVxUmKVahQLQeRQHqwYmPDqDhcEKZ3BaQsxelFFI5PY7nN71OEeiL47/zUWcYe1A==}
+    dependencies:
+      '@fastify/merge-json-schemas': 0.1.1
+      ajv: 8.17.1
+      ajv-formats: 3.0.1(ajv@8.17.1)
+      fast-deep-equal: 3.1.3
+      fast-uri: 2.4.0
+      json-schema-ref-resolver: 1.0.1
+      rfdc: 1.4.1
+    dev: false
+
   /fast-levenshtein@2.0.6:
     resolution: {integrity: sha512-DCXu6Ifhqcks7TZKY3Hxp3y6qphY5SJZmrWMDrKcERSOXWQdMhU9Ig/PYrzyw/ul9jOIyh0N4M0tbC5hodg8dw==}
     dev: true
@@ -4212,6 +4267,10 @@ packages:
     resolution: {integrity: sha512-stRHYGeuqpEZTL1Ef0Ovr2ltazUT9g844X5z/zEBFLG8RYlpDiOCIG+ATvYEp+/zmc7sN29mcIMp8gvYplYPIQ==}
     dev: false
 
+  /fastify-plugin@5.0.1:
+    resolution: {integrity: sha512-HCxs+YnRaWzCl+cWRYFnHmeRFyR5GVnJTAaCJQiYzQSDwK9MgJdyAsuL3nh0EWRCYMgQ5MeziymvmAhUHYHDUQ==}
+    dev: false
+
   /fastify-type-provider-zod@1.2.0(fastify@4.28.1)(zod@3.23.8):
     resolution: {integrity: sha512-2zkPEWFIBYzkGQ0kmn8gOW5tlQOmdDWn5edF5LQ2r0RiydFGhD86FVZX6wLraXAmdFm8P1CMmo19lwlGb0mZrA==}
     peerDependencies:
@@ -4223,13 +4282,14 @@ packages:
       zod-to-json-schema: 3.23.3(zod@3.23.8)
     dev: false
 
-  /fastify-type-provider-zod@2.1.0(fastify@4.28.1)(zod@3.23.8):
-    resolution: {integrity: sha512-p0plQyrxVR1IxJaOVbKRkduYh74HAS6Pm2szhFrc/vFdfIEu8UWo/cPFZCrcKyeo8ICjWbHH1zkx8lWw/ivpqg==}
+  /fastify-type-provider-zod@4.0.2(fastify@5.0.0)(zod@3.23.8):
+    resolution: {integrity: sha512-FDRzSL3ZuoZ+4YDevR1YOinmDKkxOdy3QB9dDR845sK+bQvDroPKhHAXLEAOObDxL7SMA0OZN/A4osrNBTdDTQ==}
     peerDependencies:
-      fastify: ^4.0.0
+      fastify: ^5.0.0
       zod: ^3.14.2
     dependencies:
-      fastify: 4.28.1
+      '@fastify/error': 4.0.0
+      fastify: 5.0.0
       zod: 3.23.8
       zod-to-json-schema: 3.23.3(zod@3.23.8)
     dev: false
@@ -4248,6 +4308,26 @@ packages:
       light-my-request: 5.14.0
       pino: 9.5.0
       process-warning: 3.0.0
+      proxy-addr: 2.0.7
+      rfdc: 1.4.1
+      secure-json-parse: 2.7.0
+      semver: 7.6.3
+      toad-cache: 3.7.0
+    dev: false
+
+  /fastify@5.0.0:
+    resolution: {integrity: sha512-Qe4dU+zGOzg7vXjw4EvcuyIbNnMwTmcuOhlOrOJsgwzvjEZmsM/IeHulgJk+r46STjdJS/ZJbxO8N70ODXDMEQ==}
+    dependencies:
+      '@fastify/ajv-compiler': 4.0.1
+      '@fastify/error': 4.0.0
+      '@fastify/fast-json-stringify-compiler': 5.0.1
+      abstract-logging: 2.0.1
+      avvio: 9.1.0
+      fast-json-stringify: 6.0.0
+      find-my-way: 9.1.0
+      light-my-request: 6.1.0
+      pino: 9.5.0
+      process-warning: 4.0.0
       proxy-addr: 2.0.7
       rfdc: 1.4.1
       secure-json-parse: 2.7.0
@@ -4292,6 +4372,15 @@ packages:
       fast-deep-equal: 3.1.3
       fast-querystring: 1.1.2
       safe-regex2: 3.1.0
+    dev: false
+
+  /find-my-way@9.1.0:
+    resolution: {integrity: sha512-Y5jIsuYR4BwWDYYQ2A/RWWE6gD8a0FMgtU+HOq1WKku+Cwdz8M1v8wcAmRXXM1/iqtoqg06v+LjAxMYbCjViMw==}
+    engines: {node: '>=14'}
+    dependencies:
+      fast-deep-equal: 3.1.3
+      fast-querystring: 1.1.2
+      safe-regex2: 4.0.0
     dev: false
 
   /find-up-simple@1.0.0:
@@ -4728,6 +4817,14 @@ packages:
     dependencies:
       cookie: 0.7.2
       process-warning: 3.0.0
+      set-cookie-parser: 2.7.0
+    dev: false
+
+  /light-my-request@6.1.0:
+    resolution: {integrity: sha512-+NFuhlOGoEwxeQfJ/pobkVFxcnKyDtiX847hLjuB/IzBxIl3q4VJeFI8uRCgb3AlTWL1lgOr+u5+8QdUcr33ng==}
+    dependencies:
+      cookie: 0.7.2
+      process-warning: 4.0.0
       set-cookie-parser: 2.7.0
     dev: false
 
@@ -5306,6 +5403,12 @@ packages:
 
   /mnemonist@0.39.6:
     resolution: {integrity: sha512-A/0v5Z59y63US00cRSLiloEIw3t5G+MiKz4BhX21FI+YBJXBOGW0ohFxTxO08dsOYlzxo87T7vGfZKYp2bcAWA==}
+    dependencies:
+      obliterator: 2.0.4
+    dev: false
+
+  /mnemonist@0.39.8:
+    resolution: {integrity: sha512-vyWo2K3fjrUw8YeeZ1zF0fy6Mu59RHokURlld8ymdUPjMlD9EC9ov1/YPqTgqRvUN9nTr3Gqfz29LYAmu0PHPQ==}
     dependencies:
       obliterator: 2.0.4
     dev: false
@@ -5915,6 +6018,11 @@ packages:
     engines: {node: '>=10'}
     dev: false
 
+  /ret@0.5.0:
+    resolution: {integrity: sha512-I1XxrZSQ+oErkRR4jYbAyEEu2I0avBvvMM5JN+6EBprOGRCs63ENqZ3vjavq8fBw2+62G5LF5XelKwuJpcvcxw==}
+    engines: {node: '>=10'}
+    dev: false
+
   /reusify@1.0.4:
     resolution: {integrity: sha512-U9nH88a3fc/ekCF1l0/UP1IosiuIjyTh7hBvXVMHYgVcfGvt897Xguj2UOLDeI5BG2m7/uwyaLVT6fbtCwTyzw==}
     engines: {iojs: '>=1.0.0', node: '>=0.10.0'}
@@ -5959,6 +6067,12 @@ packages:
     resolution: {integrity: sha512-RAAZAGbap2kBfbVhvmnTFv73NWLMvDGOITFYTZBAaY8eR+Ir4ef7Up/e7amo+y1+AH+3PtLkrt9mvcTsG9LXug==}
     dependencies:
       ret: 0.4.3
+    dev: false
+
+  /safe-regex2@4.0.0:
+    resolution: {integrity: sha512-Hvjfv25jPDVr3U+4LDzBuZPPOymELG3PYcSk5hcevooo1yxxamQL/bHs/GrEPGmMoMEwRrHVGiCA1pXi97B8Ew==}
+    dependencies:
+      ret: 0.5.0
     dev: false
 
   /safe-stable-stringify@2.5.0:
@@ -6579,7 +6693,7 @@ packages:
       spdx-expression-parse: 3.0.1
     dev: true
 
-  /vite-node@2.1.3(@types/node@20.16.12):
+  /vite-node@2.1.3(@types/node@22.7.6):
     resolution: {integrity: sha512-I1JadzO+xYX887S39Do+paRePCKoiDrWRRjp9kkG5he0t7RXNvPAJPCQSJqbGN4uCrFFeS3Kj3sLqY8NMYBEdA==}
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
@@ -6587,7 +6701,7 @@ packages:
       cac: 6.7.14
       debug: 4.3.7
       pathe: 1.1.2
-      vite: 5.4.9(@types/node@20.16.12)
+      vite: 5.4.9(@types/node@22.7.6)
     transitivePeerDependencies:
       - '@types/node'
       - less
@@ -6616,7 +6730,7 @@ packages:
       - typescript
     dev: true
 
-  /vite@5.4.9(@types/node@20.16.12):
+  /vite@5.4.9(@types/node@22.7.6):
     resolution: {integrity: sha512-20OVpJHh0PAM0oSOELa5GaZNWeDjcAvQjGXy2Uyr+Tp+/D2/Hdz6NLgpJLsarPTA2QJ6v8mX2P1ZfbsSKvdMkg==}
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
@@ -6647,7 +6761,7 @@ packages:
       terser:
         optional: true
     dependencies:
-      '@types/node': 20.16.12
+      '@types/node': 22.7.6
       esbuild: 0.21.5
       postcss: 8.4.47
       rollup: 4.24.0
@@ -6655,7 +6769,7 @@ packages:
       fsevents: 2.3.3
     dev: true
 
-  /vitest@2.1.3(@types/node@20.16.12):
+  /vitest@2.1.3(@types/node@22.7.6):
     resolution: {integrity: sha512-Zrxbg/WiIvUP2uEzelDNTXmEMJXuzJ1kCpbDvaKByFA9MNeO95V+7r/3ti0qzJzrxdyuUw5VduN7k+D3VmVOSA==}
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
@@ -6680,7 +6794,7 @@ packages:
       jsdom:
         optional: true
     dependencies:
-      '@types/node': 20.16.12
+      '@types/node': 22.7.6
       '@vitest/expect': 2.1.3
       '@vitest/mocker': 2.1.3(@vitest/spy@2.1.3)(vite@5.4.9)
       '@vitest/pretty-format': 2.1.3
@@ -6697,8 +6811,8 @@ packages:
       tinyexec: 0.3.1
       tinypool: 1.0.1
       tinyrainbow: 1.2.0
-      vite: 5.4.9(@types/node@20.16.12)
-      vite-node: 2.1.3(@types/node@20.16.12)
+      vite: 5.4.9(@types/node@22.7.6)
+      vite-node: 2.1.3(@types/node@22.7.6)
       why-is-node-running: 2.3.0
     transitivePeerDependencies:
       - less

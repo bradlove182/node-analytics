@@ -1,23 +1,34 @@
 import { createTimeSpan } from "@api/utils"
-import { describe, expect, it } from "vitest"
+import { beforeAll, beforeEach, describe, expect, it } from "vitest"
 import { createSession, generateSessionToken, getSessionCookieName, validateSessionToken } from "."
+import { db } from "@api/database"
+import { userTable } from "@api/database/schemas"
+import { User } from "@api/database"
 
-function setup() {
-    const token = generateSessionToken()
-    return {
-        token,
-    }
+const testUser: User = {
+    id: "1",
+    email: "test@test.com",
+    createdAt: new Date(),
 }
 
+beforeEach(async () => {
+    await db.insert(userTable).values(testUser)
+
+    return async () => {
+        await db.delete(userTable)
+    }
+})
+
 describe("lib/auth", () => {
+
     it("generate a session token with a length of 32", () => {
-        const { token } = setup()
+        const token = generateSessionToken()
         expect(token).toHaveLength(32)
     })
 
     it("create a valid session", async () => {
-        const { token } = setup()
-        const session = await createSession(token, "1")
+        const token = generateSessionToken()
+        const session = await createSession(token, testUser.id)
         const { user, session: currentSession } = await validateSessionToken(token)
 
         expect(session.userId).toEqual("1")

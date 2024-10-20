@@ -39,17 +39,4 @@ export async function initializeDatabase() {
         }
         throw new Error(`Failed to connect to database ${error}`)
     }
-
-    try {
-        await migrate(db, {
-            migrationsFolder: "./src/database/migrations",
-        })
-        Logger.info("Start", "Migrated database")
-    }
-    catch (error) {
-        if (error instanceof Error) {
-            Logger.error("Start", `Failed to migrate database ${error.message}`)
-        }
-        throw new Error(`Failed to migrate database ${error}`)
-    }
 }

@@ -1,6 +1,6 @@
-import { db, type Team } from "@api/database";
-import { teamTable } from "@api/database/schemas";
-import { eq } from "drizzle-orm";
+import { db, type Team } from "@api/database"
+import { teamTable } from "@api/database/schemas"
+import { eq } from "drizzle-orm"
 
 export async function createTeam(team: Team) {
     await db.insert(teamTable).values(team)

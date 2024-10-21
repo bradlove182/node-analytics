@@ -1,7 +1,8 @@
-import { db, User } from "@api/database";
-import { passwordTable, userTable } from "@api/database/schemas";
-import { hash } from "@node-rs/argon2";
-import { beforeEach, describe, expect, it } from "vitest";
+import type { User } from "@api/database"
+import { db } from "@api/database"
+import { passwordTable, userTable } from "@api/database/schemas"
+import { hash } from "@node-rs/argon2"
+import { beforeEach, describe, expect, it } from "vitest"
 
 const testUser: User = {
     id: "1",

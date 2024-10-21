@@ -1,11 +1,9 @@
 import type { Session, User } from "@api/database"
-import type { FastifyReply } from "fastify"
 import { db } from "@api/database"
 import { sessionTable } from "@api/database/schemas"
 import { createTimeSpan } from "@api/utils"
 import { sha256 } from "@oslojs/crypto/sha2"
 import { encodeBase32LowerCaseNoPadding, encodeHexLowerCase } from "@oslojs/encoding"
-import { env } from "@repo/environment"
 import { eq } from "drizzle-orm"
 
 export type SessionValidationResult =

@@ -10,7 +10,6 @@ import * as schema from "@api/database/schemas"
 import { Logger } from "@api/utils"
 import { env } from "@repo/environment"
 import { drizzle } from "drizzle-orm/node-postgres"
-import { migrate } from "drizzle-orm/node-postgres/migrator"
 import pg from "pg"
 
 const pool = new pg.Pool({

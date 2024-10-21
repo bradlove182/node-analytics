@@ -1,7 +1,7 @@
 import { Redis } from "@api/redis"
+import cookie from "@fastify/cookie"
 import cors from "@fastify/cors"
 import formBody from "@fastify/formbody"
-import cookie from "@fastify/cookie"
 import { fastifyHelmet } from "@fastify/helmet"
 import fastifyRateLimit from "@fastify/rate-limit"
 import fp from "fastify-plugin"

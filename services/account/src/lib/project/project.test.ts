@@ -1,13 +1,13 @@
 import { db, type Project, type Team } from "@api/database"
+import { teamTable } from "@api/database/schemas"
 import { afterEach, beforeEach, describe, expect, it } from "vitest"
 import { createProject, deleteProject, getProject, getProjects, updateProject } from "."
-import { teamTable } from "@api/database/schemas"
 
 const testProject: Project = {
     id: "1",
     name: "test project",
     createdAt: new Date(Date.now()),
-    teamId: "1"
+    teamId: "1",
 }
 
 const testTeam: Team = {

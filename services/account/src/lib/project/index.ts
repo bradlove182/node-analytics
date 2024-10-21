@@ -1,6 +1,6 @@
-import { db, type Project } from "@api/database";
-import { projectTable } from "@api/database/schemas";
-import { eq } from "drizzle-orm";
+import { db, type Project } from "@api/database"
+import { projectTable } from "@api/database/schemas"
+import { eq } from "drizzle-orm"
 
 export async function createProject(project: Project) {
     await db.insert(projectTable).values(project)
@@ -13,7 +13,7 @@ export async function deleteProject(projectId: Project["id"]) {
 
 export async function getProject(projectId: Project["id"]) {
     const project = await db.query.projectTable.findFirst({
-        where: projectTable => eq(projectTable.id, projectId)
+        where: projectTable => eq(projectTable.id, projectId),
     })
     return project
 }

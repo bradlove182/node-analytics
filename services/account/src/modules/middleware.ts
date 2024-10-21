@@ -1,9 +1,9 @@
-import { auth } from "@api/lib/auth"
+import type { FastifyInstance } from "fastify"
 import { db } from "@api/database"
+import { auth } from "@api/lib/auth"
 import { Redis } from "@api/redis"
 import fp from "fastify-plugin"
 import { verifyRequestOrigin } from "lucia"
-import type { FastifyInstance } from "fastify"
 
 const middleware = fp(async (fastify: FastifyInstance) => {
     // Add request objects

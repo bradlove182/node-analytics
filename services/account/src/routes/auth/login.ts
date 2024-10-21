@@ -48,8 +48,8 @@ export const loginRoute: FastifyPluginCallback = (server, _, done) => {
             const user = await db.query.userTable.findFirst({
                 where: userTable => eq(userTable.email, email),
                 with: {
-                    password: true
-                }
+                    password: true,
+                },
             })
 
             if (!user || !user.password) {

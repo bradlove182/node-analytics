@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm"
-import { pgTable, primaryKey, text, timestamp } from "drizzle-orm/pg-core"
+import { pgTable, text, timestamp } from "drizzle-orm/pg-core"
 import { teamTable } from "./team"
 
 export const projectTable = pgTable("project", {

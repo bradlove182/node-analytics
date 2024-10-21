@@ -1,9 +1,9 @@
-import { createTimeSpan } from "@api/utils"
-import { beforeAll, beforeEach, describe, expect, it } from "vitest"
-import { createSession, generateSessionToken, getSessionCookieName, validateSessionToken } from "."
+import type { User } from "@api/database"
 import { db } from "@api/database"
 import { userTable } from "@api/database/schemas"
-import { User } from "@api/database"
+import { createTimeSpan } from "@api/utils"
+import { beforeEach, describe, expect, it } from "vitest"
+import { createSession, generateSessionToken, getSessionCookieName, validateSessionToken } from "."
 
 const testUser: User = {
     id: "1",
@@ -20,7 +20,6 @@ beforeEach(async () => {
 })
 
 describe("lib/auth", () => {
-
     it("generate a session token with a length of 32", () => {
         const token = generateSessionToken()
         expect(token).toHaveLength(32)

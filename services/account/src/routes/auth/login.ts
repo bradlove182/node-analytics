@@ -1,6 +1,5 @@
 import type { FastifyPluginCallback, FastifySchema } from "fastify"
 import type { ZodTypeProvider } from "fastify-type-provider-zod"
-import { passwordTable, userTable } from "@api/database/schemas"
 import { verify } from "@node-rs/argon2"
 import { eq } from "drizzle-orm"
 import { z } from "zod"
@@ -46,15 +45,14 @@ export const loginRoute: FastifyPluginCallback = (server, _, done) => {
             const { body, db, auth } = request
             const { email, password } = body
 
-            const result = await db
-                .select({ user: userTable, password: passwordTable })
-                .from(userTable)
-                .innerJoin(passwordTable, eq(userTable.id, passwordTable.userId))
-                .where(eq(userTable.email, email))
+            const user = await db.query.userTable.findFirst({
+                where: userTable => eq(userTable.email, email),
+                with: {
+                    password: true
+                }
+            })
 
-            const { user, password: storedPassword } = result[0]!
-
-            if (!user) {
+            if (!user || !user.password) {
                 return reply.code(400).send({
                     statusCode: 400,
                     success: false,
@@ -62,7 +60,7 @@ export const loginRoute: FastifyPluginCallback = (server, _, done) => {
                 })
             }
 
-            const validPassword = await verify(storedPassword.password_hash, password, {
+            const validPassword = await verify(user.password.password_hash, password, {
                 memoryCost: 19456,
                 timeCost: 2,
                 outputLen: 32,
@@ -80,7 +78,12 @@ export const loginRoute: FastifyPluginCallback = (server, _, done) => {
             const token = auth.generateSessionToken()
 
             await auth.createSession(token, user.id)
-            auth.setSessionTokenCookie(reply, token)
+
+            reply.setCookie(auth.getSessionCookieName(), token, {
+                httpOnly: true,
+                sameSite: "lax",
+                path: "/",
+            })
 
             reply.code(200).send({
                 statusCode: 200,

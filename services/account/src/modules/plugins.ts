@@ -1,11 +1,13 @@
 import { Redis } from "@api/redis"
 import cors from "@fastify/cors"
 import formBody from "@fastify/formbody"
+import cookie from "@fastify/cookie"
 import { fastifyHelmet } from "@fastify/helmet"
 import fastifyRateLimit from "@fastify/rate-limit"
 import fp from "fastify-plugin"
 
 export const plugins = fp(async (server) => {
+    server.register(cookie)
     server.register(cors, {
         maxAge: 600,
         origin: true,

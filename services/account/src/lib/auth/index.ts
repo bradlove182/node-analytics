@@ -2,6 +2,7 @@ import type { Session, User } from "@api/database"
 import { db } from "@api/database"
 import { sessionTable } from "@api/database/schemas"
 import { createTimeSpan } from "@api/utils"
+import { hash, verify } from "@node-rs/argon2"
 import { sha256 } from "@oslojs/crypto/sha2"
 import { encodeBase32LowerCaseNoPadding, encodeHexLowerCase } from "@oslojs/encoding"
 import { eq } from "drizzle-orm"
@@ -69,12 +70,32 @@ export async function invalidateSession(sessionId: Session["id"]): Promise<void>
 
 export const getSessionCookieName = () => "session"
 
+export async function hashPassword(password: string): Promise<string> {
+    return await hash(password, {
+        memoryCost: 19456,
+        timeCost: 2,
+        outputLen: 32,
+        parallelism: 1,
+    })
+}
+
+export async function verifyPassword(hashedPassword: string, password: string): Promise<boolean> {
+    return await verify(hashedPassword, password, {
+        memoryCost: 19456,
+        timeCost: 2,
+        outputLen: 32,
+        parallelism: 1,
+    })
+}
+
 export const auth = {
     generateSessionToken,
     createSession,
     validateSessionToken,
     invalidateSession,
     getSessionCookieName,
+    hashPassword,
+    verifyPassword,
 }
 
 export type Auth = typeof auth

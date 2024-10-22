@@ -3,7 +3,7 @@ import { db } from "@api/database"
 import { userTable } from "@api/database/schemas"
 import { createTimeSpan } from "@api/utils"
 import { beforeEach, describe, expect, it } from "vitest"
-import { createSession, generateSessionToken, getSessionCookieName, validateSessionToken } from "."
+import { createSession, generateSessionToken, getSessionCookieName, hashPassword, validateSessionToken, verifyPassword } from "."
 
 const testUser: User = {
     id: "1",
@@ -43,5 +43,12 @@ describe("lib/auth", () => {
     it("returns expected cookie name", () => {
         const cookie = getSessionCookieName()
         expect(cookie).toEqual("session")
+    })
+
+    it("successfully hashes and verifies a password", async () => {
+        const password = "test"
+        const hashedPassword = await hashPassword(password)
+        const unHashedPassword = await verifyPassword(hashedPassword, password)
+        expect(unHashedPassword).toBeTruthy()
     })
 })

@@ -1,7 +1,8 @@
 import type { User } from "@api/database"
+import { buildServer } from "@api/app"
 import { db } from "@api/database"
 import { passwordTable, userTable } from "@api/database/schemas"
-import { hash } from "@node-rs/argon2"
+import { hashPassword } from "@api/lib/auth"
 import { beforeEach, describe, expect, it } from "vitest"
 
 const testUser: User = {
@@ -17,13 +18,8 @@ beforeEach(async () => {
         await tx.insert(userTable).values(testUser)
         await tx.insert(passwordTable).values({
             id: "1",
-            userId: "1",
-            password_hash: await hash(testPassword, {
-                memoryCost: 19456,
-                timeCost: 2,
-                outputLen: 32,
-                parallelism: 1,
-            }),
+            userId: testUser.id,
+            password_hash: await hashPassword(testPassword),
             createdAt: new Date(),
         })
     })
@@ -37,7 +33,49 @@ beforeEach(async () => {
 })
 
 describe("login route", () => {
-    it("should be a test", () => {
-        expect(true).toBe(true)
+    it("login with valid credentials", async () => {
+        const server = buildServer()
+
+        const response = await server.inject({
+            method: "POST",
+            url: "/v1/auth/login",
+            payload: {
+                email: testUser.email,
+                password: testPassword,
+            },
+            headers: {
+                host: "127.0.0.1",
+                origin: "http://127.0.0.1",
+            },
+        })
+
+        const data = response.json()
+
+        expect(response.statusCode).toBe(200)
+        expect(data.statusCode).toBe(200)
+        expect(data.success).toBeTruthy()
+    })
+
+    it("login with invalid credentials", async () => {
+        const server = buildServer()
+
+        const response = await server.inject({
+            method: "POST",
+            url: "/v1/auth/login",
+            payload: {
+                email: "invalid@email.com",
+                password: "invalid",
+            },
+            headers: {
+                host: "127.0.0.1",
+                origin: "http://127.0.0.1",
+            },
+        })
+
+        const data = response.json()
+
+        expect(response.statusCode).toBe(400)
+        expect(data.statusCode).toBe(400)
+        expect(data.success).toBeFalsy()
     })
 })

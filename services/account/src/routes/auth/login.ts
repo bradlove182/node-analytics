@@ -34,10 +34,7 @@ export const loginRoute: FastifyPluginCallback = (server, _, done) => {
         "/login",
         {
             config: {
-                rateLimit: {
-                    max: 3,
-                    timeWindow: "1 minute",
-                },
+                rateLimit: false,
             },
             schema,
         },

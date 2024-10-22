@@ -1,8 +1,6 @@
 import type { FastifyPluginCallback, FastifySchema } from "fastify"
 import type { ZodTypeProvider } from "fastify-type-provider-zod"
 import { passwordTable, userTable } from "@api/database/schemas"
-import { hash } from "@node-rs/argon2"
-import { generateIdFromEntropySize } from "lucia"
 import pg from "pg"
 import { z } from "zod"
 
@@ -51,15 +49,10 @@ export const registerRoute: FastifyPluginCallback = (server, _, done) => {
             const { db, body, auth } = request
             const { email, password } = body
 
-            const passwordHash = await hash(password, {
-                memoryCost: 19456,
-                timeCost: 2,
-                outputLen: 32,
-                parallelism: 1,
-            })
+            const passwordHash = await auth.hashPassword(password)
 
-            const userId = generateIdFromEntropySize(10)
-            const passwordId = generateIdFromEntropySize(10)
+            const userId = auth.generateIdFromEntropySize(10)
+            const passwordId = auth.generateIdFromEntropySize(10)
 
             try {
                 await db.transaction(async (tx) => {
@@ -79,7 +72,12 @@ export const registerRoute: FastifyPluginCallback = (server, _, done) => {
                 const token = auth.generateSessionToken()
 
                 await auth.createSession(token, userId)
-                auth.setSessionTokenCookie(reply, token)
+
+                reply.setCookie(auth.getSessionCookieName(), token, {
+                    httpOnly: true,
+                    sameSite: "lax",
+                    path: "/",
+                })
 
                 return reply.code(200).send({
                     statusCode: 200,

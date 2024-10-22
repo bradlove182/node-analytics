@@ -88,6 +88,11 @@ export async function verifyPassword(hashedPassword: string, password: string): 
     })
 }
 
+export function generateIdFromEntropySize(size: number): string {
+    const buffer = crypto.getRandomValues(new Uint8Array(size))
+    return encodeBase32LowerCaseNoPadding(buffer)
+}
+
 export const auth = {
     generateSessionToken,
     createSession,
@@ -96,6 +101,7 @@ export const auth = {
     getSessionCookieName,
     hashPassword,
     verifyPassword,
+    generateIdFromEntropySize,
 }
 
 export type Auth = typeof auth

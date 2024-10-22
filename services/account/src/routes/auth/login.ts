@@ -34,7 +34,10 @@ export const loginRoute: FastifyPluginCallback = (server, _, done) => {
         "/login",
         {
             config: {
-                rateLimit: false,
+                rateLimit: {
+                    max: 3,
+                    timeWindow: "1 minute",
+                },
             },
             schema,
         },
@@ -57,12 +60,7 @@ export const loginRoute: FastifyPluginCallback = (server, _, done) => {
                 })
             }
 
-            const validPassword = await verify(user.password.password_hash, password, {
-                memoryCost: 19456,
-                timeCost: 2,
-                outputLen: 32,
-                parallelism: 1,
-            })
+            const validPassword = await auth.verifyPassword(user.password.password_hash, password)
 
             if (!validPassword) {
                 return reply.code(400).send({

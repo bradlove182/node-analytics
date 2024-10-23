@@ -1,10 +1,11 @@
 import type { User } from "@api/database"
+import type { FastifyInstance } from "fastify"
 import { buildServer } from "@api/app"
 import { db, resetDatabase } from "@api/database"
 import { passwordTable, userTable } from "@api/database/schemas"
 import { getSessionCookieName } from "@api/lib/auth"
 import { getUserByEmail } from "@api/lib/user"
-import { afterEach, beforeEach, describe, expect, it } from "vitest"
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest"
 
 const testUser: User = {
     id: "1",
@@ -15,9 +16,17 @@ const testUser: User = {
 const testPassword = "12345678"
 
 describe("auth/register", () => {
-    it("register a new user", async () => {
-        const server = buildServer()
+    let server: FastifyInstance
 
+    beforeAll(() => {
+        server = buildServer()
+
+        return () => {
+            server.close()
+        }
+    })
+
+    it("register a new user", async () => {
         const response = await server.inject({
             method: "POST",
             url: "/v1/auth/register",
@@ -38,8 +47,6 @@ describe("auth/register", () => {
     })
 
     it("sets the correct cookie header", async () => {
-        const server = buildServer()
-
         const response = await server.inject({
             method: "POST",
             url: "/v1/auth/register",

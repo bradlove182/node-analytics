@@ -1,9 +1,10 @@
 import type { User } from "@api/database"
+import type { FastifyInstance } from "fastify"
 import { buildServer } from "@api/app"
 import { db, resetDatabase } from "@api/database"
 import { passwordTable, userTable } from "@api/database/schemas"
 import { getSessionCookieName, hashPassword } from "@api/lib/auth"
-import { afterEach, beforeEach, describe, expect, it } from "vitest"
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest"
 
 const testUser: User = {
     id: "1",
@@ -14,6 +15,16 @@ const testUser: User = {
 const testPassword = "test"
 
 describe("auth/login", () => {
+    let server: FastifyInstance
+
+    beforeAll(() => {
+        server = buildServer()
+
+        return () => {
+            server.close()
+        }
+    })
+
     beforeEach(async () => {
         await db.insert(userTable).values(testUser)
         await db.insert(passwordTable).values({
@@ -25,8 +36,6 @@ describe("auth/login", () => {
     })
 
     it("sets the correct cookie header", async () => {
-        const server = buildServer()
-
         const response = await server.inject({
             method: "POST",
             url: "/v1/auth/login",
@@ -49,8 +58,6 @@ describe("auth/login", () => {
     })
 
     it("login with valid credentials", async () => {
-        const server = buildServer()
-
         const response = await server.inject({
             method: "POST",
             url: "/v1/auth/login",
@@ -72,8 +79,6 @@ describe("auth/login", () => {
     })
 
     it("login with invalid credentials", async () => {
-        const server = buildServer()
-
         const response = await server.inject({
             method: "POST",
             url: "/v1/auth/login",

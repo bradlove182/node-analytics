@@ -15,7 +15,6 @@ const testPassword = "test"
 
 describe("auth/login", () => {
     beforeEach(async () => {
-        await resetDatabase()
         await db.insert(userTable).values(testUser)
         await db.insert(passwordTable).values({
             id: "1",
@@ -23,10 +22,6 @@ describe("auth/login", () => {
             password_hash: await hashPassword(testPassword),
             createdAt: new Date(),
         })
-    })
-
-    afterEach(async () => {
-        await resetDatabase()
     })
 
     it("sets the correct cookie header", async () => {

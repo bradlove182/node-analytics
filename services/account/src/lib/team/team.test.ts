@@ -1,16 +1,12 @@
 import type { Team } from "@api/database"
-import { afterEach, describe, expect, it } from "vitest"
+import { describe, expect, it } from "vitest"
 import { createTeam, deleteTeam, getTeam, getTeams, updateTeam } from "."
 
 const testTeam: Team = {
-    id: "2",
+    id: "1",
     name: "test team",
     createdAt: new Date(Date.now()),
 }
-
-afterEach(async () => {
-    await deleteTeam(testTeam.id)
-})
 
 describe("lib/team", () => {
     it("create a new team", async () => {

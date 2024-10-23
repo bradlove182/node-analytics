@@ -12,9 +12,16 @@ export async function deleteUser(userId: User["id"]): Promise<void> {
     await db.delete(userTable).where(eq(userTable.id, userId))
 }
 
-export async function getUser(userId: User["id"]): Promise<User | undefined> {
+export async function getUserById(userId: User["id"]): Promise<User | undefined> {
     const user = await db.query.userTable.findFirst({
         where: userTable => eq(userTable.id, userId),
+    })
+    return user
+}
+
+export async function getUserByEmail(email: User["email"]): Promise<User | undefined> {
+    const user = await db.query.userTable.findFirst({
+        where: userTable => eq(userTable.email, email),
     })
     return user
 }

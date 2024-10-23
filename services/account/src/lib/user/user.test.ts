@@ -1,19 +1,15 @@
 import type { User } from "@api/database"
-import { afterEach, describe, expect, it } from "vitest"
-import { createUser, deleteUser, getUser, getUsers, updateUser } from "."
+import { describe, expect, it } from "vitest"
+import { createUser, deleteUser, getUserByEmail, getUserById, getUsers, updateUser } from "."
 
 const testUser: User = {
-    id: "2",
-    email: "test2@test.com",
+    id: "lib/user",
+    email: "test@test.com",
     createdAt: new Date(Date.now()),
 }
 
-afterEach(async () => {
-    await deleteUser(testUser.id)
-})
-
 describe("lib/user", () => {
-    it("create a new user", async () => {
+    it("createUser()", async () => {
         const user = await createUser(testUser)
 
         expect(user.id).toEqual(testUser.id)
@@ -21,35 +17,44 @@ describe("lib/user", () => {
         expect(user.createdAt).toBeInstanceOf(Date)
     })
 
-    it("get a user", async () => {
+    it("getUserById()", async () => {
         await createUser(testUser)
-        const user = await getUser(testUser.id)
+        const user = await getUserById(testUser.id)
 
         expect(user?.id).toEqual(testUser.id)
         expect(user?.email).toEqual(testUser.email)
         expect(user?.createdAt).toBeInstanceOf(Date)
     })
 
-    it("delete a user", async () => {
+    it("getUserByEmail()", async () => {
+        await createUser(testUser)
+        const user = await getUserByEmail(testUser.email)
+
+        expect(user?.id).toEqual(testUser.id)
+        expect(user?.email).toEqual(testUser.email)
+        expect(user?.createdAt).toBeInstanceOf(Date)
+    })
+
+    it("deleteUser()", async () => {
         const user = await createUser(testUser)
         await deleteUser(user.id)
 
-        const deletedUser = await getUser(user.id)
+        const deletedUser = await getUserById(user.id)
 
         expect(deletedUser).toBeUndefined()
     })
 
-    it("update a user", async () => {
+    it("updateUser()", async () => {
         const user = await createUser(testUser)
         await updateUser(user.id, {
             email: "updated@test.com",
         })
-        const updatedUser = await getUser(user.id)
+        const updatedUser = await getUserById(user.id)
 
         expect(updatedUser?.email).toEqual("updated@test.com")
     })
 
-    it("gets users", async () => {
+    it("getUsers()", async () => {
         await createUser(testUser)
         const users = await getUsers()
 

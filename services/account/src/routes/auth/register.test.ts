@@ -1,0 +1,53 @@
+import type { User } from "@api/database"
+import { buildServer } from "@api/app"
+import { db, resetDatabase } from "@api/database"
+import { passwordTable, userTable } from "@api/database/schemas"
+import { getUserByEmail } from "@api/lib/user"
+import { afterEach, beforeEach, describe, expect, it } from "vitest"
+
+const testUser: User = {
+    id: "1",
+    email: "test@test.com",
+    createdAt: new Date(),
+}
+
+const testPassword = "12345678"
+
+afterEach(async () => {
+    await db.transaction(async (tx) => {
+        await tx.delete(userTable)
+        await tx.delete(passwordTable)
+    })
+})
+
+describe("auth/register", () => {
+    beforeEach(async () => {
+        await resetDatabase()
+    })
+
+    afterEach(async () => {
+        await resetDatabase()
+    })
+
+    it("register a new user", async () => {
+        const server = buildServer()
+
+        const response = await server.inject({
+            method: "POST",
+            url: "/v1/auth/register",
+            payload: {
+                email: testUser.email,
+                password: testPassword,
+            },
+            headers: {
+                host: "127.0.0.1",
+                origin: "http://127.0.0.1",
+            },
+        })
+
+        const user = await getUserByEmail(testUser.email)
+
+        expect(response.statusCode).toBe(200)
+        expect(user?.email).toStrictEqual(testUser.email)
+    })
+})

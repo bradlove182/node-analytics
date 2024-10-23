@@ -1,18 +1,19 @@
-import type {
+import type { InferSelectModel } from "drizzle-orm"
+import {
     passwordTable,
     projectTable,
     sessionTable,
     teamTable,
     userTable,
 } from "@api/database/schemas"
-import type { InferSelectModel } from "drizzle-orm"
 import * as schema from "@api/database/schemas"
 import { Logger } from "@api/utils"
 import { env } from "@repo/environment"
 import { drizzle } from "drizzle-orm/node-postgres"
+import { migrate } from "drizzle-orm/node-postgres/migrator"
 import pg from "pg"
 
-const pool = new pg.Pool({
+export const pool = new pg.Pool({
     connectionString: env.ACCOUNT_DATABASE_URL,
 })
 
@@ -30,7 +31,9 @@ export type Project = InferSelectModel<typeof projectTable>
 export async function initializeDatabase() {
     try {
         await pool.connect()
-        Logger.info("Start", "Connected to database")
+        if (env.NODE_ENV !== "test") {
+            Logger.info("Start", "Connected to database")
+        }
     }
     catch (error) {
         if (error instanceof Error) {
@@ -38,4 +41,33 @@ export async function initializeDatabase() {
         }
         throw new Error(`Failed to connect to database ${error}`)
     }
+
+    await migrateDatabase()
+}
+
+export async function migrateDatabase() {
+    try {
+        await migrate(db, {
+            migrationsFolder: "./src/database/migrations",
+        })
+        if (env.NODE_ENV !== "test") {
+            Logger.info("Start", "Migrated database")
+        }
+    }
+    catch (error) {
+        if (error instanceof Error) {
+            Logger.error("Start", `Failed to migrate database ${error.message}`)
+        }
+        throw new Error(`Failed to migrate database ${error}`)
+    }
+}
+
+export async function resetDatabase() {
+    await db.transaction(async (tx) => {
+        await tx.delete(sessionTable)
+        await tx.delete(projectTable)
+        await tx.delete(teamTable)
+        await tx.delete(passwordTable)
+        await tx.delete(userTable)
+    })
 }

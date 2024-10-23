@@ -1,34 +1,30 @@
-import { db, type Project, type Team } from "@api/database"
+import { db, type Project, resetDatabase, type Team } from "@api/database"
 import { teamTable } from "@api/database/schemas"
-import { afterEach, beforeEach, describe, expect, it } from "vitest"
+import { beforeEach, describe, expect, it } from "vitest"
 import { createProject, deleteProject, getProject, getProjects, updateProject } from "."
 
-const testProject: Project = {
-    id: "1",
-    name: "test project",
-    createdAt: new Date(Date.now()),
-    teamId: "1",
-}
-
 const testTeam: Team = {
-    id: "1",
+    id: "lib/project",
     name: "test team",
-    createdAt: new Date(Date.now()),
+    createdAt: new Date(),
 }
 
-beforeEach(async () => {
-    await db.insert(teamTable).values(testTeam)
-
-    return async () => {
-        await db.delete(teamTable)
-    }
-})
-
-afterEach(async () => {
-    await deleteProject(testProject.id)
-})
+const testProject: Project = {
+    id: "lib/project",
+    name: "test project",
+    createdAt: new Date(),
+    teamId: testTeam.id,
+}
 
 describe("lib/project", () => {
+    beforeEach(async () => {
+        await db.insert(teamTable).values(testTeam)
+
+        return async () => {
+            await resetDatabase()
+        }
+    })
+
     it("create a new project", async () => {
         const project = await createProject(testProject)
 

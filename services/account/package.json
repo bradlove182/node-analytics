@@ -5,7 +5,7 @@
     "private": true,
     "scripts": {
         "dev": "tsx watch --clear-screen=false src/index.ts NODE_ENV=development",
-        "test": "vitest",
+        "test": "vitest --no-watch",
         "setup:dev": "docker compose up -d",
         "db:migrate": "drizzle-kit push",
         "db:studio": "drizzle-kit studio",

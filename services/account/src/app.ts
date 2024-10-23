@@ -15,7 +15,6 @@ const API_VERSION = "v1"
 export function buildServer() {
     const server = fastify({
         bodyLimit: 1_000_000,
-        trustProxy: true,
     })
 
     server.setValidatorCompiler(validatorCompiler)

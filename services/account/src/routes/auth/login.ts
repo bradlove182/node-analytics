@@ -1,6 +1,5 @@
 import type { FastifyPluginCallback, FastifySchema } from "fastify"
 import type { ZodTypeProvider } from "fastify-type-provider-zod"
-import { verify } from "@node-rs/argon2"
 import { eq } from "drizzle-orm"
 import { z } from "zod"
 

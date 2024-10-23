@@ -4,7 +4,7 @@ import { userTable } from "./user"
 
 export const sessionTable = pgTable("session", {
     id: text("id").primaryKey(),
-    userId: text("user_id").notNull().references(() => userTable.id, { onDelete: "cascade" }),
+    userId: text("user_id").notNull().references(() => userTable.id, { onDelete: "cascade", onUpdate: "cascade" }),
     expiresAt: timestamp("expires_at", {
         withTimezone: true,
         mode: "date",

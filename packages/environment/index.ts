@@ -16,7 +16,7 @@ const analyticsEnvSchema = z.object({
 const accountEnvSchema = z.object({
     ACCOUNT_PORT: z.coerce.number().default(8081),
     ACCOUNT_HOST: z.string().default("127.0.0.1"),
-    ACCOUNT_DATABASE_URL: z.string().default("postgres://user:password@127.0.0.1:5432/postgres"),
+    ACCOUNT_DATABASE_URL: z.string().default("postgres://user:password@127.0.0.1:5432/postgres?schema=test"),
     ACCOUNT_REDIS_HOST: z.string().default("127.0.0.1"),
     ACCOUNT_REDIS_PORT: z.coerce.number().default(6379),
 })

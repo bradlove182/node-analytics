@@ -1,6 +1,8 @@
 import type { FastifyPluginCallback, FastifySchema } from "fastify"
 import type { ZodTypeProvider } from "fastify-type-provider-zod"
 import { passwordTable, userTable } from "@api/database/schemas"
+import { createSession, generateSessionToken, getSessionCookieName, hashPassword } from "@api/lib/auth"
+import { generateIdFromEntropySize } from "@api/lib/crypto"
 import pg from "pg"
 import { z } from "zod"
 
@@ -46,13 +48,13 @@ export const registerRoute: FastifyPluginCallback = (server, _, done) => {
             schema,
         },
         async (request, reply) => {
-            const { db, body, auth } = request
+            const { db, body } = request
             const { email, password } = body
 
-            const passwordHash = await auth.hashPassword(password)
+            const passwordHash = await hashPassword(password)
 
-            const userId = auth.generateIdFromEntropySize(10)
-            const passwordId = auth.generateIdFromEntropySize(10)
+            const userId = generateIdFromEntropySize(10)
+            const passwordId = generateIdFromEntropySize(10)
 
             try {
                 await db.transaction(async (tx) => {
@@ -69,11 +71,11 @@ export const registerRoute: FastifyPluginCallback = (server, _, done) => {
                     })
                 })
 
-                const token = auth.generateSessionToken()
+                const token = generateSessionToken()
 
-                await auth.createSession(token, userId)
+                await createSession(token, userId)
 
-                reply.setCookie(auth.getSessionCookieName(), token, {
+                reply.setCookie(getSessionCookieName(), token, {
                     httpOnly: true,
                     sameSite: "lax",
                     path: "/",

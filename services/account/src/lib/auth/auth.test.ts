@@ -2,7 +2,7 @@ import type { User } from "@api/database"
 import { db } from "@api/database"
 import { userTable } from "@api/database/schemas"
 import { describe, expect, it } from "vitest"
-import { createSession, generateIdFromEntropySize, generateSessionToken, getSessionCookieName, hashPassword, validateSessionToken, verifyPassword } from "."
+import { createSession, generateSessionToken, getSessionCookieName, hashPassword, validateSessionToken, verifyPassword } from "."
 
 const testUser: User = {
     id: "lib/auth",
@@ -43,21 +43,5 @@ describe.sequential("lib/auth", () => {
         const hashedPassword = await hashPassword(password)
         const isValid = await verifyPassword(hashedPassword, password)
         expect(isValid).toBeTruthy()
-    })
-
-    it("generateIdFromEntropySize()", () => {
-        // check string is only lowercase
-        for (let i = 0; i < 100; i++) {
-            const id = generateIdFromEntropySize(10)
-            expect(id).not.toMatch(/[A-Z]/)
-        }
-
-        // check output length
-        const id1 = generateIdFromEntropySize(25)
-        expect(id1.length).toBe(40)
-
-        // check padding is omitted
-        const id3 = generateIdFromEntropySize(8)
-        expect(id3).not.toMatch(/=/)
     })
 })

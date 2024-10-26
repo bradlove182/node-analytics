@@ -6,22 +6,22 @@ type RedisPrefixes = "session" | "otp"
 type RedisKey = `${RedisPrefixes}:${string}`
 
 class Redis {
-    public static redis: IORedis
+    public static instance: IORedis
 
     public static async initialize() {
-        this.redis = new IORedis({
+        this.instance = new IORedis({
             host: env.ACCOUNT_REDIS_HOST,
             port: env.ACCOUNT_REDIS_PORT,
             connectTimeout: 500,
             maxRetriesPerRequest: 1,
         })
 
-        this.redis.on("error", (error) => {
+        this.instance.on("error", (error) => {
             Logger.error("Redis", `Failed to connect to redis ${String(error)}`)
             throw new Error("Failed to connect to redis")
         })
 
-        this.redis.on("connect", () => {
+        this.instance.on("connect", () => {
             Logger.info("Redis", "Connected to redis")
         })
     }
@@ -36,19 +36,19 @@ class Redis {
      * await Redis.set("otp:user_xxx", new Date().toISOString());
      */
     public static async set(key: RedisKey, value: string) {
-        await this.redis.set(key, value)
+        await this.instance.set(key, value)
     }
 
     public static async incr(key: RedisKey) {
-        await this.redis.incr(key)
+        await this.instance.incr(key)
     }
 
     public static async decr(key: RedisKey) {
-        await this.redis.decr(key)
+        await this.instance.decr(key)
     }
 
     public static async expire(key: RedisKey, seconds: string | number) {
-        await this.redis.expire(key, seconds)
+        await this.instance.expire(key, seconds)
     }
 
     /**
@@ -59,7 +59,7 @@ class Redis {
      * const visits = await Redis.get("visits");
      */
     public static async get<T = string>(key: RedisKey) {
-        return this.redis.get(key) as T | undefined
+        return this.instance.get(key) as T | undefined
     }
 
     /**
@@ -70,7 +70,7 @@ class Redis {
      * await Redis.del("visits");
      */
     public static async del(key: RedisKey) {
-        await this.redis.del(key)
+        await this.instance.del(key)
     }
 }
 

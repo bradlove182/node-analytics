@@ -6,6 +6,5 @@ declare module "fastify" {
     interface FastifyRequest {
         db: Database
         redis: typeof Redis
-        auth: Auth
     }
 }

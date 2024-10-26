@@ -17,7 +17,7 @@ export const plugins = fp(async (server) => {
         global: true,
         max: 3000,
         allowList: ["localhost", "127.0.0.1"],
-        redis: Redis.redis,
+        redis: Redis.instance,
     })
     server.register(formBody)
     server.register(fastifyHelmet, {

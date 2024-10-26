@@ -1,5 +1,6 @@
 import type { FastifyPluginCallback, FastifySchema } from "fastify"
 import type { ZodTypeProvider } from "fastify-type-provider-zod"
+import { createSession, generateSessionToken, getSessionCookieName, verifyPassword } from "@api/lib/auth"
 import { eq } from "drizzle-orm"
 import { z } from "zod"
 
@@ -41,7 +42,7 @@ export const loginRoute: FastifyPluginCallback = (server, _, done) => {
             schema,
         },
         async (request, reply) => {
-            const { body, db, auth } = request
+            const { body, db } = request
             const { email, password } = body
 
             const user = await db.query.userTable.findFirst({
@@ -59,7 +60,7 @@ export const loginRoute: FastifyPluginCallback = (server, _, done) => {
                 })
             }
 
-            const validPassword = await auth.verifyPassword(user.password.password_hash, password)
+            const validPassword = await verifyPassword(user.password.password_hash, password)
 
             if (!validPassword) {
                 return reply.code(400).send({
@@ -69,11 +70,11 @@ export const loginRoute: FastifyPluginCallback = (server, _, done) => {
                 })
             }
 
-            const token = auth.generateSessionToken()
+            const token = generateSessionToken()
 
-            await auth.createSession(token, user.id)
+            await createSession(token, user.id)
 
-            reply.setCookie(auth.getSessionCookieName(), token, {
+            reply.setCookie(getSessionCookieName(), token, {
                 httpOnly: true,
                 sameSite: "lax",
                 path: "/",

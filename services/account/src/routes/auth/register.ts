@@ -1,7 +1,7 @@
 import type { FastifyPluginCallback, FastifySchema } from "fastify"
 import type { ZodTypeProvider } from "fastify-type-provider-zod"
 import { passwordTable, userTable } from "@api/database/schemas"
-import { createSession, generateSessionToken, getSessionCookieName, hashPassword } from "@api/lib/auth"
+import { createSession, createSessionCookie, generateSessionToken, getSessionCookieName, hashPassword } from "@api/lib/auth"
 import { generateIdFromEntropySize } from "@api/lib/crypto"
 import pg from "pg"
 import { z } from "zod"
@@ -75,11 +75,7 @@ export const registerRoute: FastifyPluginCallback = (server, _, done) => {
 
                 await createSession(token, userId)
 
-                reply.setCookie(getSessionCookieName(), token, {
-                    httpOnly: true,
-                    sameSite: "lax",
-                    path: "/",
-                })
+                reply.header("set-cookie", createSessionCookie(token))
 
                 return reply.code(200).send({
                     statusCode: 200,

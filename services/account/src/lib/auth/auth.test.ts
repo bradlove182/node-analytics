@@ -2,7 +2,7 @@ import type { User } from "@api/database"
 import { db } from "@api/database"
 import { userTable } from "@api/database/schemas"
 import { describe, expect, it } from "vitest"
-import { createSession, generateSessionToken, getSessionCookieName, hashPassword, validateSessionToken, verifyPassword } from "."
+import { createSession, createSessionCookie, generateSessionToken, getSessionCookieName, hashPassword, validateSessionToken, verifyPassword } from "."
 
 const testUser: User = {
     id: "lib/auth",
@@ -13,6 +13,7 @@ const testUser: User = {
 describe.sequential("lib/auth", () => {
     it("generateSessionToken() with a length of 32", () => {
         const token = generateSessionToken()
+
         expect(token).toHaveLength(32)
     })
 
@@ -35,13 +36,25 @@ describe.sequential("lib/auth", () => {
 
     it("getSessionCookieName()", () => {
         const cookie = getSessionCookieName()
+
         expect(cookie).toEqual("session")
+    })
+
+    it("createSessionCookie()", () => {
+        const token = generateSessionToken()
+        const cookie = createSessionCookie(token)
+
+        expect(cookie).toContain(`${getSessionCookieName()}=${token}`)
+        expect(cookie).toContain("HttpOnly")
+        expect(cookie).toContain("SameSite=Lax")
+        expect(cookie).toContain("Path=/")
     })
 
     it("hashPassword() verified by verifyPassword()", async () => {
         const password = "test"
         const hashedPassword = await hashPassword(password)
         const isValid = await verifyPassword(hashedPassword, password)
+
         expect(isValid).toBeTruthy()
     })
 })

@@ -50,6 +50,12 @@ describe("auth/login", () => {
         })
 
         const cookie = response.cookies.find(cookie => cookie.name === getSessionCookieName())
+        const cookieHeader = response.headers["set-cookie"]
+
+        expect(cookieHeader).toContain(`${getSessionCookieName()}=${cookie?.value}`)
+        expect(cookieHeader).toContain("HttpOnly")
+        expect(cookieHeader).toContain("SameSite=Lax")
+        expect(cookieHeader).toContain("Path=/")
 
         expect(cookie?.name).toEqual(getSessionCookieName())
         expect(cookie?.httpOnly).toBeTruthy()

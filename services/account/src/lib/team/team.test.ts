@@ -3,9 +3,9 @@ import { describe, expect, it } from "vitest"
 import { createTeam, deleteTeam, getTeam, getTeams, updateTeam } from "."
 
 const testTeam: Team = {
-    id: "1",
+    id: "lib/team",
     name: "test team",
-    createdAt: new Date(Date.now()),
+    createdAt: new Date(),
 }
 
 describe("lib/team", () => {

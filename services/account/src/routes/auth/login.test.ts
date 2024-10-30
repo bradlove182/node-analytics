@@ -1,7 +1,7 @@
 import type { User } from "@api/database"
 import type { FastifyInstance } from "fastify"
 import { buildServer } from "@api/app"
-import { db, resetDatabase } from "@api/database"
+import { db } from "@api/database"
 import { passwordTable, userTable } from "@api/database/schemas"
 import { getSessionCookieName, hashPassword } from "@api/lib/auth"
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest"

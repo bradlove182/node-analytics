@@ -2,7 +2,8 @@ import type { Team } from "@api/database"
 import type { FastifyPluginCallback, FastifySchema } from "fastify"
 import type { ZodTypeProvider } from "fastify-type-provider-zod"
 import { teamTable } from "@api/database/schemas"
-import { generateIdFromEntropySize } from "lucia"
+import { generateIdFromEntropySize } from "@api/lib/crypto"
+import { createTeam } from "@api/lib/team"
 import { z } from "zod"
 
 const schema = {
@@ -38,17 +39,16 @@ export const teamCreateRoute: FastifyPluginCallback = (server, _, done) => {
             schema,
         },
         async (request, reply) => {
-            const { body, db } = request
+            const { body } = request
             const { name } = body
 
             const id = generateIdFromEntropySize(10)
 
-            const teams = await db
-                .insert(teamTable)
-                .values({ name, id })
-                .returning()
-
-            const team = teams.find(team => team.id === id)!
+            const team = await createTeam({
+                id,
+                name,
+                createdAt: new Date(),
+            })
 
             reply.code(200).send({
                 statusCode: 200,

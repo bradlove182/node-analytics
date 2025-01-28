@@ -1,7 +1,7 @@
 import type { FastifyPluginCallback, FastifySchema } from "fastify"
 import type { ZodTypeProvider } from "fastify-type-provider-zod"
 import { passwordTable, userTable } from "@api/database/schemas"
-import { createSession, createSessionCookie, generateSessionToken, getSessionCookieName, hashPassword } from "@api/lib/auth"
+import { createSession, createSessionCookie, generateSessionToken, hashPassword } from "@api/lib/auth"
 import { generateIdFromEntropySize } from "@api/lib/crypto"
 import pg from "pg"
 import { z } from "zod"

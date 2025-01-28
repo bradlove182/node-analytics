@@ -9,7 +9,7 @@ const testTeam: Team = {
     createdAt: new Date(),
 }
 
-describe("team/create", () => {
+describe("teams/create", () => {
     let server: FastifyInstance
 
     beforeAll(() => {

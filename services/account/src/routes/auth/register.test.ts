@@ -1,11 +1,9 @@
 import type { User } from "@api/database"
 import type { FastifyInstance } from "fastify"
 import { buildServer } from "@api/app"
-import { db, resetDatabase } from "@api/database"
-import { passwordTable, userTable } from "@api/database/schemas"
 import { getSessionCookieName } from "@api/lib/auth"
 import { getUserByEmail } from "@api/lib/user"
-import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest"
+import { beforeAll, describe, expect, it } from "vitest"
 
 const testUser: User = {
     id: "1",

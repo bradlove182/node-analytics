@@ -4,7 +4,7 @@ import { buildServer } from "@api/app"
 import { db } from "@api/database"
 import { passwordTable, userTable } from "@api/database/schemas"
 import { getSessionCookieName, hashPassword } from "@api/lib/auth"
-import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest"
+import { beforeAll, beforeEach, describe, expect, it } from "vitest"
 
 const testUser: User = {
     id: "1",

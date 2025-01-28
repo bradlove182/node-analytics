@@ -68,7 +68,7 @@ export const loginRoute: FastifyPluginCallback = (server, _, done) => {
 
             reply.header("set-cookie", createSessionCookie(token))
 
-            reply.code(200).send({
+            return reply.code(200).send({
                 statusCode: 200,
                 success: true,
                 message: "Login successful",

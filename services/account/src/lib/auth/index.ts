@@ -69,7 +69,7 @@ export async function invalidateSession(sessionId: Session["id"]): Promise<void>
     await db.delete(sessionTable).where(eq(sessionTable.id, sessionId))
 }
 
-export const getSessionCookieName = () => "session"
+export const getSessionCookieName = () => "session" as const
 
 export function createSessionCookie(token: string) {
     return fastifyCookie.serialize(getSessionCookieName(), token, {

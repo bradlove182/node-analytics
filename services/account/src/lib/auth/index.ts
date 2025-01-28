@@ -1,5 +1,4 @@
 import type { Session, User } from "@api/database"
-import type { SerializeOptions } from "@fastify/cookie"
 import { db } from "@api/database"
 import { sessionTable } from "@api/database/schemas"
 import { createTimeSpan } from "@api/utils"

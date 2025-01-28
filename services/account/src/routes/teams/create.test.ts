@@ -23,7 +23,7 @@ describe("team/create", () => {
     it("creates a new team", async () => {
         const response = await server.inject({
             method: "POST",
-            url: "/v1/team/create",
+            url: "/v1/teams/create",
             payload: {
                 name: testTeam.name,
             },

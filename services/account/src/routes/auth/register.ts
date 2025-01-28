@@ -38,15 +38,7 @@ const schema = {
 export const registerRoute: FastifyPluginCallback = (server, _, done) => {
     server.withTypeProvider<ZodTypeProvider>().post(
         "/register",
-        {
-            config: {
-                rateLimit: {
-                    max: 3,
-                    timeWindow: "1 minute",
-                },
-            },
-            schema,
-        },
+        { schema },
         async (request, reply) => {
             const { db, body } = request
             const { email, password } = body

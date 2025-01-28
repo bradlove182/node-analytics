@@ -1,6 +1,6 @@
 import type { FastifyPluginCallback, FastifySchema } from "fastify"
 import type { ZodTypeProvider } from "fastify-type-provider-zod"
-import { createSession, createSessionCookie, generateSessionToken, getSessionCookieName, verifyPassword } from "@api/lib/auth"
+import { createSession, createSessionCookie, generateSessionToken, verifyPassword } from "@api/lib/auth"
 import { eq } from "drizzle-orm"
 import { z } from "zod"
 
@@ -32,15 +32,7 @@ const schema = {
 export const loginRoute: FastifyPluginCallback = (server, _, done) => {
     server.withTypeProvider<ZodTypeProvider>().post(
         "/login",
-        {
-            config: {
-                rateLimit: {
-                    max: 3,
-                    timeWindow: "1 minute",
-                },
-            },
-            schema,
-        },
+        { schema },
         async (request, reply) => {
             const { body, db } = request
             const { email, password } = body

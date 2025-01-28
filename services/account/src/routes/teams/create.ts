@@ -1,7 +1,6 @@
 import type { Team } from "@api/database"
 import type { FastifyPluginCallback, FastifySchema } from "fastify"
 import type { ZodTypeProvider } from "fastify-type-provider-zod"
-import { teamTable } from "@api/database/schemas"
 import { generateIdFromEntropySize } from "@api/lib/crypto"
 import { createTeam } from "@api/lib/team"
 import { z } from "zod"
@@ -29,15 +28,7 @@ const schema = {
 export const teamCreateRoute: FastifyPluginCallback = (server, _, done) => {
     server.withTypeProvider<ZodTypeProvider>().post(
         "/create",
-        {
-            config: {
-                rateLimit: {
-                    max: 3,
-                    timeWindow: "1 minute",
-                },
-            },
-            schema,
-        },
+        { schema },
         async (request, reply) => {
             const { body } = request
             const { name } = body
@@ -50,7 +41,7 @@ export const teamCreateRoute: FastifyPluginCallback = (server, _, done) => {
                 createdAt: new Date(),
             })
 
-            reply.code(200).send({
+            return reply.code(200).send({
                 statusCode: 200,
                 success: true,
                 data: team,

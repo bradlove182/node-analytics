@@ -23,15 +23,7 @@ const schema = {
 export const usersRoute: FastifyPluginCallback = (server, _, done) => {
     server.withTypeProvider<ZodTypeProvider>().get(
         "/",
-        {
-            config: {
-                rateLimit: {
-                    max: 3,
-                    timeWindow: "1 minute",
-                },
-            },
-            schema,
-        },
+        { schema },
         async (request, reply) => {
             const { db } = request
 

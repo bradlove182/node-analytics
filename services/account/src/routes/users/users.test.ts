@@ -1,9 +1,10 @@
+import type { User } from "@api/database"
 import type { FastifyInstance } from "fastify"
 import { buildServer } from "@api/app"
-import { createTeam } from "@api/lib/team"
+import { createUser } from "@api/lib/user"
 import { beforeAll, describe, expect, it } from "vitest"
 
-describe("teams", () => {
+describe("users", () => {
     let server: FastifyInstance
 
     beforeAll(() => {
@@ -14,17 +15,17 @@ describe("teams", () => {
         }
     })
 
-    it("gets teams", async () => {
+    it("gets users", async () => {
         const length = 5
-        await Promise.all(Array.from({ length }).map((_, index) => createTeam({
+        await Promise.all(Array.from({ length }).map((_, index) => createUser({
             id: String(index + 1),
-            name: "Test Team",
+            email: `${index + 1}@email.com`,
             createdAt: new Date(),
         })))
 
         const response = await server.inject({
             method: "GET",
-            url: `/v1/teams`,
+            url: `/v1/users`,
             headers: {
                 host: "127.0.0.1",
                 origin: "http://127.0.0.1",

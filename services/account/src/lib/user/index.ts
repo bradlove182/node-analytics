@@ -1,9 +1,7 @@
 import type { User, UserWithPassword } from "@api/database"
 import { db } from "@api/database"
-import { passwordTable, userTable } from "@api/database/schemas"
-import { generateIdFromEntropySize } from "@api/lib/crypto"
+import { userTable } from "@api/database/schemas"
 import { eq } from "drizzle-orm"
-import { hashPassword } from "../auth"
 
 export async function createUser(user: User): Promise<User> {
     await db.insert(userTable).values(user)

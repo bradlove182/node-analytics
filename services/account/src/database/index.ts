@@ -23,6 +23,9 @@ export const db = drizzle(pool, {
 
 export type Database = typeof db
 export type User = InferSelectModel<typeof userTable>
+export type UserWithPassword = InferSelectModel<typeof userTable> & {
+    password: Password | null
+}
 export type Password = InferSelectModel<typeof passwordTable>
 export type Session = InferSelectModel<typeof sessionTable>
 export type Team = InferSelectModel<typeof teamTable>

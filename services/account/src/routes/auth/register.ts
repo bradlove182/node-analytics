@@ -58,7 +58,7 @@ export const registerRoute: FastifyPluginCallback = (server, _, done) => {
                     await tx.insert(passwordTable).values({
                         id: passwordId,
                         userId,
-                        password_hash: passwordHash,
+                        passwordHash,
                         createdAt: new Date(),
                     })
                 })

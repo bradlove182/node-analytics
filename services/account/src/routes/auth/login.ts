@@ -52,7 +52,7 @@ export const loginRoute: FastifyPluginCallback = (server, _, done) => {
                 })
             }
 
-            const validPassword = await verifyPassword(user.password.password_hash, password)
+            const validPassword = await verifyPassword(user.password.passwordHash, password)
 
             if (!validPassword) {
                 return reply.code(400).send({

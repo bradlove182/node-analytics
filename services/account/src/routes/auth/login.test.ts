@@ -30,7 +30,7 @@ describe("auth/login", () => {
         await db.insert(passwordTable).values({
             id: "1",
             userId: testUser.id,
-            password_hash: await hashPassword(testPassword),
+            passwordHash: await hashPassword(testPassword),
             createdAt: new Date(),
         })
     })

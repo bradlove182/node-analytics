@@ -1,12 +1,17 @@
-import type { User } from "@api/database"
+import { db, type User } from "@api/database"
+import { passwordTable } from "@api/database/schemas"
+import { hashPassword, verifyPassword } from "@api/lib/auth"
+import { createPassword } from "@api/lib/password"
 import { describe, expect, it } from "vitest"
-import { createUser, deleteUser, getUserByEmail, getUserById, getUsers, updateUser } from "."
+import { createUser, deleteUser, getUserByEmail, getUserByEmailWithPassword, getUserById, getUserByIdWithPassword, getUsers, updateUser } from "."
 
 const testUser: User = {
     id: "lib/user",
     email: "test@test.com",
     createdAt: new Date(Date.now()),
 }
+
+export const testPassword: string = "test"
 
 describe("lib/user", () => {
     it("createUser()", async () => {
@@ -26,6 +31,20 @@ describe("lib/user", () => {
         expect(user?.createdAt).toBeInstanceOf(Date)
     })
 
+    it("getUserByIdWithPassword()", async () => {
+        await createUser(testUser)
+        await createPassword(testUser.id, testPassword)
+
+        const user = await getUserByIdWithPassword(testUser.id)
+
+        const verifiedPassowrd = await verifyPassword(user?.password?.passwordHash ?? "", testPassword)
+
+        expect(user?.id).toEqual(testUser.id)
+        expect(user?.email).toEqual(testUser.email)
+        expect(user?.createdAt).toBeInstanceOf(Date)
+        expect(verifiedPassowrd).toBeTruthy()
+    })
+
     it("getUserByEmail()", async () => {
         await createUser(testUser)
         const user = await getUserByEmail(testUser.email)
@@ -33,6 +52,20 @@ describe("lib/user", () => {
         expect(user?.id).toEqual(testUser.id)
         expect(user?.email).toEqual(testUser.email)
         expect(user?.createdAt).toBeInstanceOf(Date)
+    })
+
+    it("getUserByEmailWithPassword()", async () => {
+        await createUser(testUser)
+        await createPassword(testUser.id, testPassword)
+
+        const user = await getUserByEmailWithPassword(testUser.email)
+
+        const verifiedPassowrd = await verifyPassword(user?.password?.passwordHash ?? "", testPassword)
+
+        expect(user?.id).toEqual(testUser.id)
+        expect(user?.email).toEqual(testUser.email)
+        expect(user?.createdAt).toBeInstanceOf(Date)
+        expect(verifiedPassowrd).toBeTruthy()
     })
 
     it("deleteUser()", async () => {

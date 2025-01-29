@@ -1,7 +1,9 @@
-import type { User } from "@api/database"
+import type { User, UserWithPassword } from "@api/database"
 import { db } from "@api/database"
-import { userTable } from "@api/database/schemas"
+import { passwordTable, userTable } from "@api/database/schemas"
+import { generateIdFromEntropySize } from "@api/lib/crypto"
 import { eq } from "drizzle-orm"
+import { hashPassword } from "../auth"
 
 export async function createUser(user: User): Promise<User> {
     await db.insert(userTable).values(user)
@@ -19,9 +21,29 @@ export async function getUserById(userId: User["id"]): Promise<User | undefined>
     return user
 }
 
+export async function getUserByIdWithPassword(userId: User["id"]): Promise<UserWithPassword | undefined> {
+    const user = await db.query.userTable.findFirst({
+        where: userTable => eq(userTable.id, userId),
+        with: {
+            password: true,
+        },
+    })
+    return user
+}
+
 export async function getUserByEmail(email: User["email"]): Promise<User | undefined> {
     const user = await db.query.userTable.findFirst({
         where: userTable => eq(userTable.email, email),
+    })
+    return user
+}
+
+export async function getUserByEmailWithPassword(email: User["email"]): Promise<UserWithPassword | undefined> {
+    const user = await db.query.userTable.findFirst({
+        where: userTable => eq(userTable.email, email),
+        with: {
+            password: true,
+        },
     })
     return user
 }

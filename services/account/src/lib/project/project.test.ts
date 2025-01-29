@@ -3,7 +3,7 @@ import { teamTable } from "@api/database/schemas"
 import { beforeEach, describe, expect, it } from "vitest"
 import { createProject, deleteProject, getProject, getProjects, updateProject } from "."
 
-const testTeam: Team = {
+export const testTeam: Team = {
     id: "lib/project",
     name: "test team",
     createdAt: new Date(),

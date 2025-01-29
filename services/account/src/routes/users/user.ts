@@ -1,6 +1,7 @@
 import type { User } from "@api/database"
 import type { FastifyPluginCallback, FastifySchema } from "fastify"
 import type { ZodTypeProvider } from "fastify-type-provider-zod"
+import { getUserById } from "@api/lib/user"
 import { eq } from "drizzle-orm"
 import { z } from "zod"
 
@@ -15,12 +16,10 @@ const schema = {
             statusCode: z.literal(200),
             success: z.boolean(),
             data: z.custom<User>(),
-            error: z.undefined(),
         }),
         400: z.object({
             statusCode: z.literal(400),
             success: z.boolean(),
-            data: z.undefined(),
             error: z.string(),
         }),
     },
@@ -31,18 +30,15 @@ export const userRoute: FastifyPluginCallback = (server, _, done) => {
         "/:userId",
         { schema },
         async (request, reply) => {
-            const { params, db } = request
+            const { params } = request
             const { userId } = params
 
-            const user = await db.query.userTable.findFirst({
-                where: userTable => eq(userTable.id, userId),
-            })
+            const user = await getUserById(userId)
 
             if (!user) {
                 return reply.code(400).send({
                     statusCode: 400,
                     success: false,
-                    data: undefined,
                     error: "User not found",
                 })
             }
@@ -51,7 +47,6 @@ export const userRoute: FastifyPluginCallback = (server, _, done) => {
                 statusCode: 200,
                 success: true,
                 data: user,
-                error: undefined,
             })
         },
     )

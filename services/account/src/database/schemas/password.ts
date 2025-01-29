@@ -5,7 +5,7 @@ import { userTable } from "./user"
 export const passwordTable = pgTable("password", {
     id: text("id").primaryKey(),
     userId: text("user_id").notNull().references(() => userTable.id, { onDelete: "cascade" }),
-    password_hash: text("password_hash").notNull(),
+    passwordHash: text("passwordHash").notNull(),
     createdAt: timestamp("created_at", {
         withTimezone: true,
         mode: "date",

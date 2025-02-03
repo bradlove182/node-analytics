@@ -2,9 +2,13 @@ import type { FastifyInstance } from "fastify"
 import { db } from "@api/database"
 import { Redis } from "@api/redis"
 import { verifyRequestOrigin } from "@api/utils"
+import { env } from "@repo/environment"
 import fp from "fastify-plugin"
 
-const allowedHosts = ["127.0.0.1", "localhost"]
+const allowedHosts = [
+    "127.0.0.1",
+    `${env.ACCOUNT_HOST}:${env.ACCOUNT_PORT}`,
+]
 
 const middleware = fp(async (fastify: FastifyInstance) => {
     // Add request objects

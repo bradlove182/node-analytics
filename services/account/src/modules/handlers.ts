@@ -1,9 +1,18 @@
+import type { FastifyError } from "fastify"
+import type pg from "pg"
+import type { ZodError } from "zod"
 import crypto from "node:crypto"
 import process from "node:process"
 import { Logger } from "@api/utils"
 import fp from "fastify-plugin"
-import pg from "pg"
-import { ZodError } from "zod"
+
+function isZodError(error: Error): error is ZodError {
+    return "issues" in error
+}
+
+function isDatabaseError(error: Error): error is pg.DatabaseError {
+    return "constraint" in error
+}
 
 export const handlers = fp(async (server) => {
     server.setErrorHandler((error, request, response) => {
@@ -28,7 +37,7 @@ export const handlers = fp(async (server) => {
             },
         })
 
-        if (error instanceof ZodError) {
+        if (isZodError(error)) {
             return response.send({
                 statusCode,
                 success: false,
@@ -40,7 +49,7 @@ export const handlers = fp(async (server) => {
             })
         }
 
-        if (error instanceof pg.DatabaseError) {
+        if (isDatabaseError(error)) {
             return response.send({
                 statusCode,
                 success: false,

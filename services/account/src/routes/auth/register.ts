@@ -20,7 +20,7 @@ const schema = {
             })
             .min(8, "Password must be at least 8 characters")
             .describe("User's Password"),
-    }),
+    }, { message: "Email and password is required." }),
     response: {
         200: z.object({
             statusCode: z.literal(200),

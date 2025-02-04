@@ -1,18 +1,18 @@
 import type { Session, User } from "$lib/server/database/types"
+import type { RequestEvent } from "@sveltejs/kit"
 import { db } from "$lib/server/database"
+import * as table from "$lib/server/database/schemas"
 import { createTimeSpan } from "$lib/utils/timespan"
 import { sha256 } from "@oslojs/crypto/sha2"
 import { encodeBase64url, encodeHexLowerCase } from "@oslojs/encoding"
 import { eq } from "drizzle-orm"
-import * as table from "$lib/server/database/schemas"
-import type { RequestEvent } from "@sveltejs/kit"
 
 export const getSessionCookieName = () => "session" as const
 
 export function generateSessionToken() {
-    const bytes = crypto.getRandomValues(new Uint8Array(18));
-    const token = encodeBase64url(bytes);
-    return token;
+    const bytes = crypto.getRandomValues(new Uint8Array(18))
+    const token = encodeBase64url(bytes)
+    return token
 }
 
 export async function createSession(token: string, userId: User["id"]): Promise<Session> {
@@ -61,23 +61,23 @@ export async function validateSessionToken(token: string) {
     return { session, user }
 }
 
-export type SessionValidationResult = Awaited<ReturnType<typeof validateSessionToken>>;
+export type SessionValidationResult = Awaited<ReturnType<typeof validateSessionToken>>
 
 export async function invalidateSession(sessionId: Session["id"]): Promise<void> {
     await db.delete(table.session).where(eq(table.session.id, sessionId))
 }
 
 export function setSessionTokenCookie(event: RequestEvent, token: string, expiresAt: Date) {
-	event.cookies.set(getSessionCookieName(), token, {
-		expires: expiresAt,
-		path: '/'
-	});
+    event.cookies.set(getSessionCookieName(), token, {
+        expires: expiresAt,
+        path: "/",
+    })
 }
 
 export function deleteSessionTokenCookie(event: RequestEvent) {
-	event.cookies.delete(getSessionCookieName(), {
-		path: '/'
-	});
+    event.cookies.delete(getSessionCookieName(), {
+        path: "/",
+    })
 }
 
 export const auth = {
@@ -87,7 +87,7 @@ export const auth = {
     invalidateSession,
     getSessionCookieName,
     setSessionTokenCookie,
-    deleteSessionTokenCookie
+    deleteSessionTokenCookie,
 }
 
 export type Auth = typeof auth

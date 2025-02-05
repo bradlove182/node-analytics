@@ -26,7 +26,7 @@ interface GitHubUser {
     company: string | null
     blog: string
     location: string | null
-    email: string | null
+    email: string
     hireable: boolean | null
     bio: string | null
     twitter_username: string | null
@@ -92,10 +92,7 @@ export async function GET(event: RequestEvent): Promise<Response> {
         })
     }
 
-    // TODO: This email can be undefined
-    // We might need a step to ask the user for an email before completing
-    // the createUser
-    const user = await createGithubUser(githubEmail!, String(githubUserId))
+    const user = await createGithubUser(githubEmail, String(githubUserId))
 
     if (user) {
         const sessionToken = generateSessionToken()

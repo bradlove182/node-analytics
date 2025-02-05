@@ -14,7 +14,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 export const actions = {
     github: async (event) => {
         const state = generateState()
-        const url = github.createAuthorizationURL(state, [])
+        const url = github.createAuthorizationURL(state, ["user:email"])
 
         setGithubStateCookie(event, state)
 

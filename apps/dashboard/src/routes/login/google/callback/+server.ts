@@ -33,8 +33,8 @@ export async function GET(event: RequestEvent): Promise<Response> {
         })
     }
 
-    const claims = decodeIdToken(tokens.idToken())
-    console.log("claimns", claims)
+    const claims = decodeIdToken(tokens.idToken()) as { email: string, sub: string }
+
     const googleUserId = claims.sub
     const email = claims.email
 

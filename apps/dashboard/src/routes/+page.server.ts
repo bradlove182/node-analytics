@@ -1,6 +1,6 @@
 import type { Actions } from "@sveltejs/kit"
 import type { PageServerLoad } from "./$types"
-import { invalidateSession } from "$lib/server/auth"
+import { invalidateSession } from "$lib/server/auth/session"
 import { fail, redirect } from "@sveltejs/kit"
 
 export const load: PageServerLoad = async ({ locals }) => {

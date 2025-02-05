@@ -1,6 +1,6 @@
 import type { OAuth2Tokens } from "arctic"
 import type { RequestEvent } from "./$types"
-import { createSession, generateSessionToken, setSessionTokenCookie } from "$lib/server/auth"
+import { createSession, generateSessionToken, setSessionTokenCookie } from "$lib/server/auth/session"
 import { createGithubUser, getGithubStateCookieName, getUserByGithubId, github } from "$lib/server/auth/github"
 
 interface GitHubUser {

@@ -8,3 +8,7 @@
 
 {user.id}
 {user.email}
+
+<form method="POST" action="?/logout">
+    <button type="submit">Logout</button>
+</form>

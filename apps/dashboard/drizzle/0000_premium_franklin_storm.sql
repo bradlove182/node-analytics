@@ -1,7 +1,7 @@
 CREATE TABLE "github" (
 	"id" text PRIMARY KEY NOT NULL,
 	"user_id" text NOT NULL,
-	"username" text NOT NULL
+	"github_id" text NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE "session" (

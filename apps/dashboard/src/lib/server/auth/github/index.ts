@@ -5,6 +5,7 @@ import { generateIdFromEntropySize } from "$lib/server/crypto"
 import { db } from "$lib/server/database"
 import * as table from "$lib/server/database/schemas"
 import { createUser } from "$lib/server/user"
+import { createTimeSpan } from "$lib/utils/timespan"
 import { GitHub as GitHubClient } from "arctic"
 import { eq } from "drizzle-orm"
 
@@ -51,7 +52,7 @@ export function setGithubStateCookie(event: RequestEvent, state: string) {
     event.cookies.set(getGithubStateCookieName(), state, {
         path: "/",
         httpOnly: true,
-        maxAge: 60 * 10,
+        maxAge: createTimeSpan(10, "m").milliseconds(),
         sameSite: "lax",
     })
 }

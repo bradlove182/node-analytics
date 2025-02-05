@@ -1,6 +1,6 @@
 {
-  "id": "6ab32abe-58f5-46c2-bd27-6148a700ed4a",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "1515079e-088b-4884-8df1-981d660ef046",
+  "prevId": "6ab32abe-58f5-46c2-bd27-6148a700ed4a",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -32,6 +32,51 @@
         "github_user_id_user_id_fk": {
           "name": "github_user_id_user_id_fk",
           "tableFrom": "github",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.google": {
+      "name": "google",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "google_id": {
+          "name": "google_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "google_user_id_user_id_fk": {
+          "name": "google_user_id_user_id_fk",
+          "tableFrom": "google",
           "tableTo": "user",
           "columnsFrom": [
             "user_id"

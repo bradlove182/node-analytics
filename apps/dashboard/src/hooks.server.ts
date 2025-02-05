@@ -3,6 +3,7 @@ import { deleteSessionTokenCookie, getSessionCookieName, setSessionTokenCookie, 
 
 const handleAuth: Handle = async ({ event, resolve }) => {
     const sessionToken = event.cookies.get(getSessionCookieName())
+
     if (!sessionToken) {
         event.locals.user = null
         event.locals.session = null

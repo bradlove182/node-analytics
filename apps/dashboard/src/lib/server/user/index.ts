@@ -1,11 +1,15 @@
 import type { User } from "$lib/server/database/types"
+import { generateIdFromEntropySize } from "$lib/server/crypto"
 import { db } from "$lib/server/database"
 import * as table from "$lib/server/database/schemas"
 import { eq } from "drizzle-orm"
 
-export async function createUser(user: User): Promise<User> {
-    await db.insert(table.user).values(user)
-    return user
+export async function createUser(email: User["email"]): Promise<User> {
+    const users = await db.insert(table.user).values({
+        id: generateIdFromEntropySize(10),
+        email,
+    }).returning()
+    return users.find(user => user.email === email)!
 }
 
 export async function deleteUser(userId: User["id"]): Promise<void> {

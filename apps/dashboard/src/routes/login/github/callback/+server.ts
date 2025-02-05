@@ -1,7 +1,7 @@
 import type { RequestEvent } from "@sveltejs/kit"
 import type { OAuth2Tokens } from "arctic"
 import { createSession, generateSessionToken, setSessionTokenCookie } from "$lib/server/auth"
-import { getGithubStateCookieName, getUserByGithubId, github } from "$lib/server/auth/github"
+import { createGithubUser, getGithubStateCookieName, getUserByGithubId, github } from "$lib/server/auth/github"
 
 interface GitHubUser {
     login: string
@@ -92,15 +92,25 @@ export async function GET(event: RequestEvent): Promise<Response> {
         })
     }
 
-    // TODO: Replace with our createUser
-    // const user = await createUser(githubUserId, githubUsername);
+    // TODO: This email can be undefined
+    // We might need a step to ask the user for an email before completing
+    // the createUser
+    const user = await createGithubUser(githubEmail!, String(githubUserId))
 
-    // TODO: create session once user has been created
+    if (user) {
+        const sessionToken = generateSessionToken()
+        const session = await createSession(sessionToken, user.userId)
+        setSessionTokenCookie(event, sessionToken, session.expiresAt)
+
+        return new Response(null, {
+            status: 302,
+            headers: {
+                Location: "/",
+            },
+        })
+    }
 
     return new Response(null, {
-        status: 302,
-        headers: {
-            Location: "/",
-        },
+        status: 400,
     })
 }

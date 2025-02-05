@@ -14,5 +14,5 @@ export const user = pgTable("user", {
 
 export const userRelations = relations(user, ({ one, many }) => ({
     sessions: many(session),
-    github: one(github),
+    github: one(github, { fields: [user.id], references: [github.userId] }),
 }))

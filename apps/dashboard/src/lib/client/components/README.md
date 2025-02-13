@@ -33,15 +33,6 @@ Examples:
 - ProductCard
 - DataTable
 
-## Templates
-Templates are large layout components that define the overall structure and arrangement of pages. They handle the positioning and spacing of other components.
-
-Examples:
-- UserAccountLayout
-- UserDashboardLayout
-- BlogPostLayout
-- SettingsLayout
-
 ## Benefits of This Structure
 - **Maintainability**: Components are organized by complexity and purpose
 - **Reusability**: Base components can be reused across many different contexts

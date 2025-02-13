@@ -1,7 +1,7 @@
 import type { OAuth2Tokens } from "arctic"
 import type { RequestEvent } from "./$types"
-import { createSession, generateSessionToken, setSessionTokenCookie } from "$lib/server/auth/session"
 import { createGoogleUser, getGoogleCodeVerifierCookieName, getGoogleStateCookieName, getUserByGoogleId, google } from "$lib/server/auth/google"
+import { createSession, generateSessionToken, setSessionTokenCookie } from "$lib/server/auth/session"
 import { decodeIdToken } from "arctic"
 
 export async function GET(event: RequestEvent): Promise<Response> {

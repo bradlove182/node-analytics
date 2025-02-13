@@ -10,17 +10,17 @@
 
 <Card class="min-w-100">
     <CardHeader>
-        <CardTitle level={1}>Sign In</CardTitle>
+        <CardTitle level={1}>Sign up risk-free</CardTitle>
         <CardDescription>Choose a auth provider</CardDescription>
     </CardHeader>
     <CardContent>
         <form method="POST" use:enhance onsubmit={() => loading = true}>
-            <fieldset class="flex flex-col gap-4" {disabled}>
-                <Button type="submit" formaction="/login?/github">
-                    Sign in with GitHub
+            <fieldset class="flex gap-4" {disabled}>
+                <Button class="w-full" type="submit" formaction="/signup?/github">
+                    GitHub
                 </Button>
-                <Button type="submit" formaction="/login?/google">
-                    Sign in with Google
+                <Button class="w-full" type="submit" formaction="/signup?/google">
+                    Google
                 </Button>
             </fieldset>
         </form>

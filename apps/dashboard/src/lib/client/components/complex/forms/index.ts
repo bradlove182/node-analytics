@@ -1,5 +1,5 @@
-import SignInForm from "./SignInForm.svelte"
+import SignUpForm from "./SignUpForm.svelte"
 
 export {
-    SignInForm,
+    SignUpForm,
 }

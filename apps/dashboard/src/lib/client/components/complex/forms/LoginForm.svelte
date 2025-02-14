@@ -10,7 +10,7 @@
 
 <Card class="min-w-100">
     <CardHeader>
-        <CardTitle level={1}>Sign up</CardTitle>
+        <CardTitle level={1}>Login</CardTitle>
         <CardDescription>Select a provider below</CardDescription>
     </CardHeader>
     <CardContent>
@@ -30,6 +30,6 @@
         </form>
     </CardContent>
     <CardFooter>
-        <Button class="w-full" variant="link" href="/login">Already have an account? Login.</Button>
+        <Button class="w-full" variant="link" href="/signup">Dont have an account? Sign up.</Button>
     </CardFooter>
 </Card>

@@ -5,7 +5,7 @@ import { fail, redirect } from "@sveltejs/kit"
 
 export const load: PageServerLoad = async ({ locals }) => {
     if (!locals.user) {
-        return redirect(302, "/signup")
+        return redirect(302, "/login")
     }
 
     return {
@@ -19,6 +19,6 @@ export const actions = {
             return fail(401)
         }
         invalidateSession(event.locals.session?.id)
-        return redirect(302, "/signup")
+        return redirect(302, "/login")
     },
 } satisfies Actions

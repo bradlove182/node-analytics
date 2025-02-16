@@ -15,6 +15,8 @@ if (!GITHUB_CLIENT_ID || !GITHUB_CLIENT_SECRET) {
     throw new Error("GITHUB_CLIENT_ID or GITHUB_CLIENT_SECRET is not set")
 }
 
+export { type GitHub }
+
 export const github = new GitHubClient(GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET, null)
 
 export const getGithubStateCookieName = () => "github_oauth_state" as const

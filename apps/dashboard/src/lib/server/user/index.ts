@@ -4,6 +4,8 @@ import { db } from "$lib/server/database"
 import * as table from "$lib/server/database/schemas"
 import { eq } from "drizzle-orm"
 
+export { type User }
+
 export async function createUser(email: User["email"]): Promise<User> {
     const users = await db.insert(table.user).values({
         id: generateIdFromEntropySize(10),

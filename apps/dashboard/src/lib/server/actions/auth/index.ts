@@ -4,7 +4,7 @@ import { google, setGoogleAuthCookie } from "$lib/server/auth/google"
 import { redirect } from "@sveltejs/kit"
 import { generateCodeVerifier, generateState } from "arctic"
 
-export async function authenticateWithGithub(event: RequestEvent) {
+export function authenticateWithGithub(event: RequestEvent) {
     const state = generateState()
     const url = github.createAuthorizationURL(state, ["user:email"])
 
@@ -13,7 +13,7 @@ export async function authenticateWithGithub(event: RequestEvent) {
     return redirect(302, url)
 }
 
-export async function authenticateWithGoogle(event: RequestEvent) {
+export function authenticateWithGoogle(event: RequestEvent) {
     const state = generateState()
     const codeVerifier = generateCodeVerifier()
     // Add the openid and profile scope to have access to the user's google profile
@@ -22,4 +22,11 @@ export async function authenticateWithGoogle(event: RequestEvent) {
     setGoogleAuthCookie(event, state, codeVerifier)
 
     return redirect(302, url)
+}
+
+export function oAuth() {
+    return {
+        github: authenticateWithGithub,
+        google: authenticateWithGoogle,
+    }
 }

@@ -1,6 +1,6 @@
 import type { Actions } from "@sveltejs/kit"
 import type { PageServerLoad } from "./$types"
-import { authenticateWithGithub, authenticateWithGoogle } from "$lib/server/actions/auth"
+import { oAuth } from "$lib/server/actions/auth"
 import { redirect } from "@sveltejs/kit"
 
 export const load: PageServerLoad = async ({ locals }) => {
@@ -9,7 +9,4 @@ export const load: PageServerLoad = async ({ locals }) => {
     }
 }
 
-export const actions = {
-    github: authenticateWithGithub,
-    google: authenticateWithGoogle,
-} satisfies Actions
+export const actions = oAuth() satisfies Actions

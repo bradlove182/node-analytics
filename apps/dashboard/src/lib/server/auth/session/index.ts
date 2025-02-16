@@ -7,6 +7,8 @@ import { sha256 } from "@oslojs/crypto/sha2"
 import { encodeBase64url, encodeHexLowerCase } from "@oslojs/encoding"
 import { eq } from "drizzle-orm"
 
+export { type Session }
+
 export const getSessionCookieName = () => "session" as const
 
 export function generateSessionToken() {
@@ -88,6 +90,6 @@ export const auth = {
     getSessionCookieName,
     setSessionTokenCookie,
     deleteSessionTokenCookie,
-}
+} as const
 
 export type Auth = typeof auth

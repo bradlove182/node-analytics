@@ -15,6 +15,8 @@ if (!GOOGLE_CLIENT_ID || !GOOGLE_CLIENT_SECRET) {
     throw new Error("GOOGLE_CLIENT_ID or GOOGLE_CLIENT_SECRET is not set")
 }
 
+export { type Google }
+
 export const google = new GoogleClient(
     GOOGLE_CLIENT_ID,
     GOOGLE_CLIENT_SECRET,

@@ -1,7 +1,8 @@
 import type { RequestEvent } from "@sveltejs/kit"
 import { github, setGithubStateCookie } from "$lib/server/auth/github"
 import { google, setGoogleAuthCookie } from "$lib/server/auth/google"
-import { redirect } from "@sveltejs/kit"
+import { invalidateSession } from "$lib/server/auth/session"
+import { fail, redirect } from "@sveltejs/kit"
 import { generateCodeVerifier, generateState } from "arctic"
 
 export function authenticateWithGithub(event: RequestEvent) {
@@ -22,6 +23,14 @@ export function authenticateWithGoogle(event: RequestEvent) {
     setGoogleAuthCookie(event, state, codeVerifier)
 
     return redirect(302, url)
+}
+
+export async function logout(event: RequestEvent) {
+    if (event.locals.session === null) {
+        return fail(401)
+    }
+    invalidateSession(event.locals.session?.id)
+    return redirect(302, "/login")
 }
 
 export function oAuth() {

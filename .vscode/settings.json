@@ -87,6 +87,7 @@
         "less",
         "scss",
         "pcss",
-        "postcss"
+        "postcss",
+        "svelte"
     ]
 }

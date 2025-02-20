@@ -1,11 +1,13 @@
 <script lang="ts">
-    import { Navigation } from '$lib/client/components/complex/navigation';
+    import type { LayoutProps } from "./$types"
+    import { Navigation } from "$components/complex/navigation"
 
-	let { children } = $props();
+    const { children, data }: LayoutProps = $props()
+
+    const { user } = $derived(data)
 </script>
 
-<Navigation />
+<Navigation {user} />
 <main>
-    app
     {@render children()}
 </main>

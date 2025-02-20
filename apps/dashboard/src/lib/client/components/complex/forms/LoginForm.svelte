@@ -1,11 +1,11 @@
 <script lang="ts">
-    import { enhance } from "$app/forms";
-    import { Button } from "$lib/client/components/base/button";
-    import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "$lib/client/components/base/card";
+    import { enhance } from "$app/forms"
+    import { Button } from "$components/base/button"
+    import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "$components/base/card"
 
-    let loading = $state<boolean>(false);
+    let loading = $state<boolean>(false)
 
-    const disabled = $derived(loading);
+    const disabled = $derived(loading)
 </script>
 
 <Card class="min-w-100">

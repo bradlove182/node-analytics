@@ -1,10 +1,10 @@
 <script lang="ts">
-    import { enhance } from "$app/forms";
-    import type { PageProps } from "./$types";
+    import type { PageProps } from "./$types"
+    import { enhance } from "$app/forms"
 
-   const { data }: PageProps = $props();
+    const { data }: PageProps = $props()
 
-   const { user } = $derived(data);
+    const { user } = $derived(data)
 </script>
 
 {user.id}

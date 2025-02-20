@@ -1,4 +1,8 @@
 <script lang="ts">
+    import type { User } from "$lib/server/user"
+    import { UserDropdownMenu } from "$components/combined/user-dropdown-menu"
+
+    const { user }: { user: User } = $props()
 
 </script>
 
@@ -6,5 +10,7 @@
     <div class="flex items-center">
         <span>Analytics</span>
     </div>
-    <div>User Menu</div>
+    <div>
+        <UserDropdownMenu {user} />
+    </div>
 </header>

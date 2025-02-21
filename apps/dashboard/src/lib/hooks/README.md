@@ -6,8 +6,8 @@ When building web applications with Svelte, managing state across components can
 
 Let's start with the simpler of the two hooks, `useState`. This hook provides a way to create global reactive state that works seamlessly with Svelte's server-side rendering (SSR).
 
-```bash
-const counter = useState('counter', 0);
+```typescript
+const counter = useState("counter", 0)
 // Later: counter.current++
 ```
 
@@ -22,8 +22,8 @@ This pattern ensures that we maintain a single source of truth across our applic
 
 The `useLocalStorage` hook takes our state management a step further by adding persistence. It works similarly to `useState` but automatically syncs the state with the browser's localStorage.
 
-```bash
-const settings = useLocalStorage('user-settings', { theme: 'dark' });
+```typescript
+const settings = useLocalStorage("user-settings", { theme: "dark" })
 // Changes to settings.current will automatically save to localStorage
 ```
 
@@ -44,14 +44,14 @@ This implementation provides several benefits:
 
 ## Usage Example
 
-```bash
+```typescript
 // In a Svelte component
-const counter = useState('counter', 0);
-const preferences = useLocalStorage('preferences', { darkMode: false });
+const counter = useState("counter", 0)
+const preferences = useLocalStorage("preferences", { darkMode: false })
 
 // Update values
-counter.current++;
-preferences.current.darkMode = true;
+counter.current++
+preferences.current.darkMode = true
 ```
 
 The beauty of this system is its simplicity. You get powerful state management capabilities with minimal boilerplate code, and it integrates perfectly with Svelte's existing patterns.
@@ -60,7 +60,7 @@ The beauty of this system is its simplicity. You get powerful state management c
 
 One important detail is the use of the `ContextState` interface:
 
-```bash
+```typescript
 export interface ContextState<T> {
     current: T
 }

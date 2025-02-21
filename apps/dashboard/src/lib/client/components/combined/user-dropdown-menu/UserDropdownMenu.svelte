@@ -4,6 +4,7 @@
     import * as DropdownMenu from "$components/base/dropdown-menu"
     import { ThemeToggle } from "$components/base/theme-toggle"
     import { useUser } from "$lib/hooks/data/user"
+    import { IconLogout } from "$lib/icons"
 
     const user = $derived(useUser().current)
 
@@ -47,8 +48,9 @@
                 </DropdownMenu.ItemBlank>
             </DropdownMenu.Group>
             <DropdownMenu.Separator />
-            <DropdownMenu.Item onclick={() => form?.submit()}>
+            <DropdownMenu.Item onclick={() => form?.submit()} class="justify-between">
                 Logout
+                <IconLogout />
             </DropdownMenu.Item>
         </DropdownMenu.Content>
     </DropdownMenu.Root>

@@ -1,8 +1,8 @@
 <script lang="ts">
     import type { User } from "$lib/server/user"
     import { enhance } from "$app/forms"
-    import { Avatar, AvatarFallback, AvatarImage } from "$components/base/avatar"
-    import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "$components/base/dropdown-menu"
+    import * as Avatar from "$components/base/avatar"
+    import * as DropdownMenu from "$components/base/dropdown-menu"
 
     interface Props {
         user: User
@@ -10,37 +10,46 @@
 
     const { user }: Props = $props()
 
-    let ref = $state<HTMLFormElement>()
+    let form = $state<HTMLFormElement>()
 
     const userFallback = $derived(user.email.slice(0, 2).toUpperCase())
 
 </script>
-<form method="POST" use:enhance action="/logout" bind:this={ref}>
-    <DropdownMenu>
-        <DropdownMenuTrigger>
+<form method="POST" use:enhance action="/logout" bind:this={form}>
+    <DropdownMenu.Root>
+        <DropdownMenu.Trigger class="hover:cursor-pointer w-8 h-8 text-sm">
             {#snippet child({ props })}
-                <Avatar {...props} class="hover:cursor-pointer">
-                    <AvatarImage />
-                    <AvatarFallback>
+                <Avatar.Root {...props}>
+                    <Avatar.Image />
+                    <Avatar.Fallback>
                         {userFallback}
-                    </AvatarFallback>
-                </Avatar>
+                    </Avatar.Fallback>
+                </Avatar.Root>
             {/snippet}
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-            <DropdownMenuItem class="flex items-center gap-2">
-                <Avatar class="h-7 w-7 text-xs">
-                    <AvatarImage />
-                    <AvatarFallback>
-                        {userFallback}
-                    </AvatarFallback>
-                </Avatar>
-                {user.email}
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem onclick={() => ref?.submit()}>
+        </DropdownMenu.Trigger>
+        <DropdownMenu.Content align="end" class="min-w-[256px]">
+            <DropdownMenu.Group>
+                <DropdownMenu.GroupHeading class="flex flex-col gap-1">
+                    <p>{user.email}</p>
+                    <p class="text-muted-foreground font-normal">{user.email}</p>
+                </DropdownMenu.GroupHeading>
+                <DropdownMenu.Item>
+                    Dashboard
+                </DropdownMenu.Item>
+                <DropdownMenu.Item>
+                    Account Settings
+                </DropdownMenu.Item>
+            </DropdownMenu.Group>
+            <DropdownMenu.Separator />
+            <DropdownMenu.Group>
+                <DropdownMenu.Item class="hover:bg-transparent">
+                    Theme
+                </DropdownMenu.Item>
+            </DropdownMenu.Group>
+            <DropdownMenu.Separator />
+            <DropdownMenu.Item onclick={() => form?.submit()}>
                 Logout
-            </DropdownMenuItem>
-        </DropdownMenuContent>
-    </DropdownMenu>
+            </DropdownMenu.Item>
+        </DropdownMenu.Content>
+    </DropdownMenu.Root>
 </form>

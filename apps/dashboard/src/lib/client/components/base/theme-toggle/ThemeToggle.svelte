@@ -43,4 +43,5 @@
         </span>
 
     {/each}
+    <span class="sr-only">Toggle theme</span>
 </RadioGroup.Root>

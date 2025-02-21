@@ -62,6 +62,9 @@ importers:
       drizzle-orm:
         specifier: 0.39.0
         version: 0.39.0(@libsql/client-wasm@0.14.0)(@types/pg@8.11.11)(pg@8.13.3)(postgres@3.4.5)
+      mode-watcher:
+        specifier: ^0.5.1
+        version: 0.5.1(svelte@5.20.0)
       postgres:
         specifier: ^3.4.5
         version: 3.4.5
@@ -3696,6 +3699,11 @@ packages:
 
   mnemonist@0.39.8:
     resolution: {integrity: sha512-vyWo2K3fjrUw8YeeZ1zF0fy6Mu59RHokURlld8ymdUPjMlD9EC9ov1/YPqTgqRvUN9nTr3Gqfz29LYAmu0PHPQ==}
+
+  mode-watcher@0.5.1:
+    resolution: {integrity: sha512-adEC6T7TMX/kzQlaO/MtiQOSFekZfQu4MC+lXyoceQG+U5sKpJWZ4yKXqw846ExIuWJgedkOIPqAYYRk/xHm+w==}
+    peerDependencies:
+      svelte: ^4.0.0 || ^5.0.0-next.1
 
   mri@1.2.0:
     resolution: {integrity: sha512-tzzskb3bG8LvYGFF/mDTpq3jpI6Q9wc3LEmBaghu+DdCssd1FakN7Bc0hVNmEyGq1bq3RgfkCb3cmQLpNPOroA==}
@@ -7956,6 +7964,10 @@ snapshots:
   mnemonist@0.39.8:
     dependencies:
       obliterator: 2.0.5
+
+  mode-watcher@0.5.1(svelte@5.20.0):
+    dependencies:
+      svelte: 5.20.0
 
   mri@1.2.0: {}
 

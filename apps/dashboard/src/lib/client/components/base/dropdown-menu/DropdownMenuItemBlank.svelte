@@ -1,0 +1,26 @@
+<script lang="ts">
+    import { cn } from "$lib/utils/tailwind"
+    import { DropdownMenu as DropdownMenuPrimitive } from "bits-ui"
+
+    let {
+        ref = $bindable(null),
+        class: className,
+        inset,
+        children,
+        ...restProps
+    }: Pick<DropdownMenuPrimitive.ItemProps, "ref" | "class" | "children"> & {
+        inset?: boolean
+    } = $props()
+</script>
+
+<div
+    bind:this={ref}
+    class={cn(
+        "data-[highlighted]:bg-accent data-[highlighted]:text-accent-foreground relative flex cursor-default select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none transition-colors data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&>svg]:size-4 [&>svg]:shrink-0",
+        inset && "pl-8",
+        className,
+    )}
+    {...restProps}
+>
+    {@render children?.()}
+</div>

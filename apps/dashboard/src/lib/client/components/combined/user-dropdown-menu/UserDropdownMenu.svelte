@@ -2,6 +2,7 @@
     import { enhance } from "$app/forms"
     import * as Avatar from "$components/base/avatar"
     import * as DropdownMenu from "$components/base/dropdown-menu"
+    import { ThemeToggle } from "$components/base/theme-toggle"
     import { useUser } from "$lib/hooks/data/user"
 
     const user = $derived(useUser().current)
@@ -38,9 +39,12 @@
             </DropdownMenu.Group>
             <DropdownMenu.Separator />
             <DropdownMenu.Group>
-                <DropdownMenu.Item class="hover:bg-transparent">
+                <DropdownMenu.ItemBlank class="justify-between">
                     Theme
-                </DropdownMenu.Item>
+                    <div class="pointer-events-auto">
+                        <ThemeToggle />
+                    </div>
+                </DropdownMenu.ItemBlank>
             </DropdownMenu.Group>
             <DropdownMenu.Separator />
             <DropdownMenu.Item onclick={() => form?.submit()}>

@@ -1,5 +1,6 @@
 <script lang="ts">
     import { getAppTitle } from "$lib/utils/head"
+    import { ModeWatcher } from "mode-watcher"
     import "../app.css"
 
     const { children } = $props()
@@ -9,4 +10,5 @@
     <title>{getAppTitle()}</title>
 </svelte:head>
 
+<ModeWatcher />
 {@render children()}

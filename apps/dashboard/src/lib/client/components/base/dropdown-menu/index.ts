@@ -3,6 +3,7 @@ import CheckboxItem from "./DropdownMenuCheckboxItem.svelte"
 import Content from "./DropdownMenuContent.svelte"
 import GroupHeading from "./DropdownMenuGroupHeading.svelte"
 import Item from "./DropdownMenuItem.svelte"
+import ItemBlank from "./DropdownMenuItemBlank.svelte"
 import Label from "./DropdownMenuLabel.svelte"
 import RadioItem from "./DropdownMenuRadioItem.svelte"
 import Separator from "./DropdownMenuSeparator.svelte"
@@ -25,6 +26,7 @@ export {
     Group as DropdownMenuGroup,
     GroupHeading as DropdownMenuGroupHeading,
     Item as DropdownMenuItem,
+    ItemBlank as DropdownMenuItemBlank,
     Label as DropdownMenuLabel,
     RadioGroup as DropdownMenuRadioGroup,
     RadioItem as DropdownMenuRadioItem,
@@ -37,6 +39,7 @@ export {
     Group,
     GroupHeading,
     Item,
+    ItemBlank,
     Label,
     RadioGroup,
     RadioItem,

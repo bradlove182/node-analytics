@@ -1,18 +1,14 @@
 <script lang="ts">
-    import type { User } from "$lib/server/user"
     import { enhance } from "$app/forms"
     import * as Avatar from "$components/base/avatar"
     import * as DropdownMenu from "$components/base/dropdown-menu"
+    import { useUser } from "$lib/hooks/data/user"
 
-    interface Props {
-        user: User
-    }
-
-    const { user }: Props = $props()
+    const user = $derived(useUser().current)
 
     let form = $state<HTMLFormElement>()
 
-    const userFallback = $derived(user.email.slice(0, 2).toUpperCase())
+    const userFallback = $derived(user?.email.slice(0, 2).toUpperCase())
 
 </script>
 <form method="POST" use:enhance action="/logout" bind:this={form}>
@@ -30,8 +26,8 @@
         <DropdownMenu.Content align="end" class="min-w-[256px]">
             <DropdownMenu.Group>
                 <DropdownMenu.GroupHeading class="flex flex-col gap-1">
-                    <p>{user.email}</p>
-                    <p class="text-muted-foreground font-normal">{user.email}</p>
+                    <p>{user?.email}</p>
+                    <p class="text-muted-foreground font-normal">{user?.email}</p>
                 </DropdownMenu.GroupHeading>
                 <DropdownMenu.Item>
                     Dashboard

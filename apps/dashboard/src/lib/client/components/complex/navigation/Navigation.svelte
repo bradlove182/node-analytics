@@ -1,8 +1,5 @@
 <script lang="ts">
-    import type { User } from "$lib/server/user"
     import { UserDropdownMenu } from "$components/combined/user-dropdown-menu"
-
-    const { user }: { user: User } = $props()
 
 </script>
 
@@ -11,6 +8,6 @@
         <span>Analytics</span>
     </div>
     <div>
-        <UserDropdownMenu {user} />
+        <UserDropdownMenu />
     </div>
 </header>

@@ -12,6 +12,8 @@
 
     let ref = $state<HTMLFormElement>()
 
+    const userFallback = $derived(user.email.slice(0, 2).toUpperCase())
+
 </script>
 <form method="POST" use:enhance action="/logout" bind:this={ref}>
     <DropdownMenu>
@@ -20,14 +22,20 @@
                 <Avatar {...props} class="hover:cursor-pointer">
                     <AvatarImage />
                     <AvatarFallback>
-                        {user.email.slice(0, 2)}
+                        {userFallback}
                     </AvatarFallback>
                 </Avatar>
             {/snippet}
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-            <DropdownMenuItem>
-                Profile
+            <DropdownMenuItem class="flex items-center gap-2">
+                <Avatar class="h-7 w-7 text-xs">
+                    <AvatarImage />
+                    <AvatarFallback>
+                        {userFallback}
+                    </AvatarFallback>
+                </Avatar>
+                {user.email}
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem onclick={() => ref?.submit()}>

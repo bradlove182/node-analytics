@@ -8,6 +8,6 @@
 </script>
 
 <Navigation {user} />
-<main>
+<main class="container mx-auto px-2 md:px-4 pt-8">
     {@render children()}
 </main>

@@ -5,15 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1738748783437,
-      "tag": "0000_white_nightshade",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1738748812036,
-      "tag": "0001_rare_victor_mancha",
+      "when": 1740383224519,
+      "tag": "0000_last_supernaut",
       "breakpoints": true
     }
   ]

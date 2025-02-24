@@ -1,24 +1,16 @@
-import type { Actions } from "@sveltejs/kit"
 import type { PageServerLoad } from "./$types"
-import { invalidateSession } from "$lib/server/auth/session"
-import { fail, redirect } from "@sveltejs/kit"
+import { getProjects } from "$lib/server/project"
+import { redirect } from "@sveltejs/kit"
 
 export const load: PageServerLoad = async ({ locals }) => {
     if (!locals.user) {
         return redirect(302, "/login")
     }
 
+    const projects = await getProjects()
+
     return {
         user: locals.user,
+        projects,
     }
 }
-
-export const actions = {
-    logout: async (event) => {
-        if (event.locals.session === null) {
-            return fail(401)
-        }
-        invalidateSession(event.locals.session?.id)
-        return redirect(302, "/login")
-    },
-} satisfies Actions

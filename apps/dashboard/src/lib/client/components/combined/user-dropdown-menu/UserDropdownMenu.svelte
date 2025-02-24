@@ -3,8 +3,8 @@
     import * as Avatar from "$components/base/avatar"
     import * as DropdownMenu from "$components/base/dropdown-menu"
     import { ThemeToggle } from "$components/base/theme-toggle"
+    import { IconLogout } from "$icons"
     import { useUser } from "$lib/hooks/data/user"
-    import { IconLogout } from "$lib/icons"
 
     const user = $derived(useUser().current)
 

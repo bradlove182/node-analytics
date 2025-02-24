@@ -2,6 +2,7 @@ import type { OAuth2Tokens } from "arctic"
 import type { RequestEvent } from "./$types"
 import { createGithubUser, getGithubStateCookieName, getUserByGithubId, github } from "$lib/server/auth/github"
 import { createSession, generateSessionToken, setSessionTokenCookie } from "$lib/server/auth/session"
+import { createProject } from "$lib/server/project"
 
 interface GitHubUser {
     login: string
@@ -98,6 +99,8 @@ export async function GET(event: RequestEvent): Promise<Response> {
         const sessionToken = generateSessionToken()
         const session = await createSession(sessionToken, user.userId)
         setSessionTokenCookie(event, sessionToken, session.expiresAt)
+
+        await createProject(`${githubEmail}'s Project`)
 
         return new Response(null, {
             status: 302,

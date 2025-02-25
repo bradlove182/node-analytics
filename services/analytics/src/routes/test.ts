@@ -5,6 +5,7 @@ export const testRoutes: FastifyPluginCallback = (fastify, _, done) => {
     const tableName = "my_table"
 
     fastify.get("/", async (request) => {
+        console.log(request.db, "DB");
         await request.db.command({
             query: `DROP TABLE IF EXISTS ${tableName}`,
         })

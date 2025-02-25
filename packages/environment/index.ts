@@ -6,12 +6,15 @@ const baseEnvSchema = z.object({
 })
 
 const analyticsEnvSchema = z.object({
-    CLICKHOUSE_DATABASE_URL: z.string().default("url"),
+    CLICKHOUSE_DATABASE_URL: z.string().default("http://localhost:8123/"),
     CLICKHOUSE_DATABASE_USERNAME: z.string().default("default"),
     CLICKHOUSE_DATABASE_PASSWORD: z.string().default(""),
     ANALYTICS_PORT: z.coerce.number().default(8080),
     ANALYTICS_HOST: z.string().default("localhost"),
-})
+    APP_SECRET: z.string().default("jokesjokesjokesjokesjokesjokesjokesjokesjokesjokesjokes"),
+    CLIENT_IP_HEADER: z.string().default("x-custom-ip-header"),
+    DISABLE_BOT_CHECK: z.boolean().default(true)
+});
 
 const accountEnvSchema = z.object({
     ACCOUNT_PORT: z.coerce.number().default(8081),

@@ -79,3 +79,15 @@ Learn more about the power of Turborepo:
 -   [Filtering](https://turbo.build/repo/docs/core-concepts/monorepos/filtering)
 -   [Configuration Options](https://turbo.build/repo/docs/reference/configuration)
 -   [CLI Usage](https://turbo.build/repo/docs/reference/command-line-reference)
+
+#Clickhouse Information:
+
+-   Connect to the docker container of clickhouse using To connect to your ClickHouse Docker container from the terminal, follow these steps:
+
+Find your container ID or name:
+
+Copydocker ps
+
+Connect to the ClickHouse client inside the container:
+
+Copydocker exec -it <container_id_or_name> clickhouse-client

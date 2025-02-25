@@ -7,6 +7,7 @@ import type { ClickHouseClient } from "@clickhouse/client"
 export let db: ClickHouseClient
 
 export async function initializeDatabase() {
+    // console.log(env, "env.CLICKHOUSE_DATABASE_URL")
     try {
         db = createClient({
             url: env.CLICKHOUSE_DATABASE_URL,

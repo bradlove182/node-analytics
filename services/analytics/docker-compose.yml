@@ -4,17 +4,17 @@ version: "2"
 
 services:
     clickhouse:
+        hostname: clickhouse
         container_name: clickhouse
         image: clickhouse/clickhouse-server:latest
         depends_on:
             - kafka
         environment:
-            CLICKHOUSE_USER: username
-            CLICKHOUSE_PASS: password
             CLICKHOUSE_DB: honeycomb
             CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT: 1
         ports:
             - 8123:8123
+            - 9000:9000  # Native protocol
         deploy:
             resources:
                 limits:
@@ -22,7 +22,7 @@ services:
                     memory: 12000M
         volumes:
             - ./dev/db/.clickhouse/:/bitnami/clickhouse
-
+        
     kafka:
         image: bitnami/kafka:latest
         container_name: kafka

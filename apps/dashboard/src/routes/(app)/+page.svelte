@@ -3,7 +3,7 @@
 
     const { data } = $props()
 
-    const { projects } = $derived(data)
+    const { projects, users } = $derived(data)
 </script>
 
 <svelte:head>
@@ -11,5 +11,13 @@
 </svelte:head>
 
 {#each projects as project}
-    {project.name}
+    <div>
+        {project.name}
+    </div>
+{/each}
+
+{#each users as user}
+    <div>
+        {user.email}
+    </div>
 {/each}

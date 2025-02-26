@@ -100,7 +100,7 @@ export async function GET(event: RequestEvent): Promise<Response> {
         const session = await createSession(sessionToken, user.userId)
         setSessionTokenCookie(event, sessionToken, session.expiresAt)
 
-        await createProject(`${githubEmail}'s Project`)
+        await createProject(`${githubEmail}'s Project`, user.userId)
 
         return new Response(null, {
             status: 302,

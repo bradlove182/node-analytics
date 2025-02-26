@@ -2,6 +2,7 @@ import type { OAuth2Tokens } from "arctic"
 import type { RequestEvent } from "./$types"
 import { createGoogleUser, getGoogleCodeVerifierCookieName, getGoogleStateCookieName, getUserByGoogleId, google } from "$lib/server/auth/google"
 import { createSession, generateSessionToken, setSessionTokenCookie } from "$lib/server/auth/session"
+import { createProject } from "$lib/server/project"
 import { decodeIdToken } from "arctic"
 
 export async function GET(event: RequestEvent): Promise<Response> {
@@ -58,6 +59,9 @@ export async function GET(event: RequestEvent): Promise<Response> {
         const sessionToken = generateSessionToken()
         const session = await createSession(sessionToken, user.userId)
         setSessionTokenCookie(event, sessionToken, session.expiresAt)
+
+        await createProject(`${email}'s Project`, user.userId)
+
         return new Response(null, {
             status: 302,
             headers: {

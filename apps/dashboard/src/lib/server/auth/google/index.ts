@@ -9,10 +9,10 @@ import { createTimeSpan } from "$lib/utils/timespan"
 import { Google as GoogleClient } from "arctic"
 import { eq } from "drizzle-orm"
 
-const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } = env
+const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_CLIENT_CALLBACK_URL } = env
 
-if (!GOOGLE_CLIENT_ID || !GOOGLE_CLIENT_SECRET) {
-    throw new Error("GOOGLE_CLIENT_ID or GOOGLE_CLIENT_SECRET is not set")
+if (!GOOGLE_CLIENT_ID || !GOOGLE_CLIENT_SECRET || !GOOGLE_CLIENT_CALLBACK_URL) {
+    throw new Error("GOOGLE_CLIENT_ID or GOOGLE_CLIENT_SECRET or GOOGLE_CLIENT_CALLBACK_URL is not set")
 }
 
 export { type Google }
@@ -20,7 +20,7 @@ export { type Google }
 export const google = new GoogleClient(
     GOOGLE_CLIENT_ID,
     GOOGLE_CLIENT_SECRET,
-    "http://localhost:5173/login/google/callback",
+    GOOGLE_CLIENT_CALLBACK_URL,
 )
 
 export const getGoogleStateCookieName = () => "google_oauth_state" as const

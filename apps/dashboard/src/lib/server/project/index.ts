@@ -1,15 +1,22 @@
 import type { Project } from "$lib/server/database/types"
 import { generateIdFromEntropySize } from "$lib/server/crypto"
 import { db } from "$lib/server/database"
-import { project } from "$lib/server/database/schemas"
+import { project, projectUsers } from "$lib/server/database/schemas"
 import { eq } from "drizzle-orm"
 
-export async function createProject(name: string) {
+export async function createProject(name: string, userId: string) {
     const id = generateIdFromEntropySize(10)
-    const projects = await db.insert(project).values({
-        id,
-        name,
-    }).returning()
+    const projects = await db.transaction(async (tx) => {
+        const result = await tx.insert(project).values({
+            id,
+            name,
+        }).returning()
+        await tx.insert(projectUsers).values({
+            userId,
+            projectId: id,
+        })
+        return result
+    })
     return projects.find(proj => proj.id === id)!
 }
 

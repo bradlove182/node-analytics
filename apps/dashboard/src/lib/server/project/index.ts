@@ -40,6 +40,16 @@ export async function getProjects() {
     return projects
 }
 
+export async function getUsersProjects(userId: string) {
+    const projects = await db.query.projectUsers.findMany({
+        where: table => eq(table.userId, userId),
+        with: {
+            project: true,
+        },
+    })
+    return projects.map(item => item.project)
+}
+
 export async function getProjectUsers(projectId: Project["id"]) {
     const projectUsers = await db.query.project.findFirst({
         where: table => eq(table.id, projectId),

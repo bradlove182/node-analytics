@@ -3,21 +3,19 @@
 
     const { data } = $props()
 
-    const { projects, users } = $derived(data)
+    const { projects } = $derived(data)
 </script>
 
 <svelte:head>
     <title>{getAppTitle("Dashboard")}</title>
 </svelte:head>
 
-{#each projects as project}
-    <div>
-        {project.name}
-    </div>
-{/each}
-
-{#each users as user}
-    <div>
-        {user.email}
-    </div>
-{/each}
+{#await projects}
+    loading projects...
+{:then items}
+    {#each items as project}
+        <div>
+            {project.name} - {project.id}
+        </div>
+    {/each}
+{/await}

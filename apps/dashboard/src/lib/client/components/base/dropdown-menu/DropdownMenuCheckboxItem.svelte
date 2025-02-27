@@ -3,6 +3,7 @@
     import type { Snippet } from "svelte"
     import { cn } from "$lib/utils/tailwind"
     import { DropdownMenu as DropdownMenuPrimitive } from "bits-ui"
+    import { IconCheck } from "$icons";
 
     let {
         ref = $bindable(null),
@@ -34,7 +35,7 @@
                 </span>
             {:else}
                 <span class={cn("size-4", !checked && "text-transparent")}>
-                    check
+                    <IconCheck />
                 </span>
             {/if}
         </span>

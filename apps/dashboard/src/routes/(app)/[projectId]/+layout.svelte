@@ -1,12 +1,15 @@
 <script lang="ts">
     import type { LayoutProps } from "./$types"
     import { Navigation } from "$components/complex/navigation"
-    import { useUser } from "$lib/hooks/data/user"
+    import { useProject } from "$lib/hooks/data/project"
+    import { useUser, useUserProjects } from "$lib/hooks/data/user"
 
     const { children, data }: LayoutProps = $props()
 
     // Initialize Data hooks here
     useUser(data.user)
+    useUserProjects(data.projects)
+    useProject(data.project)
 </script>
 
 <Navigation />

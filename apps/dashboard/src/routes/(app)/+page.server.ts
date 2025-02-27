@@ -1,6 +1,6 @@
 import type { PageServerLoad } from "./$types"
 import { getUsersProjects } from "$lib/server/project"
-import { redirect } from "@sveltejs/kit"
+import { error, redirect } from "@sveltejs/kit"
 
 export const load: PageServerLoad = async ({ locals }) => {
     const { user } = locals
@@ -9,8 +9,12 @@ export const load: PageServerLoad = async ({ locals }) => {
         return redirect(302, "/login")
     }
 
-    return {
-        user,
-        projects: getUsersProjects(user.id),
+    const projects = await getUsersProjects(user.id)
+    const defaultProject = projects[0]
+
+    if (defaultProject) {
+        return redirect(302, `/${defaultProject.id}`)
     }
+
+    return error(404)
 }

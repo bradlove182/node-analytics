@@ -1,12 +1,14 @@
 <script lang="ts">
+    import type { Project } from "$lib/server/database/types"
     import { Button } from "$components/base/button"
     import * as DropdownMenu from "$components/base/dropdown-menu"
     import { useProject } from "$lib/hooks/data/project"
     import { useUserProjects } from "$lib/hooks/data/user"
-    import { type Project } from "$lib/server/database/types";
+    import { useDialog } from "$lib/hooks/dialog"
 
     const projects = useUserProjects()
     const project = useProject()
+    const dialog = useDialog()
 
     const currentProject = $state<Project>(project.current ?? projects.current[0])
 
@@ -15,12 +17,12 @@
 <DropdownMenu.Root>
     <DropdownMenu.Trigger>
         {#snippet child({ props })}
-            <Button {...props}>
+            <Button variant="outline" {...props}>
                 {currentProject.name}
             </Button>
         {/snippet}
     </DropdownMenu.Trigger>
-    <DropdownMenu.Content>
+    <DropdownMenu.Content align="start">
         <DropdownMenu.Group>
             <DropdownMenu.Label>
                 Projects
@@ -32,7 +34,7 @@
             {/each}
         </DropdownMenu.Group>
         <DropdownMenu.Separator />
-        <DropdownMenu.Item>
+        <DropdownMenu.Item onclick={() => dialog.current = "createTeam"}>
             Create Project
         </DropdownMenu.Item>
     </DropdownMenu.Content>

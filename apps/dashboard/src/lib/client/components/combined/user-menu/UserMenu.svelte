@@ -1,6 +1,7 @@
 <script lang="ts">
     import { enhance } from "$app/forms"
     import * as Avatar from "$components/base/avatar"
+    import { Button } from "$components/base/button";
     import * as DropdownMenu from "$components/base/dropdown-menu"
     import { ThemeToggle } from "$components/base/theme-toggle"
     import { IconLogout } from "$icons"
@@ -15,14 +16,16 @@
 </script>
 <form method="POST" use:enhance action="/logout" bind:this={form}>
     <DropdownMenu.Root>
-        <DropdownMenu.Trigger class="hover:cursor-pointer w-8 h-8 text-sm">
+        <DropdownMenu.Trigger class="hover:cursor-pointer size-10 text-sm rounded-full">
             {#snippet child({ props })}
-                <Avatar.Root {...props}>
-                    <Avatar.Image />
-                    <Avatar.Fallback>
-                        {userFallback}
-                    </Avatar.Fallback>
-                </Avatar.Root>
+                <Button size="icon" variant="ghost" {...props}>
+                    <Avatar.Root class="pointer-events-none size-full">
+                        <Avatar.Image />
+                        <Avatar.Fallback>
+                            {userFallback}
+                        </Avatar.Fallback>
+                    </Avatar.Root>
+                </Button>
             {/snippet}
         </DropdownMenu.Trigger>
         <DropdownMenu.Content align="end" class="min-w-[256px]">

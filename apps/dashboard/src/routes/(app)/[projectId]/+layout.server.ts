@@ -10,7 +10,7 @@ export const load: LayoutServerLoad = async ({ locals, params }) => {
     const { projectId } = params
 
     const projects = await getUsersProjects(locals.user.id)
-    const project = projects.find(project => project.id === projectId)!
+    const project = projects.find(project => project.id === projectId)
 
     return {
         user: locals.user,

@@ -3,6 +3,7 @@
     import { Navigation } from "$components/complex/navigation"
     import { useProject } from "$lib/hooks/data/project"
     import { useUser, useUserProjects } from "$lib/hooks/data/user"
+    import { DialogProvider } from "$lib/hooks/dialog"
 
     const { children, data }: LayoutProps = $props()
 
@@ -12,7 +13,9 @@
     useProject(data.project)
 </script>
 
-<Navigation />
-<main class="container mx-auto px-2 md:px-4 pt-8">
-    {@render children()}
-</main>
+<DialogProvider>
+    <Navigation />
+    <main class="container mx-auto px-2 md:px-4 pt-8">
+        {@render children()}
+    </main>
+</DialogProvider>

@@ -6,11 +6,10 @@
 
     const { children }: { children: Snippet<[]> } = $props()
 
+    let open = $state(false)
     let currentDialog = $state<Promise<Component>>()
 
     const dialog = useDialog()
-
-    let open = $state(false)
 
     $effect(() => {
         if (dialog.current) {

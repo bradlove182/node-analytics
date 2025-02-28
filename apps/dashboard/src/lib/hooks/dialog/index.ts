@@ -1,4 +1,4 @@
-import { useState } from "../index.svelte"
+import { useState } from "$lib/hooks/index.svelte"
 import DialogProvider from "./DialogProvider.svelte"
 
 export const dialogs = {

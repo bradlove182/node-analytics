@@ -23,11 +23,9 @@
 
     $effect(() => {
         if (!open) {
-            // We set a timeout to account for exit animations
-            setTimeout(() => {
-                currentDialog = undefined
+            untrack(() => {
                 dialog.current = undefined
-            }, 200)
+            })
         }
     })
 

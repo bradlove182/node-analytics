@@ -19,6 +19,7 @@
         "@fastify/redis": "^7.0.2",
         "@fastify/session": "^11.1.0",
         "date-fns": "^4.1.0",
+        "date-fns-tz": "^3.2.0",
         "detect-browser": "^5.3.0",
         "drizzle-orm": "^0.39.3",
         "fastify": "^5.2.1",

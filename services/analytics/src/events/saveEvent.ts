@@ -1,10 +1,13 @@
-import { FastifyCookie } from "@fastify/cookie";
-import { FastifySessionObject } from "@fastify/session";
+import { Logger } from "@api/utils";
+import clickhouse from "@lib/clickhouse";
 import { EVENT_NAME_LENGTH, EVENT_TYPE, PAGE_TITLE_LENGTH, URL_LENGTH } from "@lib/constants";
 import { uuid } from "@lib/crypto";
+import { CLICKHOUSE, runQuery } from "@lib/db";
+import kafka from "@lib/kafka";
 import { FastifyRequest } from "fastify";
+import { saveEventData } from "./saveEventData";
 
-interface DataInterface {
+interface DataInterface { 
     websiteId: string;
     sessionId: string;
     visitId: string;
@@ -26,11 +29,19 @@ interface DataInterface {
     subdivision1?: string;
     subdivision2?: string;
     city?: string;
+    tag?: string;
+    // db: FastifyRequest["db"]
 }
 
+export async function saveEvent(args: DataInterface) {
+    return runQuery({
+      [CLICKHOUSE]: () => clickhouseQuery(args),
+    });
+  }
 
-export async function saveEventQuery(data: DataInterface, db: FastifyRequest["db"]) {
-    const {
+  async function clickhouseQuery(data: DataInterface, ){
+
+        const {
         websiteId,
         sessionId,
         visitId,
@@ -46,56 +57,60 @@ export async function saveEventQuery(data: DataInterface, db: FastifyRequest["db
         subdivision1,
         subdivision2,
         city,
+        tag,
         ...args
     } = data;
 
-    console.log(args, "args")
-
-    // Remove cookie and other non-database fields from args
-    const { cookie, ...cleanArgs } = args;
+    const { insert, getUTCString } = clickhouse;
+    const { sendMessage } = kafka
+    const eventId = uuid();
+    const createdAt = getUTCString();
 
     const message = {
-        website_id: String(websiteId || ''),
-        session_id: String(sessionId || ''),
-        visit_id: String(visitId || ''),
-        event_id: String(uuid()),
-        country: String(country || 'cape town'),
-        subdivision1: subdivision1 ? String(subdivision1) : null,
-        subdivision2: subdivision2 ? String(subdivision2) : null,
-        city: city ? String(city) : null,
-        url_path: String(urlPath || '').substring(0, URL_LENGTH),
-        url_query: urlQuery ? String(urlQuery).substring(0, URL_LENGTH) : null,
-        referrer_path: referrerPath ? String(referrerPath).substring(0, URL_LENGTH) : null,
-        referrer_query: referrerQuery ? String(referrerQuery).substring(0, URL_LENGTH) : null,
-        referrer_domain: referrerDomain ? String(referrerDomain).substring(0, URL_LENGTH) : null,
-        page_title: pageTitle ? String(pageTitle).substring(0, PAGE_TITLE_LENGTH) : null,
-        event_type: Number(eventName ? EVENT_TYPE.customEvent : EVENT_TYPE.pageView),
-        event_name: eventName ? String(eventName).substring(0, EVENT_NAME_LENGTH) : null,
-        // Format date for ClickHouse
-        created_at: new Date().toISOString().slice(0, 19).replace('T', ' '),
-        ...Object.fromEntries(
-            Object.entries(cleanArgs)
-                .filter(([_, value]) => value !== undefined)
-                .map(([key, value]) => [key, value ? String(value) : null])
-        )
-    };
+        ...args,
+        website_id: websiteId,
+        session_id: sessionId,
+        visit_id: visitId,
+        event_id: eventId,
+        country: country,
+        subdivision1:
+          country && subdivision1
+            ? subdivision1.includes('-')
+              ? subdivision1
+              : `${country}-${subdivision1}`
+            : null,
+        subdivision2: subdivision2,
+        city: city,
+        url_path: urlPath?.substring(0, URL_LENGTH),
+        url_query: urlQuery?.substring(0, URL_LENGTH),
+        referrer_path: referrerPath?.substring(0, URL_LENGTH),
+        referrer_query: referrerQuery?.substring(0, URL_LENGTH),
+        referrer_domain: referrerDomain?.substring(0, URL_LENGTH),
+        page_title: pageTitle?.substring(0, PAGE_TITLE_LENGTH),
+        event_type: eventName ? EVENT_TYPE.customEvent : EVENT_TYPE.pageView,
+        event_name: eventName ? eventName?.substring(0, EVENT_NAME_LENGTH) : null,
+        tag: tag,
+        created_at: createdAt,
+      };
 
-    console.log('Prepared message for insertion:', JSON.stringify(message, null, 2));
-
-    try {
-        await db.insert({
-            table: 'honeycomb.website_event',
-            values: [message],
-            format: 'JSONEachRow',
-            clickhouse_settings: {
-                date_time_input_format: 'best_effort'
-            }
-        });
-        
-        console.log(`Event saved with ID: ${message.event_id}`);
-    } catch (error) {
-        console.error('Error inserting event into ClickHouse:', error);
-        console.error('Failed message:', JSON.stringify(message, null, 2));
-        throw error;
+    if(kafka.enabled){
+        Logger.info("Honeycomb", "Kafka")
+    } else {
+        console.log("SAVING EVENT")
+        await insert("honeycomb.website_event", [message])
     }
-}
+
+    if (eventData) {
+        await saveEventData({
+          websiteId,
+          sessionId,
+          eventId,
+          urlPath: urlPath?.substring(0, URL_LENGTH),
+          eventName: eventName?.substring(0, EVENT_NAME_LENGTH),
+          eventData,
+          createdAt,
+        });
+      }
+    
+      return data;
+  }

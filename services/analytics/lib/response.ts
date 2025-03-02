@@ -3,7 +3,8 @@ export function ok(res: any, data: object = {}) {
 }
 
 export function json(res: any, data: object = {}) {
-    return res.status(200).json(data);
+    return Response.json(data)
+    // return res.status(200).json(data);
 }
 
 export function send(res: any, data: any, type = "text/plain") {

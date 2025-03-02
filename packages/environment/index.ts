@@ -13,7 +13,11 @@ const analyticsEnvSchema = z.object({
     ANALYTICS_HOST: z.string().default("localhost"),
     APP_SECRET: z.string().default("jokesjokesjokesjokesjokesjokesjokesjokesjokesjokesjokes"),
     CLIENT_IP_HEADER: z.string().default("x-custom-ip-header"),
-    DISABLE_BOT_CHECK: z.boolean().default(true)
+    DISABLE_BOT_CHECK: z.boolean().default(true),
+    KAFKA_URL: z.string().nullable().default(null),
+    KAFKA_BROKER: z.string().nullable().default(null),
+    SKIP_LOCATION_HEADERS: z.boolean().default(false),
+    IGNORE_IP: z.string().default('')
 });
 
 const accountEnvSchema = z.object({

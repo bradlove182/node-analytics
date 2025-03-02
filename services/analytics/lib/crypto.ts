@@ -10,7 +10,7 @@ const TAG_LENGTH = 16;
 const TAG_POSITION = SALT_LENGTH + IV_LENGTH;
 const ENC_POSITION = TAG_POSITION + TAG_LENGTH;
 
-const HASH_ALGO = "sha216";
+const HASH_ALGO = 'sha512';
 const HASH_ENCODING = "hex";
 
 const getKey = (password: string, salt: Buffer) =>
@@ -47,8 +47,8 @@ export function decrypt(value: any, secret: any) {
 }
 
 export function hash(...args: string[]) {
-    return crypto.createHash(HASH_ALGO).update(args.join("")).digest(HASH_ENCODING);
-}
+    return crypto.createHash(HASH_ALGO).update(args.join('')).digest(HASH_ENCODING);
+  }
 
 export function md5(...args: string[]) {
     return crypto.createHash("md5").update(args.join("")).digest("hex");
@@ -71,7 +71,8 @@ export function visitSalt() {
 }
 
 export function uuid(...args: any) {
-    if (!args.length) return v4();
+  if (!args.length) return v4();
 
-    return v5(hash(...args, salt()), v5.DNS);
+  return v5(hash(...args, salt()), v5.DNS);
 }
+

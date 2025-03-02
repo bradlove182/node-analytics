@@ -2,19 +2,21 @@ import ipaddr from "ipaddr.js";
 import { FastifyPluginCallback, fastify } from "fastify";
 import { isbot } from "isbot";
 import { safeDecodeURI } from "@lib/client/url";
-import { badRequest, forbidden, methodNotAllowed, ok, send } from "@lib/response";
+import { badRequest, forbidden, json, methodNotAllowed, ok, send } from "@lib/response";
 import { env } from "@repo/environment"
 // import { createToken } from "@lib/token";
-import { COLLECTION_TYPE, HOSTNAME_REGEX, IP_REGEX } from "lib/constants";
+import { COLLECTION_TYPE, DOMAIN_REGEX, HOSTNAME_REGEX, IP_REGEX } from "lib/constants";
 // import { secret, visitSalt, uuid } from "lib/crypto";
 import { getClientInfo, getIpAddress } from "@lib/detect";
 // import { useCors, useSession, useValidate } from "lib/middleware";
 import { CollectionType, RequestType } from "@lib/types";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
-import { saveEventQuery } from "@api/events/saveEvent";
+import { saveEvent } from "@api/events/saveEvent";
 import { z } from "zod";
 import { IncomingMessage } from "http";
-import { uuid } from "@lib/crypto";
+import { secret, uuid, visitSalt } from "@lib/crypto";
+import { urlOrPathParam } from "@lib/shema";
+import { createToken } from "@lib/token";
 
 export interface CollectRequestBody {
     payload: {
@@ -54,147 +56,24 @@ export interface NextApiRequestCollect extends IncomingMessage {
     headers: { [key: string]: any };
 }
 
-const schema = {
-    POST: z.object({
-        payload: z
-            .object({
-                data: z.object({}),
-                hostname: z.string().max(100).regex(HOSTNAME_REGEX),
-                ip: z.string().regex(IP_REGEX),
-                langauge: z.string().max(35),
-                referrer: z.string(),
-                screen: z.string().max(11),
-                title: z.string(),
-                url: z.string(),
-                website: z
-                    .string({
-                        required_error: "WebsiteId is required",
-                    })
-                    .uuid(),
-                name: z.string().max(50),
-                tag: z.string().max(50).nullable(),
-            })
-            .required(),
-        type: z
-            .string({
-                required_error: "Type is required",
-            })
-            .regex(/event|identify/i),
+
+const schema = z.object({
+    type: z.enum(['event', 'identify']),
+    payload: z.object({
+      website: z.string().uuid(),
+      data: z.object({}).passthrough().optional(),
+      hostname: z.string().regex(DOMAIN_REGEX).max(100).optional(),
+      language: z.string().max(35).optional(),
+      referrer: urlOrPathParam.optional(),
+      screen: z.string().max(11).optional(),
+      title: z.string().optional(),
+      url: urlOrPathParam,
+      name: z.string().max(50).optional(),
+      tag: z.string().max(50).optional(),
+      ip: z.string().ip().optional(),
+      userAgent: z.string().optional(),
     }),
-};
-
-// export default async (req: Request, res: NextApiResponse) => {
-//     // await useCors(req, res);
-
-//     if (req.method === "POST") {
-//         if (!process.env.DISABLE_BOT_CHECK && isbot(req.headers["user-agent"])) {
-//             return ok(res);
-//         }
-
-//         // await useValidate(schema, req, res);
-
-//         if (hasBlockedIp(req)) {
-//             return forbidden(res);
-//         }
-
-//         const { type, payload } = req.body;
-//         const { url, referrer, name: eventName, data, title } = payload;
-//         const pageTitle = safeDecodeURI(title);
-
-//         // await useSession(req, res);
-
-//         // const session = req.session;
-//         // const iat = Math.floor(new Date().getTime() / 1000);
-
-//         // expire visitId after 30 minutes
-//         // if (session.iat && iat - session.iat > 1800) {
-//         //     session.visitId = uuid(session.id, visitSalt());
-//         // }
-
-//         // session.iat = iat;
-
-//         if (type === COLLECTION_TYPE.event) {
-//             // eslint-disable-next-line prefer-const
-//             let [urlPath, urlQuery] = safeDecodeURI(url)?.split("?") || [];
-//             let [referrerPath, referrerQuery] = safeDecodeURI(referrer)?.split("?") || [];
-//             let referrerDomain = "";
-
-//             if (!urlPath) {
-//                 urlPath = "/";
-//             }
-
-//             if (referrerPath?.startsWith("http")) {
-//                 const refUrl = new URL(referrer);
-//                 referrerPath = refUrl.pathname;
-//                 referrerQuery = refUrl.search.substring(1);
-//                 referrerDomain = refUrl.hostname.replace(/www\./, "");
-//             }
-
-//             if (process.env.REMOVE_TRAILING_SLASH) {
-//                 urlPath = urlPath.replace(/(.+)\/$/, "$1");
-//             }
-
-//             await saveEventQuery({
-//                 urlPath,
-//                 urlQuery,
-//                 referrerPath,
-//                 referrerQuery,
-//                 referrerDomain,
-//                 pageTitle,
-//                 eventName,
-//                 eventData: data,
-//                 sessionId: "asdas",
-//                 visitId: "asdasd",
-//             });
-//         }
-
-//         // if (type === COLLECTION_TYPE.identify) {
-//         //     if (!data) {
-//         //         return badRequest(res, "Data required.");
-//         //     }
-
-//         //     await saveSessionData({
-//         //         websiteId: session.websiteId,
-//         //         sessionId: session.id,
-//         //         sessionData: data,
-//         //     });
-//         // }
-
-//         // const token = createToken(session, secret());
-
-//         return send(res, token);
-//     }
-
-//     return methodNotAllowed(res);
-// };
-
-// function hasBlockedIp(req: NextApiRequestCollect) {
-//     const ignoreIps = process.env.IGNORE_IP;
-
-//     if (ignoreIps) {
-//         const ips = [];
-
-//         if (ignoreIps) {
-//             ips.push(...ignoreIps.split(",").map((n) => n.trim()));
-//         }
-
-//         const clientIp = getIpAddress(req);
-
-//         return ips.find((ip) => {
-//             if (ip === clientIp) return true;
-
-//             // CIDR notation
-//             if (ip.indexOf("/") > 0 && clientIp) {
-//                 const addr = ipaddr.parse(clientIp);
-//                 const range = ipaddr.parseCIDR(ip);
-
-//                 if (addr.kind() === range[0].kind() && addr.match(range)) return true;
-//             }
-//         });
-//     }
-
-//     return false;
-// }
+  });
 
 export const sendData: FastifyPluginCallback = (fastify, _, done) => {
     fastify.withTypeProvider<ZodTypeProvider>().post(
@@ -204,90 +83,94 @@ export const sendData: FastifyPluginCallback = (fastify, _, done) => {
         },
         async (request, response) => {
             if (request.method === "POST") {
-                console.log(!env.DISABLE_BOT_CHECK && isbot(request.headers["user-agent"]), "ASDASDASDASDASDS")
                 if (!env.DISABLE_BOT_CHECK && isbot(request.headers["user-agent"])) {
-                    return ok(response);
+                    return json({ beep: 'boop' });
                 }
 
-                // dont need this as fastify will validate on
-                // await useValidate(schema, req, res);
-
-                // console.log(request, "request Object");
-                // if (hasBlockedIp(request)) {
-                //     return forbidden(response);
-                // }
-
                 const { type, payload } = request.body;
-                // console.log(type, "TYPE ")
-                // console.log(payload, "PAYLOAD")
-                // const { url, referrer, name: eventName, data, title } = payload;
+
+
                 const {
                     website: websiteId,
-                    url,
-                    referrer,
-                    name: eventName,
-                    data,
-                    title,
                     hostname,
                     screen,
                     language,
-                    tag
-                } = payload;
+                    url,
+                    referrer,
+                    name,
+                    data,
+                    title,
+                    tag,
+                  } = payload;
 
-                // const pageTitle = safeDecodeURI(title);
+                // Cache check
+                // let cache: { websiteId: string; sessionId: string; visitId: string; iat: number } | null = null;
 
-                // await useSession(request, response);
-
-                // const session = request.session;
-                const { ip, userAgent, device, browser, os, country, subdivision1, subdivision2, city } =
-                await getClientInfo(request, payload);
+                const { ip, userAgent, device, browser, os, country, subdivision1, subdivision2, city } = await getClientInfo(request, payload);
+                
                 const sessionId = uuid(websiteId, ip, userAgent);
-                console.log(sessionId, ip, userAgent, device, browser, os, country, subdivision1, subdivision2, city)
-                // console.log(session, "SEESSION")
-                // const iat = Math.floor(new Date().getTime() / 1000);
 
-                // expire visitId after 30 minutes
-                // if (session.iat && iat - session.iat > 1800) {
-                //     session.visitId = uuid(session.id, visitSalt());
-                // }
+                // Visit info
+                const now = Math.floor(new Date().getTime() / 1000);
+                let visitId = uuid(sessionId, visitSalt());
+                let iat = now;
 
-                // session.iat = iat;
+                // Expire visit after 30 minutes
+                if (now - iat > 1800) {
+                    visitId = uuid(sessionId, visitSalt());
+                    iat = now;
+                }
 
                 if (type === COLLECTION_TYPE.event) {
-                    // eslint-disable-next-line prefer-const
-                    let [urlPath, urlQuery] = safeDecodeURI(url)?.split("?") || [];
-                    let [referrerPath, referrerQuery] = safeDecodeURI(referrer)?.split("?") || [];
-                    let referrerDomain = "";
-
-                    if (!urlPath) {
-                        urlPath = "/";
-                    }
-
-                    if (referrerPath?.startsWith("http")) {
-                        const refUrl = new URL(referrer);
-                        referrerPath = refUrl.pathname;
-                        referrerQuery = refUrl.search.substring(1);
-                        referrerDomain = refUrl.hostname.replace(/www\./, "");
-                    }
+                    const base = hostname ? `https://${hostname}` : 'https://localhost';
+                    const currentUrl = new URL(url, base);
+                    let urlPath = currentUrl.pathname;
+                    const urlQuery = currentUrl.search.substring(1);
+                    const urlDomain = currentUrl.hostname.replace(/^www./, '');
 
                     if (process.env.REMOVE_TRAILING_SLASH) {
                         urlPath = urlPath.replace(/(.+)\/$/, "$1");
                     }
 
-                    await saveEventQuery({
+                    let referrerPath: string | undefined;
+                    let referrerQuery: string | undefined;
+                    let referrerDomain: string | undefined;
+
+                    if (referrer) {
+                        const referrerUrl = new URL(referrer, base);
+                
+                        referrerPath = referrerUrl.pathname;
+                        referrerQuery = referrerUrl.search.substring(1);
+                
+                        if (referrerUrl.hostname !== 'localhost') {
+                          referrerDomain = referrerUrl.hostname.replace(/^www\./, '');
+                        }
+                    }
+
+                    await saveEvent({
+                        websiteId,
+                        sessionId,
+                        visitId,
                         urlPath,
                         urlQuery,
-                        referrerPath,
-                        referrerQuery,
-                        referrerDomain,
-                        pageTitle: title ?? "testing",
-                        eventName,
-                        ...session,
+                        pageTitle: title,
+                        eventName: name,
                         eventData: data,
-                        websiteId: '1',
-                        sessionId: "1",
-                        visitId: "1",
-                    }, request.db);
+                        hostname: hostname || urlDomain,
+                        browser,
+                        os,
+                        device,
+                        screen,
+                        language,
+                        country,
+                        subdivision1,
+                        subdivision2,
+                        city,
+                        tag,
+                        referrerPath,
+                        referrerDomain,
+                        referrerQuery,
+                    });
                 }
 
                 // if (type === COLLECTION_TYPE.identify) {
@@ -302,9 +185,9 @@ export const sendData: FastifyPluginCallback = (fastify, _, done) => {
                 //     });
                 // }
 
-                // const token = createToken(session, secret());
+                const token = createToken({ websiteId, sessionId, visitId, iat }, secret());
 
-                return send(response, token);
+                return json({ cache: token });
             }
         }
     );

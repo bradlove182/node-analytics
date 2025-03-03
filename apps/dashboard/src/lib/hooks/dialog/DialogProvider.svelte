@@ -12,9 +12,9 @@
     const dialog = useDialog()
 
     $effect(() => {
-        if (dialog.current) {
+        if (dialog.current.key) {
             untrack(() => {
-                currentDialog = dialogs[dialog.current!]()
+                currentDialog = dialogs[dialog.current.key!]()
                 open = true
             })
         }
@@ -23,7 +23,7 @@
     $effect(() => {
         if (!open) {
             untrack(() => {
-                dialog.current = undefined
+                dialog.current = { key: undefined, props: undefined }
             })
         }
     })
@@ -37,7 +37,7 @@
         {#await currentDialog}
             loading...
         {:then CurrentDialog}
-            <CurrentDialog />
+            <CurrentDialog {...dialog.current.props} />
         {/await}
     </Dialog.Content>
 </Dialog.Root>

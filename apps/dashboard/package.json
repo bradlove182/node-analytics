@@ -28,11 +28,14 @@
         "bits-ui": "1.1.0",
         "clsx": "^2.1.1",
         "drizzle-orm": "0.39.0",
+        "formsnap": "^2.0.0",
         "mode-watcher": "^0.5.1",
         "postgres": "^3.4.5",
+        "sveltekit-superforms": "^2.23.1",
         "tailwind-merge": "^3.0.1",
         "tailwind-variants": "^0.3.1",
-        "tailwindcss-animate": "^1.0.7"
+        "tailwindcss-animate": "^1.0.7",
+        "zod": "^3.24.2"
     },
     "devDependencies": {
         "@eslint/compat": "^1.2.6",

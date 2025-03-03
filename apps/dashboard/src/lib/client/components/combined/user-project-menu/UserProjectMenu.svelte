@@ -34,7 +34,7 @@
             {/each}
         </DropdownMenu.Group>
         <DropdownMenu.Separator />
-        <DropdownMenu.Item onclick={() => dialog.current = "createTeam"}>
+        <DropdownMenu.Item onclick={() => dialog.current.key = "createTeam"}>
             Create Project
         </DropdownMenu.Item>
     </DropdownMenu.Content>

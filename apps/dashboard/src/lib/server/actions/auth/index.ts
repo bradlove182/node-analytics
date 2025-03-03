@@ -30,6 +30,8 @@ export async function logout(event: RequestEvent) {
         return fail(401)
     }
     invalidateSession(event.locals.session?.id)
+    event.locals.session = null
+    event.locals.user = null
     return redirect(302, "/login")
 }
 

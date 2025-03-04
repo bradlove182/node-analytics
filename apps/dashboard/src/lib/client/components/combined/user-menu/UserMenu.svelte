@@ -5,7 +5,7 @@
     import * as DropdownMenu from "$components/base/dropdown-menu"
     import { ThemeToggle } from "$components/base/theme-toggle"
     import { IconLogout } from "$icons"
-    import { useUser } from "$lib/hooks/data/user"
+    import { useUser } from "$lib/hooks/data"
 
     const user = $derived(useUser().current)
 

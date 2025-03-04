@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { useProject } from "$lib/hooks/data/project"
+    import { useProject } from "$lib/hooks/data"
     import { getAppTitle } from "$lib/utils/head"
 
     const project = useProject()

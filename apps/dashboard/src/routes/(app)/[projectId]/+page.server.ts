@@ -12,9 +12,9 @@ export const load: PageServerLoad = async ({ locals, parent }) => {
         return redirect(302, "/login")
     }
 
-    const { project } = await parent()
+    const { projects, projectId } = await parent()
 
-    if (!project) {
+    if (!projects.find(proj => proj.id === projectId)) {
         return error(404)
     }
 

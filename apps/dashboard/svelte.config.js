@@ -15,6 +15,7 @@ const config = {
         alias: {
             "$components/*": "./src/lib/client/components/*",
             "$icons": "./src/lib/client/icons/index.ts",
+            "$routes": "./src/routes/*",
         },
     },
 }

@@ -4,13 +4,12 @@
     import { page } from "$app/state"
     import * as Dialog from "$components/base/dialog"
     import { CreateProjectForm } from "$components/complex/forms/create-project"
-    import { useProject } from "$lib/hooks/data/project"
-    import { useUserProjects } from "$lib/hooks/data/user"
+    import { useProject, useProjects } from "$lib/hooks/data"
     import { useDialog } from "$lib/hooks/dialog"
     import { untrack } from "svelte"
 
     const project = useProject()
-    const projects = useUserProjects()
+    const projects = useProjects()
     const dialog = useDialog()
 
     const form = $derived(page.form ?? {})

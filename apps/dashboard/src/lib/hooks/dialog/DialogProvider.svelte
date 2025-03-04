@@ -6,24 +6,23 @@
 
     const { children }: { children: Snippet<[]> } = $props()
 
-    let open = $state(false)
     let currentDialog = $state<Promise<Component>>()
 
     const dialog = useDialog()
 
     $effect(() => {
-        if (dialog.current) {
+        if (dialog.current.dialog) {
             untrack(() => {
-                currentDialog = dialogs[dialog.current!]()
-                open = true
+                currentDialog = dialogs[dialog.current.dialog!]()
+                dialog.current.open = true
             })
         }
     })
 
     $effect(() => {
-        if (!open) {
+        if (!dialog.current.open) {
             untrack(() => {
-                dialog.current = undefined
+                dialog.current.dialog = undefined
             })
         }
     })
@@ -32,7 +31,7 @@
 
 {@render children()}
 
-<Dialog.Root bind:open>
+<Dialog.Root bind:open={dialog.current.open}>
     <Dialog.Content>
         {#await currentDialog}
             loading...

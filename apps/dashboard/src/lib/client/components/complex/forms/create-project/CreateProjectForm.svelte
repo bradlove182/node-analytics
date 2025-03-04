@@ -8,14 +8,21 @@
     import { zodClient } from "sveltekit-superforms/adapters"
     import { createProjectFormSchema } from "."
 
-    const { data, children }: { data: { form: SuperValidated<Infer<CreateProjectFormSchema>> }, children: Snippet<[Fields: Snippet, Buttons: Snippet]> } = $props()
+    const { data, children }: {
+        data: {
+            form: SuperValidated<Infer<CreateProjectFormSchema>>
+        }
+        children: Snippet<[Fields: Snippet, Buttons: Snippet]>
+    } = $props()
 
     const form = superForm(data.form, {
         validators: zodClient(createProjectFormSchema),
         dataType: "json",
     })
 
-    const { form: formData, enhance } = form
+    const { form: formData, enhance, submitting } = form
+
+    const disabled = $derived(!$formData.name || $submitting)
 
 </script>
 
@@ -32,7 +39,7 @@
 {/snippet}
 
 {#snippet Buttons()}
-    <Form.Button type="submit">Create</Form.Button>
+    <Form.Button type="submit" {disabled}>Create</Form.Button>
 {/snippet}
 
 <form class="contents" method="POST" use:enhance action="?/createProject">

@@ -1,6 +1,7 @@
 import type { HTMLAttributes } from "svelte/elements"
-import IconLogout from "./IconLogout.svelte"
 import IconCheck from "./IconCheck.svelte"
+import IconLogout from "./IconLogout.svelte"
+import IconPlus from "./IconPlus.svelte"
 import IconX from "./IconX.svelte"
 
 export interface IconProps extends HTMLAttributes<SVGSVGElement> {
@@ -8,7 +9,8 @@ export interface IconProps extends HTMLAttributes<SVGSVGElement> {
 }
 
 export {
-    IconLogout,
     IconCheck,
-    IconX
+    IconLogout,
+    IconPlus,
+    IconX,
 }

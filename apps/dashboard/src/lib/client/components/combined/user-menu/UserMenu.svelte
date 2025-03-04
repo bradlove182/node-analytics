@@ -1,7 +1,7 @@
 <script lang="ts">
     import { enhance } from "$app/forms"
     import * as Avatar from "$components/base/avatar"
-    import { Button } from "$components/base/button";
+    import { Button } from "$components/base/button"
     import * as DropdownMenu from "$components/base/dropdown-menu"
     import { ThemeToggle } from "$components/base/theme-toggle"
     import { IconLogout } from "$icons"
@@ -14,7 +14,7 @@
     const userFallback = $derived(user?.email.slice(0, 2).toUpperCase())
 
 </script>
-<form method="POST" use:enhance action="/logout" bind:this={form}>
+<form method="POST" use:enhance action="/logout" bind:this={form} class="contents">
     <DropdownMenu.Root>
         <DropdownMenu.Trigger class="hover:cursor-pointer size-10 text-sm rounded-full">
             {#snippet child({ props })}

@@ -6,7 +6,7 @@ export const dialogs = {
 } as const
 
 export function useDialog<K extends keyof typeof dialogs>(key?: K) {
-    return useState<K | undefined>("use-dialog", key)
+    return useState<{ dialog: K | undefined, open: boolean }>("use-dialog", { dialog: key, open: false })
 }
 
 export { DialogProvider }

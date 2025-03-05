@@ -46,6 +46,6 @@
     <Form.Button type="submit" {disabled}>Create</Form.Button>
 {/snippet}
 
-<form class="contents" method="POST" use:enhance action="?/createProject">
+<form class="contents" method="POST" use:enhance action="/?/createProject">
     {@render children(Fields, Buttons)}
 </form>

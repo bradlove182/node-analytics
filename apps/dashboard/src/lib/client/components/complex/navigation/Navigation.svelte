@@ -4,7 +4,7 @@
 </script>
 
 <header class="px-6 h-[64px] flex items-center border-b justify-between sticky top-0">
-    <div class="flex items-center gap-2">
+    <div class="flex items-center gap-6">
         <a href="/">Analytics</a>
         <UserProjectMenu />
     </div>

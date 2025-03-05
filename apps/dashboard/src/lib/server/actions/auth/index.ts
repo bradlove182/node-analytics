@@ -5,6 +5,16 @@ import { invalidateSession } from "$lib/server/auth/session"
 import { fail, redirect } from "@sveltejs/kit"
 import { generateCodeVerifier, generateState } from "arctic"
 
+export async function logout(event: RequestEvent) {
+    if (event.locals.session === null) {
+        return fail(401)
+    }
+    invalidateSession(event.locals.session?.id)
+    event.locals.session = null
+    event.locals.user = null
+    return redirect(302, "/login")
+}
+
 export function authenticateWithGithub(event: RequestEvent) {
     const state = generateState()
     const url = github.createAuthorizationURL(state, ["user:email"])
@@ -23,16 +33,6 @@ export function authenticateWithGoogle(event: RequestEvent) {
     setGoogleAuthCookie(event, state, codeVerifier)
 
     return redirect(302, url)
-}
-
-export async function logout(event: RequestEvent) {
-    if (event.locals.session === null) {
-        return fail(401)
-    }
-    invalidateSession(event.locals.session?.id)
-    event.locals.session = null
-    event.locals.user = null
-    return redirect(302, "/login")
 }
 
 export function oAuth() {

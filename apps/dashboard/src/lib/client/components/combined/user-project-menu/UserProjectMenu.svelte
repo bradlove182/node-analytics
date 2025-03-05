@@ -18,6 +18,11 @@
         <DropdownMenu.Trigger>
             {#snippet child({ props })}
                 <Button variant="outline" {...props}>
+                    <Avatar.Root class="size-5 text-xs">
+                        <Avatar.Fallback>
+                            {project.current?.name.slice(0, 1).toUpperCase()}
+                        </Avatar.Fallback>
+                    </Avatar.Root>
                     {project.current?.name}
                 </Button>
             {/snippet}

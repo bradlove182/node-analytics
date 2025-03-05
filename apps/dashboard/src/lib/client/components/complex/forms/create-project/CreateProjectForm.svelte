@@ -4,6 +4,7 @@
     import type { CreateProjectFormSchema } from "."
     import * as Form from "$components/base/form"
     import { Input } from "$components/base/input"
+    import { useDialog } from "$lib/hooks/dialog"
     import { superForm } from "sveltekit-superforms"
     import { zodClient } from "sveltekit-superforms/adapters"
     import { createProjectFormSchema } from "."
@@ -19,6 +20,8 @@
         validators: zodClient(createProjectFormSchema),
         dataType: "json",
     })
+
+    const dialog = useDialog()
 
     const { form: formData, enhance, submitting } = form
 
@@ -39,6 +42,7 @@
 {/snippet}
 
 {#snippet Buttons()}
+    <Form.Button type="button" variant="outline" onclick={() => dialog.current.open = false}>Cancel</Form.Button>
     <Form.Button type="submit" {disabled}>Create</Form.Button>
 {/snippet}
 

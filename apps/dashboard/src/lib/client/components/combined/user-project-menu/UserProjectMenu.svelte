@@ -1,33 +1,48 @@
 <script lang="ts">
     import { goto } from "$app/navigation"
+    import { page } from "$app/state"
     import * as Avatar from "$components/base/avatar"
     import { Button } from "$components/base/button"
     import * as DropdownMenu from "$components/base/dropdown-menu"
     import { IconPlus } from "$icons"
-    import { useProject, useProjects } from "$lib/hooks/data"
+    import { useProject, useProjects, useUser } from "$lib/hooks/data"
     import { useDialog } from "$lib/hooks/dialog"
 
     const projects = useProjects()
     const project = useProject()
     const dialog = useDialog()
+    const user = useUser()
+
+    const { name, href, fallback } = $derived.by(() => {
+        if (project.current) {
+            return {
+                name: project.current.name,
+                href: "",
+                fallback: project.current.name.slice(0, 1).toUpperCase(),
+            }
+        }
+        return {
+            name: "My Account",
+            href: "/account",
+            fallback: user.current?.email.slice(0, 1).toUpperCase(),
+        }
+    })
 
 </script>
 
 <DropdownMenu.Root>
-    {#if project.current}
-        <DropdownMenu.Trigger>
-            {#snippet child({ props })}
-                <Button variant="outline" {...props}>
-                    <Avatar.Root class="size-5 text-xs">
-                        <Avatar.Fallback>
-                            {project.current?.name.slice(0, 1).toUpperCase()}
-                        </Avatar.Fallback>
-                    </Avatar.Root>
-                    {project.current?.name}
-                </Button>
-            {/snippet}
-        </DropdownMenu.Trigger>
-    {/if}
+    <DropdownMenu.Trigger>
+        {#snippet child({ props })}
+            <Button variant="outline" {...props}>
+                <Avatar.Root class="size-5 text-xs">
+                    <Avatar.Fallback>
+                        {fallback?.slice(0, 1).toUpperCase()}
+                    </Avatar.Fallback>
+                </Avatar.Root>
+                {name}
+            </Button>
+        {/snippet}
+    </DropdownMenu.Trigger>
     <DropdownMenu.Content align="start">
         <DropdownMenu.Group>
             <DropdownMenu.Label>

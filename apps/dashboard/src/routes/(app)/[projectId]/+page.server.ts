@@ -6,9 +6,7 @@ import { superValidate } from "sveltekit-superforms"
 import { zod } from "sveltekit-superforms/adapters"
 
 export const load: PageServerLoad = async ({ locals, parent }) => {
-    const { user } = locals
-
-    if (!user) {
+    if (!locals.user) {
         return redirect(302, "/login")
     }
 
@@ -19,7 +17,7 @@ export const load: PageServerLoad = async ({ locals, parent }) => {
     }
 
     return {
-        user,
+        user: locals.user,
         form: await superValidate(zod(createProjectFormSchema)),
     }
 }

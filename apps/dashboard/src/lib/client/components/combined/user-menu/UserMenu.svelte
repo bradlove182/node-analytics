@@ -43,7 +43,11 @@
                     {/snippet}
                 </DropdownMenu.Item>
                 <DropdownMenu.Item>
-                    Account Settings
+                    {#snippet child({ props })}
+                        <a href="/account" {...props}>
+                            Account Settings
+                        </a>
+                    {/snippet}
                 </DropdownMenu.Item>
                 <DropdownMenu.Item class="justify-between" onclick={() => dialog.current.dialog = "createProject"}>
                     Create Project

@@ -7,7 +7,7 @@
         data: {
             user: User
             projects: Project[]
-            projectId: Project["id"]
+            projectId?: Project["id"]
         }
         children: Snippet<[]>
     }

@@ -5,7 +5,7 @@
 
 <header class="px-6 h-[64px] flex items-center border-b justify-between sticky top-0">
     <div class="flex items-center gap-2">
-        <span>Analytics</span>
+        <a href="/">Analytics</a>
         <UserProjectMenu />
     </div>
     <div>

@@ -4,10 +4,13 @@
     import { Button } from "$components/base/button"
     import * as DropdownMenu from "$components/base/dropdown-menu"
     import { ThemeToggle } from "$components/base/theme-toggle"
-    import { IconLogout } from "$icons"
-    import { useUser } from "$lib/hooks/data"
+    import { IconLogout, IconPlus } from "$icons"
+    import { useProject, useUser } from "$lib/hooks/data"
+    import { useDialog } from "$lib/hooks/dialog"
 
     const user = $derived(useUser().current)
+    const project = $derived(useProject().current)
+    const dialog = useDialog()
 
     let form = $state<HTMLFormElement>()
 
@@ -35,10 +38,16 @@
                     <p class="text-muted-foreground font-normal">{user?.email}</p>
                 </DropdownMenu.GroupHeading>
                 <DropdownMenu.Item>
-                    Dashboard
+                    {#snippet child({ props })}
+                        <a href={`/${project?.id}`} {...props}>Dashboard</a>
+                    {/snippet}
                 </DropdownMenu.Item>
                 <DropdownMenu.Item>
                     Account Settings
+                </DropdownMenu.Item>
+                <DropdownMenu.Item class="justify-between" onclick={() => dialog.current.dialog = "createProject"}>
+                    Create Project
+                    <IconPlus />
                 </DropdownMenu.Item>
             </DropdownMenu.Group>
             <DropdownMenu.Separator />

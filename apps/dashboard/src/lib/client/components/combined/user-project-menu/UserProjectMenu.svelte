@@ -14,13 +14,15 @@
 </script>
 
 <DropdownMenu.Root>
-    <DropdownMenu.Trigger>
-        {#snippet child({ props })}
-            <Button variant="outline" {...props}>
-                {project.current?.name}
-            </Button>
-        {/snippet}
-    </DropdownMenu.Trigger>
+    {#if project.current}
+        <DropdownMenu.Trigger>
+            {#snippet child({ props })}
+                <Button variant="outline" {...props}>
+                    {project.current?.name}
+                </Button>
+            {/snippet}
+        </DropdownMenu.Trigger>
+    {/if}
     <DropdownMenu.Content align="start">
         <DropdownMenu.Group>
             <DropdownMenu.Label>
@@ -41,7 +43,7 @@
             {/each}
         </DropdownMenu.Group>
         <DropdownMenu.Separator />
-        <DropdownMenu.Item onclick={() => dialog.current.dialog = "createTeam"}>
+        <DropdownMenu.Item onclick={() => dialog.current.dialog = "createProject"}>
             <IconPlus />
             Create Project
         </DropdownMenu.Item>

@@ -39,8 +39,6 @@
             user.current = data.user
         }
     })
-
-    $inspect(user.current)
 </script>
 
 {@render children()}

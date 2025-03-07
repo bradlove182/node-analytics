@@ -5,16 +5,15 @@
     import * as DropdownMenu from "$components/base/dropdown-menu"
     import { ThemeToggle } from "$components/base/theme-toggle"
     import { IconLogout, IconPlus } from "$icons"
-    import { useProject, useUser } from "$lib/hooks/data"
+    import { useProject, useProjects, useUser } from "$lib/hooks/data"
     import { useDialog } from "$lib/hooks/dialog"
 
     const user = $derived(useUser().current)
+    const projects = $derived(useProjects().current)
     const project = $derived(useProject().current)
     const dialog = useDialog()
 
     let form = $state<HTMLFormElement>()
-
-    const userFallback = $derived(user?.email.slice(0, 2).toUpperCase())
 
 </script>
 <form method="POST" use:enhance action="/logout" bind:this={form} class="contents">
@@ -25,7 +24,7 @@
                     <Avatar.Root class="pointer-events-none size-full">
                         <Avatar.Image />
                         <Avatar.Fallback>
-                            {userFallback}
+                            {user?.email.slice(0, 2).toUpperCase()}
                         </Avatar.Fallback>
                     </Avatar.Root>
                 </Button>
@@ -39,12 +38,12 @@
                 </DropdownMenu.GroupHeading>
                 <DropdownMenu.Item>
                     {#snippet child({ props })}
-                        <a href={`/${project?.id}`} {...props}>Dashboard</a>
+                        <a href={`/${project?.id ?? projects[0].id}`} {...props}>Dashboard</a>
                     {/snippet}
                 </DropdownMenu.Item>
                 <DropdownMenu.Item>
                     {#snippet child({ props })}
-                        <a href="/account" {...props}>
+                        <a href="/account/settings" {...props}>
                             Account Settings
                         </a>
                     {/snippet}

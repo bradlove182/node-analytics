@@ -11,7 +11,7 @@
 <DataProvider {data}>
     <DialogProvider>
         <Navigation />
-        <main class="container mx-auto px-2 md:px-4 pt-8">
+        <main>
             {@render children()}
         </main>
     </DialogProvider>

@@ -1,3 +1,4 @@
+import { pushState } from "$app/navigation"
 import { getContext, hasContext, setContext } from "svelte"
 
 export interface ContextState<T> {
@@ -47,4 +48,30 @@ export function useLocalStorage<T>(key: string, initialValue: T): ContextState<T
     setContext(key, state)
 
     return state
+}
+
+/**
+ * A reactive hook that syncs an object's state with URL search parameters.
+ * Updates the URL automatically when the state changes, and vice versa.
+ *
+ * @param accessor - A function that returns an object containing the search parameters
+ * @example
+ * const searchParams = $state({ query: 'test', page: '1' });
+ * useSearchParams(() => searchParams);
+ * // URL updates to "?query=test&page=1"
+ */
+export function useSearchParams<T extends Record<string, any>>(accessor: () => T) {
+    const params = new URLSearchParams(accessor())
+
+    $effect(() => {
+        if (accessor()) {
+            Object.keys(accessor()).forEach((key) => {
+                params.set(key, accessor()[key])
+            })
+        }
+    })
+
+    $effect(() => {
+        pushState(`?${params.toString()}`, accessor())
+    })
 }

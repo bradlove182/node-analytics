@@ -1,12 +1,22 @@
-import { pushState } from "$app/navigation"
-import { getContext, hasContext, setContext } from "svelte"
+import { replaceState } from "$app/navigation"
+import { page } from "$app/state"
+import { getContext, hasContext, setContext, tick } from "svelte"
 
 export interface ContextState<T> {
     current: T
 }
 
 /**
- * This hook allows us to have global reactvity with contextual SSR data.
+ * A reactive hook that creates or retrieves a shared state using Svelte's context system.
+ * Provides global state management that works with SSR and maintains reactivity.
+ *
+ * @param name - Unique identifier for the context
+ * @param initialValue - The default value if context doesn't exist
+ * @returns A ContextState object containing the current value
+ * @example
+ * const counter = useState('counter', 0);
+ * // Access value with counter.current
+ * // Updates to counter.current are reactive across components
  */
 export function useState<T>(name: string, initialValue: T): ContextState<T> {
     if (hasContext(name)) {
@@ -21,8 +31,16 @@ export function useState<T>(name: string, initialValue: T): ContextState<T> {
 }
 
 /**
- * This hook allows you to read a item from local storage and save it to a contextual state.
- * Everytime the state changes it will update the value in localStorage too.
+ * A reactive hook that syncs state between localStorage and a contextual state.
+ * Provides SSR-safe localStorage persistence with Svelte's contextual state management.
+ *
+ * @param key - The localStorage key to store/retrieve the value
+ * @param initialValue - The default value if nothing exists in localStorage
+ * @returns A ContextState object containing the current value
+ * @example
+ * const theme = useLocalStorage('theme', 'light');
+ * // Access value with theme.current
+ * // Updates to theme.current automatically sync to localStorage
  */
 export function useLocalStorage<T>(key: string, initialValue: T): ContextState<T> {
     if (hasContext(key)) {
@@ -52,26 +70,24 @@ export function useLocalStorage<T>(key: string, initialValue: T): ContextState<T
 
 /**
  * A reactive hook that syncs an object's state with URL search parameters.
- * Updates the URL automatically when the state changes, and vice versa.
+ * Automatically updates the URL query string when the state object changes.
+ * Uses replaceState to update the URL without adding to browser history.
  *
- * @param accessor - A function that returns an object containing the search parameters
+ * @param state - An object containing the search parameters to sync with URL
  * @example
  * const searchParams = $state({ query: 'test', page: '1' });
- * useSearchParams(() => searchParams);
+ * useSearchParams(searchParams);
  * // URL updates to "?query=test&page=1"
  */
-export function useSearchParams<T extends Record<string, any>>(accessor: () => T) {
-    const params = new URLSearchParams(accessor())
+export function useSearchParams<T extends Record<string, any>>(state: T) {
+    const params = new URLSearchParams(state)
 
     $effect(() => {
-        if (accessor()) {
-            Object.keys(accessor()).forEach((key) => {
-                params.set(key, accessor()[key])
+        if (state) {
+            Object.keys(state).forEach(key => params.set(key, state[key]))
+            tick().then(() => {
+                replaceState(`?${params.toString()}`, page.state)
             })
         }
-    })
-
-    $effect(() => {
-        pushState(`?${params.toString()}`, accessor())
     })
 }

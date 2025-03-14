@@ -3,7 +3,7 @@
     import { UserProjectMenu } from "$components/combined/user-project-menu"
 </script>
 
-<header class="px-6 h-[64px] justify-between">
+<header class="px-6 h-[64px] justify-between bg-card">
     <nav class="flex items-center justify-between size-full">
         <div class="flex items-center gap-6">
             <a href="/">Analytics</a>

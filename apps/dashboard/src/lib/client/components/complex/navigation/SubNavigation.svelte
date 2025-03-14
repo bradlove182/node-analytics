@@ -10,7 +10,7 @@
 
 </script>
 
-<div class="flex w-full sticky top-0 border-b -mt-1">
+<div class="flex w-full sticky top-0 border-b -mt-1 bg-card">
     <div class="flex items-center gap-1 px-4 py-1">
         {#each items as { label, href }}
             <Button

@@ -1,6 +1,6 @@
 # Understanding Global State Management in Svelte with Custom Hooks
 
-When building web applications with Svelte, managing state across components can be challenging. Today, let's explore two powerful custom hooks that make state management more straightforward and efficient: `useState` and `useLocalStorage`.
+When building web applications with Svelte, managing state across components can be challenging. Today, let's explore three powerful custom hooks that make state management more straightforward and efficient: `useState`, `useLocalStorage`, and `useSearchParams`.
 
 ## The Basic State Hook
 
@@ -33,12 +33,34 @@ Here's what makes it special:
 3. Uses Svelte's `$effect` to automatically save changes to localStorage
 4. Handles JSON serialization/deserialization automatically
 
+## URL-Synced State with Search Parameters
+
+The `useSearchParams` hook provides another way to persist state - directly in the URL's query string. This is particularly useful for sharing application state through links or maintaining state across page refreshes.
+
+```typescript
+const filters = $state({ category: "books", sort: "newest" })
+useSearchParams(filters)
+// URL updates to "?category=books&sort=newest"
+```
+
+Key features of this hook:
+1. Automatically syncs an object's properties to URL search parameters
+2. Updates the URL whenever the state object changes
+3. Uses `replaceState` to update the URL without adding to browser history
+4. Makes application state shareable via URL
+
+This is especially valuable for:
+- Search and filter functionality
+- Pagination controls
+- Tab selections
+- Any state that should be preserved in bookmarks or shared links
+
 ## Why This Matters
 
 This implementation provides several benefits:
 - **SSR Compatibility**: Works seamlessly with server-side rendering
 - **Global State**: Easily share state across components
-- **Persistence**: Optional automatic saving to localStorage
+- **Multiple Persistence Options**: State can be ephemeral, saved to localStorage, or synced with URL parameters
 - **Type Safety**: Full TypeScript support
 - **Reactive**: Changes trigger automatic updates
 
@@ -48,10 +70,13 @@ This implementation provides several benefits:
 // In a Svelte component
 const counter = useState("counter", 0)
 const preferences = useLocalStorage("preferences", { darkMode: false })
+const searchFilters = $state({ query: "", page: 1 })
+useSearchParams(searchFilters)
 
 // Update values
 counter.current++
 preferences.current.darkMode = true
+searchFilters.query = "svelte hooks"
 ```
 
 The beauty of this system is its simplicity. You get powerful state management capabilities with minimal boilerplate code, and it integrates perfectly with Svelte's existing patterns.
@@ -70,6 +95,11 @@ This wrapper object ensures that our state updates trigger proper reactivity, as
 
 ## Conclusion
 
-These hooks provide a clean, type-safe way to manage global state in Svelte applications. Whether you need simple state sharing or persistent storage, they offer a consistent API that works well with Svelte's paradigms.
+These hooks provide a clean, type-safe way to manage global state in Svelte applications. Whether you need simple state sharing, persistent storage, or URL-synced parameters, they offer a consistent API that works well with Svelte's paradigms.
 
-Remember that while localStorage is convenient for small amounts of data, it has limitations (storage size, synchronous API, client-side only). For larger applications, you might want to combine these patterns with other storage solutions.
+Remember that each persistence method has its own use cases:
+- `useState` for ephemeral state that only needs to exist during the session
+- `useLocalStorage` for persistent settings that should survive page refreshes
+- `useSearchParams` for state that should be shareable or bookmarkable via URL
+
+For larger applications, you might want to combine these patterns with other storage solutions.

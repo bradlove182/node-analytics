@@ -47,6 +47,10 @@
   }
 
 @layer base {
+    :root{
+        --layout-margin: minmax(calc(var(--spacing) * 8), 1fr);
+        --layout-width: minmax(0, 1200px);
+    }
     * {
         @apply border-border;
     }

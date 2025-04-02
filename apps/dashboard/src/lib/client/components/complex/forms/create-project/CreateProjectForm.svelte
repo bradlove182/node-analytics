@@ -5,6 +5,7 @@
     import * as Form from "$components/base/form"
     import { Input } from "$components/base/input"
     import { useDialog } from "$lib/hooks/dialog"
+    import { useFocus } from "$lib/hooks/index.svelte"
     import { superForm } from "sveltekit-superforms"
     import { zodClient } from "sveltekit-superforms/adapters"
     import { createProjectFormSchema } from "."
@@ -23,6 +24,10 @@
 
     const dialog = useDialog()
 
+    let ref = $state<HTMLElement | null>(null)
+
+    useFocus(() => ref)
+
     const { form: formData, enhance, submitting } = form
 
     const disabled = $derived(!$formData.name || $submitting)
@@ -34,7 +39,7 @@
         <Form.Control>
             {#snippet children({ props })}
                 <Form.Label>Project Name</Form.Label>
-                <Input {...props} bind:value={$formData.name} />
+                <Input {...props} bind:ref bind:value={$formData.name} />
             {/snippet}
         </Form.Control>
         <Form.FieldErrors />

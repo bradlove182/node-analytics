@@ -16,7 +16,7 @@
         if (project.current) {
             return {
                 name: project.current.name,
-                href: undefined,
+                href: `/${project.current.id}`,
                 fallback: project.current.name.slice(0, 1).toUpperCase(),
             }
         }

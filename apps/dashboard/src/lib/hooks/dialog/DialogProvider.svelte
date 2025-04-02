@@ -1,6 +1,7 @@
 <script lang="ts">
     import type { Component, Snippet } from "svelte"
     import * as Dialog from "$components/base/dialog"
+    import { Loader } from "$components/base/loaders"
     import { untrack } from "svelte"
     import { dialogs, useDialog } from "."
 
@@ -34,7 +35,7 @@
 <Dialog.Root bind:open={dialog.current.open}>
     <Dialog.Content>
         {#await currentDialog}
-            loading...
+            <Loader />
         {:then CurrentDialog}
             <CurrentDialog />
         {/await}

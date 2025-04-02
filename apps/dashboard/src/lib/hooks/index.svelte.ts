@@ -1,6 +1,6 @@
 import { replaceState } from "$app/navigation"
 import { page } from "$app/state"
-import { getContext, hasContext, setContext, tick } from "svelte"
+import { getContext, hasContext, setContext, tick, untrack } from "svelte"
 
 export interface ContextState<T> {
     current: T
@@ -87,6 +87,28 @@ export function useSearchParams<T extends Record<string, any>>(state: T) {
             Object.keys(state).forEach(key => params.set(key, state[key]))
             tick().then(() => {
                 replaceState(`?${params.toString()}`, page.state)
+            })
+        }
+    })
+}
+
+/**
+ * A reactive hook that automatically focuses a DOM element when it's mounted or updated.
+ * Uses Svelte's effect system to handle focus management in a reactive way.
+ * The focus is applied after the next tick to ensure the DOM is ready.
+ *
+ * @param element - The HTMLElement to focus
+ * @example
+ * let inputElement: HTMLInputElement;
+ * useFocus(inputElement);
+ *
+ * <input bind:this={inputElement} />
+ */
+export function useFocus(element: () => HTMLElement | undefined | null) {
+    $effect(() => {
+        if (element()) {
+            untrack(() => {
+                tick().then(() => element()?.focus())
             })
         }
     })

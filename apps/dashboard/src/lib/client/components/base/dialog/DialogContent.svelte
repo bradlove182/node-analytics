@@ -1,7 +1,6 @@
 <script lang="ts">
     import type { WithoutChildrenOrChild } from "bits-ui"
     import type { Snippet } from "svelte"
-    import { IconX } from "$icons"
     import { cn } from "$lib/utils/tailwind"
     import { Dialog as DialogPrimitive } from "bits-ui"
     import * as Dialog from "./index"
@@ -29,11 +28,5 @@
         {...restProps}
     >
         {@render children?.()}
-        <DialogPrimitive.Close
-            class="ring-offset-background focus:ring-ring data-[state=open]:bg-accent data-[state=open]:text-muted-foreground absolute right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:pointer-events-none"
-        >
-            <IconX class="size-4" />
-            <span class="sr-only">Close</span>
-        </DialogPrimitive.Close>
     </DialogPrimitive.Content>
 </Dialog.Portal>

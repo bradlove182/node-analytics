@@ -22,6 +22,20 @@
     --color-input: hsl(20 5.9% 90);
     --color-ring: hsl(20 14.3% 4.1);
     --radius: 0.5rem;
+
+    --animate-snail: snail 1s ease-in-out infinite;
+
+    @keyframes snail {
+        0% {
+            transform: translateX(0)
+        }
+        50% {
+            transform: translateX(-50%);
+        }
+        100% {
+            transform: translateX(0);
+        }
+    }
   }
 
 .dark {
